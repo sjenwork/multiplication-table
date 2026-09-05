@@ -85,8 +85,8 @@ Vite 產出需能在 Cloudflare Pages 以 `/`、`/quiz.html` 或等價 SPA entry
 - [ ] 首頁可在桌機與手機顯示 9×9 選題表；首欄／首列固定、表格區內滾動，格子不因題目少而拉高。
 - [ ] 左上角保留全選並顯示 `被＼乘`；左側首欄使用被乘數色、上方首列使用乘數色；選取格、列、欄、全選狀態有清楚 active 顏色。
 - [ ] 點擊單格可選取／取消；桌機滑鼠拖曳、手機長按拖曳可批次選取／反向選取，內滾輪與邊界自動捲動正常，選取時有震動或 fallback feedback。
-- [ ] 首頁有清楚但精簡的選題說明；開始挑戰、隨機出題、錯題優先按鈕排列不換行且按鈕不超出窄螢幕。
-- [ ] 開始挑戰只從已選題目出題；隨機出題可從全部題目出題；錯題優先依錯誤次數排序且最多 10 題；每輪題目不重複、少於 10 題全部出題。
+- [x] 首頁有清楚但精簡的選題說明；開始挑戰、錯題優先、隨機出題按鈕排列不換行且按鈕不超出窄螢幕。
+- [x] 開始挑戰只從已選題目出題；隨機出題可從全部題目出題；錯題優先依錯誤次數排序且最多 10 題；每輪題目不重複、少於 10 題全部出題。
 - [ ] 答題頁 header 固定且返回在標題左側、設定在右側；返回需確認 Modal；設定可切換主題、清除 localStorage、匯出 CSV。
 - [ ] 題目頁 header、題目清單、固定／浮動鍵盤、操作列版面適應 iOS Safari、Android、窄手機與桌機；安全區域不遮住內容，題目內滾輪不觸發整頁捲動。
 - [ ] 答案輸入使用自製數字鍵盤，固定模式不遮住最後一題；浮動模式不超出 viewport，可拖曳、手柄、關閉、回到底部吸附，位置保存並在下一次載入恢復。
@@ -162,3 +162,4 @@ Vite 產出需能在 Cloudflare Pages 以 `/`、`/quiz.html` 或等價 SPA entry
 - Phase 3 resolved the entry decision: Vite uses native multi-page inputs `src/index.html` and `src/quiz.html`, producing `dist/index.html` and `dist/quiz.html`; `App.svelte` selects HomePage or QuizPage from pathname. Quiz keypad remains deferred to the next slice.
 - Phase 4B integrates `src/pwa/` manifest, versioned Service Worker, and icons through a Vite build plugin; `deploy.sh` builds first and uploads only `dist/`. The update capsule is port-driven and only appears for a waiting worker; pre-commit passes its date-time stamp as `PWA_VERSION` without changing tracked source. Capacitor and E2E remain deferred.
 - Phase 5B completes the QuizPage parity slice: fixed header actions, guarded all-answer checking with first-error focus, tokenized keypad settings, persistent completion banner actions, and keypad close-on-completion. Quiz session mutations continue through `StoragePort`; Capacitor and deployment remain out of scope.
+- Phase 5C adds a StoragePort-backed wrong-first challenge action on the home page. It excludes zero-error records, sorts by descending errors, caps the quiz at ten questions, and disables the action with an explanatory status when no wrong records exist.

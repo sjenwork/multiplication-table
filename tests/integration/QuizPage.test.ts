@@ -56,7 +56,7 @@ describe('QuizPage integration', () => {
   it('opens a return confirmation before navigation', async () => {
     const storage = new MemoryStorage();
     const calls: string[] = [];
-    render(QuizPage, { props: { storage, navigation: { go: (path) => calls.push(path), back: () => calls.push('back') } } });
+    render(QuizPage, { props: { storage, navigation: { go: (path: string) => calls.push(path), back: () => calls.push('back') } } });
     await fireEvent.click(screen.getByRole('button', { name: '返回' }));
     expect(screen.getByRole('dialog', { name: '確認返回' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: '確認返回' }));
@@ -126,7 +126,7 @@ describe('QuizPage integration', () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, selected: ['1x2'], quiz: createQuiz([{ row: 1, col: 2, answer: 2, key: '1x2' }], () => 0) }));
     const calls: string[] = [];
-    render(QuizPage, { props: { storage, navigation: { go: (path) => calls.push(path), back: () => undefined } } });
+    render(QuizPage, { props: { storage, navigation: { go: (path: string) => calls.push(path), back: () => undefined } } });
     await fireEvent.click(screen.getByRole('button', { name: '數字 2' }));
     await fireEvent.click(screen.getByRole('button', { name: '送出答案' }));
     expect(screen.getByRole('complementary', { name: '完成提示' })).toBeInTheDocument();

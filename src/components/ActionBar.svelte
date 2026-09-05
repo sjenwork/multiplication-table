@@ -2,12 +2,15 @@
   export let hasSelection = false;
   export let onStart: () => void = () => undefined;
   export let onRandom: () => void = () => undefined;
+  export let hasWrongAnswers = false;
+  export let onWrongFirst: () => void = () => undefined;
   export let onInvert: () => void = () => undefined;
   export let onSettings: () => void = () => undefined;
 </script>
 
 <div class="action-bar" role="toolbar" aria-label="題目操作">
   <button type="button" aria-label="開始挑戰" disabled={!hasSelection} onclick={onStart}>開始挑戰</button>
+  <button type="button" aria-label="錯題優先" disabled={!hasWrongAnswers} onclick={onWrongFirst}>錯題優先</button>
   <button type="button" aria-label="隨機出題" onclick={onRandom}>隨機出題</button>
   <button type="button" aria-label="反選題目" onclick={onInvert}>反選</button>
   <button type="button" aria-label="設定" onclick={onSettings}>設定</button>

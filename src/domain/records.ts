@@ -1,3 +1,5 @@
+import type { QuizState } from './quiz';
+
 export interface RecordEntry { errors: number; attempts: number; }
 export type Records = Record<string, RecordEntry>;
 export interface RoundResult { key: string; hadError: boolean; }
@@ -23,4 +25,3 @@ export function finalizeQuiz(quiz: QuizState, records: Records): { quiz: QuizSta
 }
 
 export const recordLabel = (record: RecordEntry | undefined): string => `${record?.errors ?? 0}/${record?.attempts ?? 0}`;
-import type { QuizState } from './quiz';

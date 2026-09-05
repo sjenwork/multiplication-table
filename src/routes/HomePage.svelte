@@ -5,6 +5,7 @@
   import { invertSelection, selectAll, toggleColumn, toggleKey, toggleRow } from '../domain/selection';
   import { questionBank, type Factor } from '../domain/question';
   import { DEFAULT_STATE, migrateState, parseState, serializeState, STORAGE_KEY, type AppState } from '../domain/state';
+  import { startWrongQuiz } from '../application/quiz-session';
   import type { DownloadPort, HapticsPort, NavigationPort, StoragePort } from '../ports';
 
   export let storage: StoragePort;
@@ -15,9 +16,11 @@
   let state: AppState = migrateState(DEFAULT_STATE);
   let settingsOpen = false;
   let status = '尚未選擇題目，請先點擊表格中的格子。';
+  let statusNotice = '';
 
   $: hasSelection = state.selected.length > 0;
-  $: status = hasSelection ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！` : '尚未選擇題目，請先點擊表格中的格子。';
+  $: hasWrongAnswers = questionBank().some((question) => (state.records[question.key]?.errors ?? 0) > 0);
+  $: status = statusNotice || (hasSelection ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！` : '尚未選擇題目，請先點擊表格中的格子。');
 
   onMount(() => {
     state = parseState(storage.get(STORAGE_KEY));
@@ -32,7 +35,13 @@
 
   function updateSelection(selected: string[]) { persist({ ...state, selected }); }
   function startChallenge() { navigation.go('quiz.html'); }
-  function randomQuiz() { navigation.go('quiz.html?random=1'); }
+  function randomQuiz() { statusNotice = ''; navigation.go('quiz.html?random=1'); }
+  function wrongFirstQuiz() {
+    const result = startWrongQuiz(storage, state);
+    if (!result) { statusNotice = '目前沒有錯題，先完成幾題再試試錯題優先。'; return; }
+    statusNotice = '';
+    navigation.go('quiz.html');
+  }
   function changeTheme(theme: 'light' | 'dark') {
     document.documentElement.dataset.theme = theme;
     persist({ ...state, theme });
@@ -74,7 +83,7 @@
     onColumn={(column: Factor) => updateSelection(toggleColumn(state.selected, column))}
     onAll={(selected: boolean) => updateSelection(selectAll(state.selected, selected))}
   />
-  <ActionBar hasSelection={hasSelection} onStart={startChallenge} onRandom={randomQuiz} onInvert={() => updateSelection(invertSelection(state.selected))} onSettings={() => settingsOpen = true} />
+  <ActionBar hasSelection={hasSelection} hasWrongAnswers={hasWrongAnswers} onStart={startChallenge} onRandom={randomQuiz} onWrongFirst={wrongFirstQuiz} onInvert={() => updateSelection(invertSelection(state.selected))} onSettings={() => settingsOpen = true} />
 </main>
 
 {#if settingsOpen}

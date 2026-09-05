@@ -1,6 +1,7 @@
 import { createQuiz, inputDigit, backspace, submitAnswer, nextQuestion, type AnswerStatus, type Rng, type QuizState } from '../domain/quiz';
 import { finalizeQuiz } from '../domain/records';
 import { questionBank } from '../domain/question';
+import { selectWrongFirstQuestions } from './wrong-first';
 import { migrateState, parseState, serializeState, STORAGE_KEY, type AppState, type KeypadPosition } from '../domain/state';
 import type { StoragePort } from '../ports';
 
@@ -91,4 +92,13 @@ export function startRandomQuiz(storage: StoragePort, state: AppState, rng: Rng 
   const quiz = createQuiz(questionBank(), rng);
   const nextState = saveQuiz(storage, state, quiz);
   return { state: nextState, quiz };
+}
+
+export function startWrongQuiz(storage: StoragePort, state: AppState, rng: Rng = Math.random): { state: AppState; quiz: QuizState } | null {
+  const questions = selectWrongFirstQuestions(questionBank(), state.records);
+  if (questions.length === 0) return null;
+  const quiz = createQuiz(questions, rng);
+  quiz.questions.sort((left, right) => (state.records[right.key]?.errors ?? 0) - (state.records[left.key]?.errors ?? 0));
+  const nextState = saveQuiz(storage, state, { ...quiz, activeKey: quiz.questions[0]?.key ?? null });
+  return { state: nextState, quiz: nextState.quiz! };
 }

@@ -64,7 +64,7 @@ describe('HomePage integration', () => {
     render(HomePage, { props: { storage: new MemoryStorage() } });
     const toolbar = screen.getByRole('toolbar', { name: '題目操作' });
     expect(getComputedStyle(toolbar).flexWrap).toBe('nowrap');
-    expect(toolbar.querySelectorAll('button')).toHaveLength(4);
+    expect(toolbar.querySelectorAll('button')).toHaveLength(5);
   });
 
   it('suppresses the synthetic click after a long-press drag and guards pointer boundaries', async () => {
@@ -121,5 +121,24 @@ describe('HomePage integration', () => {
     await fireEvent.click(second);
     expect(first).toHaveAttribute('aria-pressed', 'true');
     expect(second).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('disables wrong-first without errors and starts it from persisted records', async () => {
+    const emptyStorage = new MemoryStorage();
+    render(HomePage, { props: { storage: emptyStorage } });
+    expect(screen.getByRole('button', { name: '錯題優先' })).toBeDisabled();
+    await fireEvent.click(screen.getByRole('button', { name: '反選題目' }));
+    expect(screen.getByRole('button', { name: '錯題優先' })).toBeDisabled();
+    cleanup();
+
+    const storage = new MemoryStorage();
+    storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, records: { '1x1': { errors: 2, attempts: 2 } } }));
+    const go = vi.fn();
+    render(HomePage, { props: { storage, navigation: { go, back: () => undefined } } });
+    expect(screen.getByRole('button', { name: '錯題優先' })).not.toBeDisabled();
+    await fireEvent.click(screen.getByRole('button', { name: '錯題優先' }));
+    expect(go).toHaveBeenCalledWith('quiz.html');
+    expect(JSON.parse(storage.get(STORAGE_KEY)!).quiz.questions).toHaveLength(1);
+    expect(JSON.parse(storage.get(STORAGE_KEY)!).quiz.questions[0].key).toBe('1x1');
   });
 });
