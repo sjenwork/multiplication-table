@@ -80,11 +80,10 @@
         if (!grid) return;
         grid.innerHTML = '<thead><tr></tr></thead><tbody></tbody>';
         const headerRow = grid.querySelector('thead tr');
-        const selectedQuestions = questionList().filter((question) => state.selected.includes(question.key));
         const selectedKeys = new Set(state.selected);
         const headerTone = (keys) => {
             const count = keys.filter((key) => selectedKeys.has(key)).length;
-            return count === keys.length ? 'bg-emerald-100 border-emerald-400' : count > 0 ? 'bg-amber-50 border-amber-300' : 'bg-slate-100 border-transparent';
+            return count > 0 ? 'bg-amber-50 border-amber-300' : 'bg-slate-100 border-transparent';
         };
         const corner = document.createElement('th');
         corner.className = `sticky top-0 left-0 z-30 p-2 font-bold text-slate-600 border ${headerTone(questionList().map((question) => question.key))} rounded-lg`;
@@ -127,8 +126,7 @@
                 const key = questionKey(row, col);
                 const cell = document.createElement('td');
                 const selected = selectedKeys.has(key);
-                const highlighted = selectedQuestions.some((question) => question.row === row || question.col === col);
-                const cellTone = selected ? 'bg-emerald-100 border-emerald-400' : highlighted ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200';
+                const cellTone = selected ? 'bg-emerald-100 border-emerald-400' : 'bg-white border-slate-200';
                 cell.className = `p-2 rounded-lg transition border ${cellTone} relative text-xs md:text-sm`;
                 cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><input type="checkbox" class="sr-only" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
                 const checkbox = cell.querySelector('input');
