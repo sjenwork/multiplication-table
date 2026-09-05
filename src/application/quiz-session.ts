@@ -5,6 +5,7 @@ import { migrateState, parseState, serializeState, STORAGE_KEY, type AppState, t
 import type { StoragePort } from '../ports';
 
 export interface QuizSessionResult { quiz: QuizState; status: AnswerStatus; state: AppState; }
+export interface QuizCheckResult { quiz: QuizState; state: AppState; firstErrorKey: string | null; completed: boolean; }
 
 export function loadOrCreateQuiz(storage: StoragePort, rng: Rng = Math.random, random = false): { state: AppState; quiz: QuizState } {
   const state = parseState(storage.get(STORAGE_KEY));
@@ -50,6 +51,26 @@ export function answerQuestion(storage: StoragePort, state: AppState, key: strin
   return persistAnswer(storage, state, result.quiz, result.status);
 }
 
+export function checkAllAnswers(storage: StoragePort, state: AppState): QuizCheckResult | null {
+  if (!state.quiz || state.quiz.completed) return null;
+  let quiz = state.quiz;
+  let firstErrorKey: string | null = null;
+  for (const question of quiz.questions) {
+    if (question.resolved) continue;
+    const result = submitAnswer(quiz, question.key);
+    if (result.status === 'wrong' || result.status === 'revealed') firstErrorKey ??= question.key;
+    quiz = result.quiz;
+  }
+  const nextQuiz = nextQuestion(quiz);
+  if (nextQuiz.completed) {
+    const finalized = finalizeQuiz(nextQuiz, state.records);
+    const nextState = saveQuiz(storage, { ...state, records: finalized.records }, finalized.quiz);
+    return { quiz: finalized.quiz, state: nextState, firstErrorKey, completed: true };
+  }
+  const focusedQuiz = firstErrorKey ? { ...nextQuiz, activeKey: firstErrorKey } : nextQuiz;
+  return { quiz: focusedQuiz, state: saveQuiz(storage, state, focusedQuiz), firstErrorKey, completed: false };
+}
+
 function persistAnswer(storage: StoragePort, state: AppState, answeredQuiz: QuizState, status: AnswerStatus): QuizSessionResult {
   if (answeredQuiz.questions.every((question) => question.resolved)) {
     const finalized = finalizeQuiz(answeredQuiz, state.records);
@@ -62,6 +83,12 @@ function persistAnswer(storage: StoragePort, state: AppState, answeredQuiz: Quiz
 
 export function restartQuiz(storage: StoragePort, state: AppState, rng: Rng = Math.random): { state: AppState; quiz: QuizState } {
   const quiz = createQuiz(questionBank().filter((question) => state.selected.includes(question.key)), rng);
+  const nextState = saveQuiz(storage, state, quiz);
+  return { state: nextState, quiz };
+}
+
+export function startRandomQuiz(storage: StoragePort, state: AppState, rng: Rng = Math.random): { state: AppState; quiz: QuizState } {
+  const quiz = createQuiz(questionBank(), rng);
   const nextState = saveQuiz(storage, state, quiz);
   return { state: nextState, quiz };
 }

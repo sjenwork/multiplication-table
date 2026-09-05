@@ -46,7 +46,7 @@
 
 {#if mode === 'fixed' || position.detached}
   <section class:fixed={mode === 'fixed'} class:floating={mode === 'floating'} class:dock-preview={previewDock} class="number-keypad" style={mode === 'floating' ? `left:${left}px;top:${top}px` : ''} aria-label={mode === 'fixed' ? '固定數字鍵盤' : '浮動數字鍵盤'}>
-    <div class="keypad-header"><button class="drag-handle" type="button" aria-label="拖曳鍵盤" onpointerdown={beginDrag}>⠿</button><span>{input || '輸入答案'}</span><button type="button" aria-label="關閉鍵盤" onclick={onClose}>×</button></div>
+    <div class="keypad-header"><button class="drag-handle" type="button" aria-label="拖曳鍵盤" onpointerdown={beginDrag} onpointermove={moveDrag} onpointerup={endDrag} onpointercancel={endDrag}>⠿</button><span>{input || '輸入答案'}</span><button type="button" aria-label="關閉鍵盤" onclick={onClose}>×</button></div>
     <div class="key-grid" aria-label="數字鍵盤">
       {#each digits as digit}<button type="button" aria-label={`數字 ${digit}`} onclick={() => onDigit(digit)}>{digit}</button>{/each}
     </div>
