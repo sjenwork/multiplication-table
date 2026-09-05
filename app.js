@@ -195,18 +195,23 @@
         const submitBar = document.querySelector('.safe-action-bar');
         const bottomLimit = submitBar ? submitBar.getBoundingClientRect().top - 8 : window.innerHeight - 8;
         const topLimit = 8;
-        const preferredBelow = inputRect.bottom + 8;
+        const questionRect = input.closest('article')?.getBoundingClientRect();
+        const preferredBelow = inputRect.bottom + (questionRect?.height || 0) + 8;
         const preferredAbove = inputRect.top - keypadRect.height - 8;
         const nextArticle = input.closest('article')?.nextElementSibling;
         const nextRect = nextArticle?.getBoundingClientRect();
-        const overlapsNext = (top) => nextRect && top < nextRect.bottom && top + keypadRect.height > nextRect.top;
-        const top = preferredAbove >= topLimit
-            ? preferredAbove
-            : preferredBelow + keypadRect.height <= bottomLimit && !overlapsNext(preferredBelow)
-                ? preferredBelow
-                : Math.max(topLimit, preferredAbove);
+        const preferredLeft = questionRect?.left ?? inputRect.left;
+        const overlapsNext = (top) => nextRect
+            && preferredLeft < nextRect.right
+            && preferredLeft + keypadRect.width > nextRect.left
+            && top < nextRect.bottom
+            && top + keypadRect.height > nextRect.top;
+        const hasRoomBelow = preferredBelow + keypadRect.height <= bottomLimit && !overlapsNext(preferredBelow);
+        const top = hasRoomBelow
+            ? preferredBelow
+            : Math.max(topLimit, preferredAbove);
         const left = Math.min(
-            Math.max(8, inputRect.left + (inputRect.width - keypadRect.width) / 2),
+            Math.max(8, preferredLeft),
             Math.max(8, window.innerWidth - keypadRect.width - 8),
         );
         keypad.style.left = `${left}px`;
