@@ -167,15 +167,27 @@
         progress.textContent = `本次挑戰 ${state.quiz.questions.length} 題 · 完成後即可檢查答案`;
         list.innerHTML = state.quiz.questions.map((item, index) => {
             const status = item.resolved ? (item.hadError ? `✕ ${item.answer}` : '✓') : (item.wrongAttempts ? `✕ ${item.wrongAttempts}/3` : '');
-            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="relative flex items-center justify-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex items-center justify-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="numeric" value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></label><span class="absolute right-0 shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
+            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="relative flex items-center justify-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex items-center justify-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="none" readonly value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></label><span class="absolute right-0 shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
         }).join('');
         list.querySelectorAll('input[data-question]').forEach((input) => {
-            input.addEventListener('input', () => {
-                const item = state.quiz.questions.find((question) => question.key === input.dataset.question);
-                item.input = input.value;
+            input.addEventListener('click', () => {
+                state.quiz.activeKey = input.dataset.question;
                 saveState(state);
             });
         });
+    }
+
+    function updateKeypadAnswer(state, value) {
+        const active = state.quiz.questions.find((question) => question.key === state.quiz.activeKey && !question.resolved)
+            || state.quiz.questions.find((question) => !question.resolved);
+        if (!active) return;
+        state.quiz.activeKey = active.key;
+        if (value === 'backspace') active.input = active.input.slice(0, -1);
+        else if (value === 'clear') active.input = '';
+        else active.input += value;
+        const input = document.getElementById(`answer-${active.key}`);
+        if (input) input.value = active.input;
+        saveState(state);
     }
 
     function finishQuiz(state) {
@@ -264,6 +276,9 @@
         if (!state.quiz || !state.quiz.questions.length) { window.location.href = 'index.html'; return; }
         renderQuiz(state);
         document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
+        document.querySelectorAll('[data-pad-value]').forEach((button) => {
+            button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
+        });
         const modal = document.getElementById('leave-modal');
         const closeModal = () => modal.classList.add('hidden');
         document.getElementById('back-home').addEventListener('click', () => {
