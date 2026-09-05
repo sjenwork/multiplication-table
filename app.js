@@ -178,6 +178,12 @@
         box.textContent = text;
     }
 
+    function updateSubmitButton(state) {
+        const button = document.getElementById('submit-answer');
+        if (!button || !state.quiz) return;
+        button.disabled = state.quiz.questions.some((question) => !question.resolved && !question.input);
+    }
+
     function renderQuiz(state) {
         const list = document.getElementById('question-list');
         const progress = document.getElementById('progress');
@@ -195,6 +201,7 @@
                 saveState(state);
             });
         });
+        updateSubmitButton(state);
     }
 
     function updateKeypadAnswer(state, value) {
@@ -210,6 +217,7 @@
         document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-2', answerInput === input));
         document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-blue-300', answerInput === input));
         saveState(state);
+        updateSubmitButton(state);
     }
 
     function finishQuiz(state) {
@@ -299,6 +307,11 @@
 
     function submitAnswer(state) {
         if (!state.quiz) return;
+        if (state.quiz.questions.some((question) => !question.resolved && !question.input)) {
+            message('請先完成所有題目，再檢查答案。', true);
+            updateSubmitButton(state);
+            return;
+        }
         let unanswered = 0;
         state.quiz.questions.forEach((question) => {
             if (question.resolved) return;
