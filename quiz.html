@@ -131,6 +131,8 @@
         }
 
         .completion-card {
+            position: relative;
+            pointer-events: auto;
             width: min(100%, 32rem);
             padding: 0.75rem 1.25rem;
             border: 1px solid rgb(147 197 253 / 0.72);
@@ -145,6 +147,35 @@
             justify-content: center;
             gap: 0.65rem;
             animation: completion-pop 420ms cubic-bezier(.22, 1.2, .36, 1) both;
+            touch-action: pan-y;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .completion-close {
+            position: absolute;
+            top: -0.65rem;
+            right: -0.65rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border: 1px solid rgb(148 163 184 / 0.45);
+            border-radius: 9999px;
+            background: rgb(255 255 255 / 0.82);
+            color: rgb(71 85 105);
+            font-size: 1.25rem;
+            line-height: 1;
+            pointer-events: auto;
+            box-shadow: 0 8px 18px rgb(15 23 42 / 0.16);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .completion-close:hover {
+            background: rgb(255 255 255 / 0.96);
+            color: rgb(37 99 235);
         }
 
         .completion-emoji {
@@ -236,6 +267,7 @@
             <span></span><span></span><span></span><span></span><span></span>
         </div>
         <div class="completion-card">
+            <button id="close-completion" type="button" class="completion-close" aria-label="關閉完成提示">×</button>
             <div class="completion-emoji" aria-hidden="true">🎉</div>
             <h2 data-completion-title class="mt-2 text-xl font-black text-blue-700">你好棒！</h2>
             <p data-completion-detail class="mt-1 text-sm font-semibold text-slate-600">全部答對，你做到了！</p>
@@ -286,6 +318,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-155657" defer></script>
+    <script src="app.js?v=20260905-160105" defer></script>
 </body>
 </html>

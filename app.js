@@ -603,7 +603,34 @@
         if (title) title.textContent = allCorrect ? '你好棒！' : '挑戰完成！';
         if (detail) detail.textContent = allCorrect ? '全部答對，你做到了！' : '成績已保存，繼續保持！';
         overlay.classList.remove('hidden');
-        window.setTimeout(() => overlay.classList.add('hidden'), 1800);
+    }
+
+    function setupCompletionOverlay() {
+        const overlay = document.getElementById('completion-overlay');
+        const card = overlay?.querySelector('.completion-card');
+        const closeButton = document.getElementById('close-completion');
+        if (!overlay || !card || !closeButton || card.dataset.dismissReady === 'true') return;
+        card.dataset.dismissReady = 'true';
+        const close = () => overlay.classList.add('hidden');
+        closeButton.addEventListener('click', close);
+        let startX = null;
+        let startY = null;
+        card.addEventListener('pointerdown', (event) => {
+            startX = event.clientX;
+            startY = event.clientY;
+        });
+        card.addEventListener('pointerup', (event) => {
+            if (startX === null || startY === null) return;
+            const distanceX = event.clientX - startX;
+            const distanceY = event.clientY - startY;
+            if (Math.abs(distanceX) >= 56 && Math.abs(distanceX) > Math.abs(distanceY)) close();
+            startX = null;
+            startY = null;
+        });
+        card.addEventListener('pointercancel', () => {
+            startX = null;
+            startY = null;
+        });
     }
 
     function updateKeypadAnswer(state, value) {
@@ -795,6 +822,7 @@
         applyKeypadPosition(state);
         setupKeypadDrag(state);
         setupKeypadClose();
+        setupCompletionOverlay();
         updateQuizScrollReserve();
         window.addEventListener('resize', updateQuizScrollReserve);
         document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
