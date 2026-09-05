@@ -36,3 +36,9 @@
 5. 在 `main` 執行 `./deploy.sh`，才會更新正式版。
 
 部署前不要直接使用沒有 `--branch` 的 Wrangler 指令，也不要從其他分支部署。
+
+## Design System 與主題
+
+共用視覺 token 集中在 `design-tokens.css`，包含畫布、表面、文字、品牌色、狀態色、邊框、陰影、圓角與間距。不要在新元件中新增散落的 raw color；優先使用 `--ds-*` token 或既有 `.ds-*` 語意 class。
+
+主題使用 `data-theme="light|dark"`，由 `theme-init.js` 在頁面繪製前初始化，並由 `app.js` 將選擇保存到 localStorage。主題切換入口位於首頁「設定」。

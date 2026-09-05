@@ -14,6 +14,8 @@
     <link rel="apple-touch-icon" href="icons/icon-192.png">
     <link rel="stylesheet" href="pwa.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="design-tokens.css">
+    <script src="theme-init.js"></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -24,18 +26,18 @@
         .quiz-header {
             width: 100%;
             padding: 0.75rem 3.25rem;
-            border: 1px solid rgb(148 163 184 / 0.35);
-            border-radius: 1.25rem;
-            background: rgb(255 255 255 / 0.58);
-            box-shadow: 0 10px 28px rgb(15 23 42 / 0.08);
+            border: 1px solid var(--ds-border);
+            border-radius: var(--ds-radius-lg);
+            background: var(--ds-surface);
+            box-shadow: var(--ds-shadow-sm);
             backdrop-filter: blur(18px) saturate(135%);
             -webkit-backdrop-filter: blur(18px) saturate(135%);
         }
 
         .safe-keypad {
-            border: 1px solid rgb(148 163 184 / 0.38);
-            background: rgb(255 255 255 / 0.48);
-            box-shadow: 0 -12px 32px rgb(15 23 42 / 0.14);
+            border: 1px solid var(--ds-border);
+            background: var(--ds-surface);
+            box-shadow: 0 -12px 32px var(--ds-shadow-color, rgb(15 23 42 / 0.14));
             backdrop-filter: blur(24px) saturate(165%);
             -webkit-backdrop-filter: blur(24px) saturate(165%);
         }
@@ -45,19 +47,19 @@
             right: auto;
             bottom: auto;
             width: min(18rem, calc(100vw - 1rem));
-            border-radius: 1rem;
-            border: 1px solid rgb(148 163 184 / 0.45);
-            background: rgb(255 255 255 / 0.42);
-            box-shadow: 0 16px 36px rgb(15 23 42 / 0.18);
+            border-radius: var(--ds-radius-lg);
+            border: 1px solid var(--ds-border);
+            background: var(--ds-surface);
+            box-shadow: var(--ds-shadow-md);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
             transition: left 180ms ease, top 180ms ease, transform 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
         }
 
         .safe-keypad:not(.floating-keypad) {
-            border-top-left-radius: 1rem;
-            border-top-right-radius: 1rem;
-            background: rgb(255 255 255 / 0.5);
+            border-top-left-radius: var(--ds-radius-lg);
+            border-top-right-radius: var(--ds-radius-lg);
+            background: var(--ds-surface);
             overflow: visible;
         }
 
@@ -141,8 +143,8 @@
         }
 
         .keypad-close:hover {
-            background: rgb(255 255 255 / 0.95);
-            color: rgb(37 99 235);
+            background: var(--ds-surface-strong);
+            color: var(--ds-brand-strong);
         }
 
         .completion-overlay {
@@ -162,10 +164,10 @@
             pointer-events: auto;
             width: min(100%, 32rem);
             padding: 0.75rem 1.25rem;
-            border: 1px solid rgb(147 197 253 / 0.72);
+            border: 1px solid var(--ds-border-strong);
             border-radius: 9999px;
-            background: rgb(255 255 255 / 0.86);
-            box-shadow: 0 18px 45px rgb(30 64 175 / 0.2);
+            background: var(--ds-surface-strong);
+            box-shadow: var(--ds-shadow-md);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             text-align: center;
@@ -180,15 +182,15 @@
         }
 
         .completion-card.score-good {
-            border-color: rgb(250 204 21 / 0.72);
+            border-color: var(--ds-accent);
         }
 
         .completion-card.score-steady {
-            border-color: rgb(96 165 250 / 0.72);
+            border-color: var(--ds-brand);
         }
 
         .completion-card.score-keep-going {
-            border-color: rgb(52 211 153 / 0.72);
+            border-color: var(--ds-success);
         }
 
         .completion-card.score-good .completion-emoji {
@@ -212,21 +214,21 @@
             justify-content: center;
             width: 2rem;
             height: 2rem;
-            border: 1px solid rgb(148 163 184 / 0.45);
+            border: 1px solid var(--ds-border);
             border-radius: 9999px;
-            background: rgb(255 255 255 / 0.82);
-            color: rgb(71 85 105);
+            background: var(--ds-surface-strong);
+            color: var(--ds-text-muted);
             font-size: 1.25rem;
             line-height: 1;
             pointer-events: auto;
-            box-shadow: 0 8px 18px rgb(15 23 42 / 0.16);
+            box-shadow: var(--ds-shadow-sm);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
         }
 
         .completion-close:hover {
-            background: rgb(255 255 255 / 0.96);
-            color: rgb(37 99 235);
+            background: var(--ds-surface-strong);
+            color: var(--ds-brand-strong);
         }
 
         .completion-emoji {
@@ -244,17 +246,18 @@
         }
 
         .quiz-question-card {
-            background: rgb(255 255 255 / 0.52);
+            background: var(--ds-surface);
+            border-color: var(--ds-border);
             backdrop-filter: blur(12px) saturate(125%);
             -webkit-backdrop-filter: blur(12px) saturate(125%);
         }
 
         .quiz-question-card.quiz-card-success {
-            background: rgb(220 252 231 / 0.58);
+            background: var(--ds-success-soft);
         }
 
         .quiz-question-card.quiz-card-error {
-            background: rgb(254 226 226 / 0.58);
+            background: var(--ds-danger-soft);
         }
 
         .completion-confetti {
@@ -376,7 +379,7 @@
         </div>
     </div>
 
-    <div class="safe-action-bar fixed bottom-0 left-0 right-0 z-50 flex min-h-[3.75rem] flex-nowrap items-center gap-1 border-t border-slate-200 bg-white/95 px-2 shadow-lg backdrop-blur-md sm:gap-2 sm:px-4 md:px-6">
+    <div class="safe-action-bar ds-surface-strong fixed bottom-0 left-0 right-0 z-50 flex min-h-[3.75rem] flex-nowrap items-center gap-1 border-t px-2 shadow-lg backdrop-blur-md sm:gap-2 sm:px-4 md:px-6">
         <div id="completion-actions" class="hidden min-w-0 shrink overflow-x-auto items-center justify-center gap-1 sm:gap-2">
             <button id="return-home-after-quiz" type="button" class="whitespace-nowrap rounded-lg border border-slate-300 bg-slate-100 px-2 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 sm:px-3 sm:text-sm" aria-label="返回上一頁">← 上一頁</button>
             <button id="another-quiz" type="button" class="whitespace-nowrap rounded-lg border border-blue-200 bg-blue-50 px-2 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-100 sm:px-3 sm:text-sm" aria-label="依目前題庫再次出題">↻ 再次出題</button>
@@ -398,6 +401,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-212514" defer></script>
+    <script src="app.js?v=20260905-213251" defer></script>
 </body>
 </html>

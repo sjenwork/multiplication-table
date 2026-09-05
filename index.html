@@ -14,6 +14,8 @@
     <link rel="apple-touch-icon" href="icons/icon-192.png">
     <link rel="stylesheet" href="pwa.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="design-tokens.css">
+    <script src="theme-init.js"></script>
     <style>
         #multiplication-grid.selection-dragging {
             outline: 3px solid rgb(59 130 246 / 0.22);
@@ -44,7 +46,7 @@
             <h1 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">乘法小達人</h1>
         </header>
 
-        <div class="mb-4 rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3 text-center text-sm text-blue-800">
+        <div class="ds-surface mb-4 rounded-xl px-4 py-3 text-center text-sm">
             點選或長按滑動選題；每次隨機 10 題，不足則全部出題。
         </div>
 
@@ -53,35 +55,42 @@
         </div>
     </main>
 
-    <div class="safe-action-bar fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-2.5 px-2 sm:px-4 md:px-6 flex flex-nowrap items-center gap-2 z-50">
-        <p id="selection-status" class="text-xs sm:text-sm font-medium leading-tight text-slate-600 flex-1 min-w-0" role="status"></p>
+    <div class="safe-action-bar ds-surface-strong fixed bottom-0 left-0 right-0 border-t py-2.5 px-2 sm:px-4 md:px-6 flex flex-nowrap items-center gap-2 z-50">
+        <p id="selection-status" class="ds-text-muted text-xs sm:text-sm font-medium leading-tight flex-1 min-w-0" role="status"></p>
         <div class="flex items-center gap-2 shrink-0">
-            <button id="start-random-quiz" type="button" class="whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base bg-indigo-500 hover:bg-indigo-600 text-white font-bold rounded-xl shadow-md transition cursor-pointer">
+            <button id="start-random-quiz" type="button" class="ds-primary whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-md transition cursor-pointer">
                 隨機出題
             </button>
-            <button id="start-wrong-quiz" type="button" class="whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base bg-amber-500 hover:bg-amber-600 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer" disabled>
+            <button id="start-wrong-quiz" type="button" class="ds-accent whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base disabled:bg-slate-300 disabled:cursor-not-allowed font-bold rounded-xl shadow-md transition cursor-pointer" disabled>
                 錯題優先
             </button>
-            <button id="start-quiz" type="button" class="whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer">
+            <button id="start-quiz" type="button" class="ds-primary whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base disabled:bg-slate-300 disabled:cursor-not-allowed font-bold rounded-xl shadow-md transition cursor-pointer">
                 開始挑戰
             </button>
         </div>
     </div>
 
     <div id="settings-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
-        <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <div class="ds-surface-strong w-full max-w-sm rounded-2xl p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="settings-title">
             <div class="flex items-center justify-between gap-4">
                 <h2 id="settings-title" class="text-lg font-bold text-slate-800">設定</h2>
                 <button id="close-settings" type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full text-xl text-slate-500 hover:bg-slate-100" aria-label="關閉設定">×</button>
             </div>
             <p class="mt-2 text-sm leading-6 text-slate-600">管理你的練習資料與成績統計。</p>
             <div class="mt-5 space-y-3">
+                <div>
+                    <p class="mb-2 text-sm font-semibold text-slate-700">顯示主題</p>
+                    <div class="grid grid-cols-2 gap-2" role="group" aria-label="選擇顯示主題">
+                        <button type="button" data-theme-choice="light" aria-pressed="false" class="ds-theme-choice rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition">☀️ 明亮</button>
+                        <button type="button" data-theme-choice="dark" aria-pressed="false" class="ds-theme-choice rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition">🌙 深色</button>
+                    </div>
+                </div>
                 <button id="export-records" type="button" class="w-full rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-left text-sm font-semibold text-blue-700 hover:bg-blue-100 transition">匯出成績統計紀錄（CSV）</button>
                 <button id="clear-storage" type="button" class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-left text-sm font-semibold text-red-700 hover:bg-red-100 transition">清除所有練習紀錄</button>
             </div>
         </div>
     </div>
 
-    <script src="app.js?v=20260905-212514" defer></script>
+    <script src="app.js?v=20260905-213251" defer></script>
 </body>
 </html>

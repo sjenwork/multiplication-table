@@ -4,7 +4,7 @@
     const STORAGE_KEY = 'multiplication-practice-state';
 
     function newState() {
-        return { selected: [], records: {}, quiz: null, keypadPosition: { detached: false, left: null, top: null } };
+        return { selected: [], records: {}, quiz: null, theme: 'light', keypadPosition: { detached: false, left: null, top: null } };
     }
 
     function loadState() {
@@ -12,6 +12,7 @@
             const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
             if (!saved || typeof saved !== 'object') return newState();
             const state = { ...newState(), ...saved };
+            if (state.theme !== 'light' && state.theme !== 'dark') state.theme = 'light';
             if (!state.keypadPosition || typeof state.keypadPosition !== 'object') state.keypadPosition = newState().keypadPosition;
             state.keypadPosition = { ...newState().keypadPosition, ...state.keypadPosition };
             return state;
@@ -22,6 +23,12 @@
 
     function saveState(state) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function applyTheme(state) {
+        document.documentElement.dataset.theme = state.theme === 'dark' ? 'dark' : 'light';
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) themeColor.content = state.theme === 'dark' ? '#12243a' : '#f4fbff';
     }
 
     function questionKey(row, col) {
@@ -768,6 +775,15 @@
             document.getElementById('close-settings').focus();
         });
         document.getElementById('close-settings').addEventListener('click', closeSettings);
+        document.querySelectorAll('[data-theme-choice]').forEach((button) => {
+            button.addEventListener('click', () => {
+                state.theme = button.dataset.themeChoice;
+                applyTheme(state);
+                saveState(state);
+                updateThemeChoices(state);
+            });
+        });
+        updateThemeChoices(state);
         document.getElementById('export-records').addEventListener('click', () => { exportRecords(state); closeSettings(); });
         document.getElementById('clear-storage').addEventListener('click', () => {
             if (window.confirm('確定要清除所有練習紀錄與目前進度嗎？此操作無法復原。')) {
@@ -776,6 +792,12 @@
             }
         });
         settingsModal.addEventListener('click', (event) => { if (event.target === settingsModal) closeSettings(); });
+    }
+
+    function updateThemeChoices(state) {
+        document.querySelectorAll('[data-theme-choice]').forEach((button) => {
+            button.setAttribute('aria-pressed', button.dataset.themeChoice === state.theme ? 'true' : 'false');
+        });
     }
 
     async function forceUpdate() {
@@ -904,6 +926,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         if (new URLSearchParams(window.location.search).has('_update')) window.history.replaceState(null, '', `${window.location.pathname}${window.location.hash}`);
         const state = loadState();
+        applyTheme(state);
         if (document.getElementById('multiplication-grid')) initHome(state);
         if (document.getElementById('question-list')) initQuiz(state);
         initVersionUpdate();
