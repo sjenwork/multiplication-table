@@ -554,7 +554,10 @@
             const visible = state.quiz.completed && allCorrect;
             completionActions.classList.toggle('hidden', !visible);
             completionActions.classList.toggle('flex', visible);
+            completionActions.classList.toggle('flex-1', visible);
         }
+        const submitButton = document.getElementById('submit-answer');
+        if (submitButton) submitButton.classList.toggle('hidden', state.quiz.completed && allCorrect);
     }
 
     function scrollActiveQuestionIntoView(questionKey) {
