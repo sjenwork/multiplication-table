@@ -90,10 +90,10 @@
         }
 
         .keypad-close {
-            display: none;
+            display: flex;
             position: absolute;
-            top: -0.65rem;
-            right: -0.65rem;
+            top: 0.5rem;
+            right: 0.5rem;
             align-items: center;
             justify-content: center;
             width: 2rem;
@@ -110,7 +110,8 @@
         }
 
         .floating-keypad .keypad-close {
-            display: flex;
+            top: -0.65rem;
+            right: -0.65rem;
         }
 
         .keypad-close:hover {
@@ -315,7 +316,7 @@
 
     <div id="keypad-dock" class="keypad-dock" aria-hidden="true">放回底部</div>
     <div id="number-pad" class="safe-keypad fixed left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-2 py-2 shadow-lg backdrop-blur-md">
-        <button id="close-keypad" type="button" class="keypad-close" aria-label="關閉浮動鍵盤">×</button>
+        <button id="close-keypad" type="button" class="keypad-close" aria-label="關閉數字鍵盤">×</button>
         <div id="keypad-handle" class="floating-keypad-handle" aria-label="拖曳移動數字鍵盤">
             <span aria-hidden="true">⠿</span><span class="ml-2 text-xs font-semibold">拖曳鍵盤</span>
         </div>
@@ -357,6 +358,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-162829" defer></script>
+    <script src="app.js?v=20260905-163206" defer></script>
 </body>
 </html>

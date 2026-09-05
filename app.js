@@ -369,6 +369,11 @@
         document.getElementById('number-pad')?.classList.remove('hidden');
     }
 
+    function hideKeypad() {
+        document.getElementById('number-pad')?.classList.add('hidden');
+        updateQuizScrollReserve();
+    }
+
     function setupKeypadDrag(state) {
         const keypad = document.getElementById('number-pad');
         const handle = document.getElementById('keypad-handle');
@@ -523,10 +528,7 @@
         const keypad = document.getElementById('number-pad');
         const closeButton = document.getElementById('close-keypad');
         if (!keypad || !closeButton) return;
-        closeButton.addEventListener('click', () => {
-            keypad.classList.add('hidden');
-            updateQuizScrollReserve();
-        });
+        closeButton.addEventListener('click', hideKeypad);
     }
 
     function renderQuiz(state) {
@@ -582,7 +584,7 @@
         });
     }
 
-    function focusQuizQuestion(state, questionKey) {
+    function focusQuizQuestion(state, questionKey, openKeypad = true) {
         if (!state.quiz) return;
         state.quiz.activeKey = questionKey;
         document.querySelectorAll('input[data-question]').forEach((answerInput) => {
@@ -591,7 +593,8 @@
             answerInput.classList.toggle('ring-blue-300', active);
         });
         saveState(state);
-        showKeypad();
+        if (openKeypad) showKeypad();
+        else hideKeypad();
         scrollActiveQuestionIntoView(questionKey);
     }
 
@@ -797,6 +800,7 @@
             updateSubmitButton(state);
             return;
         }
+        hideKeypad();
         let unanswered = 0;
         let correctCount = state.quiz.questions.filter((question) => question.resolved && !question.hadError).length;
         let firstWrongKey = null;
@@ -821,14 +825,14 @@
         const remaining = state.quiz.questions.filter((question) => !question.resolved).length;
         if (remaining === 0) {
             finishQuiz(state, correctCount);
-            if (firstWrongKey) focusQuizQuestion(state, firstWrongKey);
+            if (firstWrongKey) focusQuizQuestion(state, firstWrongKey, false);
             return;
         }
         if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
         else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
         renderQuiz(state);
         showCompletionOverlay(correctCount, state.quiz.questions.length);
-        if (firstWrongKey) focusQuizQuestion(state, firstWrongKey);
+        if (firstWrongKey) focusQuizQuestion(state, firstWrongKey, false);
     }
 
     function initHome(state) {
