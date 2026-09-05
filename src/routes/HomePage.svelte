@@ -13,7 +13,8 @@
   export let navigation: NavigationPort = { go: () => undefined, back: () => undefined };
   export let haptics: HapticsPort = { vibrate: () => undefined };
 
-  let state: AppState = migrateState(DEFAULT_STATE);
+  // Read synchronously so the first interactive render cannot overwrite persisted state.
+  let state: AppState = parseState(storage.get(STORAGE_KEY));
   let settingsOpen = false;
   let status = '尚未選擇題目，請先點擊表格中的格子。';
   let statusNotice = '';

@@ -41,6 +41,14 @@ describe('HomePage integration', () => {
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toHaveLength(81);
   });
 
+  it('hydrates persisted state before the first grid interaction', async () => {
+    const storage = new MemoryStorage();
+    storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, selected: ['1x1'] }));
+    render(HomePage, { props: { storage } });
+    await fireEvent.click(screen.getByRole('button', { name: '選擇 1 乘 1' }));
+    expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toEqual([]);
+  });
+
   it('offers explicit inversion and disables challenge until a selection exists', async () => {
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
