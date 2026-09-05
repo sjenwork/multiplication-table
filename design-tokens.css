@@ -22,6 +22,8 @@
     --ds-update-surface-active: #125bb7;
     --ds-update-text: #ffffff;
     --ds-update-border: #8bc8ff;
+    --ds-factor-one: #1769d1;
+    --ds-factor-two: #b06b00;
     --ds-success: #1fb879;
     --ds-success-soft: #dff8eb;
     --ds-danger: #e45757;
@@ -66,6 +68,8 @@
     --ds-update-surface-active: #ffd77f;
     --ds-update-text: #08233d;
     --ds-update-border: #ffe4a3;
+    --ds-factor-one: #8bd0ff;
+    --ds-factor-two: #ffd77f;
     --ds-success: #62d6a2;
     --ds-success-soft: rgb(28 116 86 / 0.46);
     --ds-danger: #ff8b86;
