@@ -222,7 +222,9 @@
         const handle = document.getElementById('keypad-handle');
         const dock = document.getElementById('keypad-dock');
         if (!keypad || !handle || !dock) return;
-        const SNAP_ZONE = 112;
+        const DETACH_DISTANCE = 48;
+        const SNAP_RADIUS = 72;
+        const RELEASE_RADIUS = 112;
         let drag = null;
         const clampPosition = (left, top) => {
             const rect = keypad.getBoundingClientRect();
@@ -245,6 +247,16 @@
             dock.classList.toggle('is-hovered', hovered);
             dock.setAttribute('aria-hidden', visible ? 'false' : 'true');
         };
+        const rectDistance = (first, second) => {
+            const horizontal = Math.max(first.left - second.right, second.left - first.right, 0);
+            const vertical = Math.max(first.top - second.bottom, second.top - first.bottom, 0);
+            return Math.hypot(horizontal, vertical);
+        };
+        const setFloatingPosition = (left, top) => {
+            const position = clampPosition(left, top);
+            keypad.style.left = `${position.left}px`;
+            keypad.style.top = `${position.top}px`;
+        };
         handle.addEventListener('pointerdown', (event) => {
             const rect = keypad.getBoundingClientRect();
             drag = {
@@ -253,18 +265,19 @@
                 offsetY: event.clientY - rect.top,
                 detached: state.keypadPosition.detached,
                 overDock: false,
+                initialPosition: { ...state.keypadPosition },
             };
             handle.setPointerCapture(event.pointerId);
             keypad.classList.add('is-dragging');
             if (drag.detached) {
-                updateDock();
                 setDockState(true);
+                updateDock();
             }
             event.preventDefault();
         });
         handle.addEventListener('pointermove', (event) => {
             if (!drag) return;
-            if (!drag.detached && event.clientY < window.innerHeight - SNAP_ZONE) {
+            if (!drag.detached && event.clientY < window.innerHeight - keypad.getBoundingClientRect().height - DETACH_DISTANCE) {
                 drag.detached = true;
                 state.keypadPosition.detached = true;
                 keypad.classList.add('floating-keypad');
@@ -274,34 +287,35 @@
                 const detachedRect = keypad.getBoundingClientRect();
                 drag.offsetX = detachedRect.width / 2;
                 drag.offsetY = detachedRect.height / 2;
-                keypad.classList.add('is-dragging');
-                updateDock();
                 setDockState(true);
+                updateDock();
             }
             if (!drag.detached) return;
-            const inSnapZone = event.clientY >= window.innerHeight - SNAP_ZONE;
-            drag.overDock = inSnapZone;
-            setDockState(true, inSnapZone);
-            if (inSnapZone) {
-                const dockRect = dock.getBoundingClientRect();
+            keypad.classList.remove('keypad-snap-preview');
+            keypad.classList.add('is-dragging');
+            setFloatingPosition(event.clientX - drag.offsetX, event.clientY - drag.offsetY);
+            const dockRect = dock.getBoundingClientRect();
+            const keypadRect = keypad.getBoundingClientRect();
+            const distance = rectDistance(keypadRect, dockRect);
+            const nearDock = drag.overDock ? distance <= RELEASE_RADIUS : distance <= SNAP_RADIUS;
+            drag.overDock = nearDock;
+            setDockState(true, nearDock);
+            if (nearDock) {
                 keypad.classList.remove('is-dragging');
                 keypad.classList.add('keypad-snap-preview');
                 keypad.style.left = `${dockRect.left}px`;
                 keypad.style.top = `${dockRect.top}px`;
-                return;
             }
-            keypad.classList.remove('keypad-snap-preview');
-            keypad.classList.add('is-dragging');
-            const position = clampPosition(event.clientX - drag.offsetX, event.clientY - drag.offsetY);
-            keypad.style.left = `${position.left}px`;
-            keypad.style.top = `${position.top}px`;
         });
         const stopDrag = (event, canceled = false) => {
             if (!drag) return;
             const shouldSnap = !canceled && drag.detached && drag.overDock;
             keypad.classList.remove('is-dragging', 'keypad-snap-preview');
             setDockState(false);
-            if (shouldSnap) {
+            if (canceled) {
+                state.keypadPosition = drag.initialPosition;
+                applyKeypadPosition(state);
+            } else if (shouldSnap) {
                 state.keypadPosition = { detached: false, left: null, top: null };
                 applyKeypadPosition(state);
             } else if (drag.detached) {
