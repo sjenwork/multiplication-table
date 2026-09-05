@@ -373,8 +373,10 @@
     function updateQuizScrollReserve() {
         const list = document.getElementById('question-list');
         if (!list) return;
+        const header = document.querySelector('.quiz-header');
         const actionBar = document.querySelector('.safe-action-bar');
         const keypad = document.getElementById('number-pad');
+        if (header) list.style.setProperty('--quiz-header-reserve', `${header.getBoundingClientRect().height + 16}px`);
         const bottomCandidates = [window.innerHeight];
         if (actionBar) bottomCandidates.push(actionBar.getBoundingClientRect().top);
         if (keypad && !keypad.classList.contains('hidden') && !keypad.classList.contains('floating-keypad')) {
@@ -584,6 +586,7 @@
         window.requestAnimationFrame(() => {
             const questionRect = question.getBoundingClientRect();
             const listRect = list.getBoundingClientRect();
+            const header = document.querySelector('.quiz-header');
             const actionBar = document.querySelector('.safe-action-bar');
             const keypad = document.getElementById('number-pad');
             const bottomCandidates = [listRect.bottom];
@@ -594,7 +597,7 @@
                 const isFixedKeypad = !keypad.classList.contains('floating-keypad');
                 if (isFixedKeypad || overlapsQuestion) bottomCandidates.push(keypadRect.top);
             }
-            const visibleTop = listRect.top + 12;
+            const visibleTop = Math.max(listRect.top + 12, header ? header.getBoundingClientRect().bottom + 12 : listRect.top + 12);
             const visibleBottom = Math.min(...bottomCandidates) - 12;
             let scrollDistance = 0;
             if (questionRect.bottom > visibleBottom) scrollDistance = questionRect.bottom - visibleBottom;

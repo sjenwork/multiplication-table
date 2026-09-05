@@ -34,10 +34,10 @@
 
         .safe-keypad {
             border: 1px solid rgb(148 163 184 / 0.38);
-            background: rgb(255 255 255 / 0.68);
+            background: rgb(255 255 255 / 0.48);
             box-shadow: 0 -12px 32px rgb(15 23 42 / 0.14);
-            backdrop-filter: blur(20px) saturate(135%);
-            -webkit-backdrop-filter: blur(20px) saturate(135%);
+            backdrop-filter: blur(24px) saturate(165%);
+            -webkit-backdrop-filter: blur(24px) saturate(165%);
         }
 
         .floating-keypad {
@@ -47,7 +47,7 @@
             width: min(18rem, calc(100vw - 1rem));
             border-radius: 1rem;
             border: 1px solid rgb(148 163 184 / 0.45);
-            background: rgb(255 255 255 / 0.72);
+            background: rgb(255 255 255 / 0.42);
             box-shadow: 0 16px 36px rgb(15 23 42 / 0.18);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
@@ -57,6 +57,7 @@
         .safe-keypad:not(.floating-keypad) {
             border-top-left-radius: 1rem;
             border-top-right-radius: 1rem;
+            background: rgb(255 255 255 / 0.5);
             overflow: visible;
         }
 
@@ -237,6 +238,7 @@
         .quiz-question-list {
             overflow-y: auto;
             overscroll-behavior: contain;
+            padding-top: var(--quiz-header-reserve, 7rem);
             padding-bottom: var(--quiz-scroll-reserve, 15rem);
             scrollbar-gutter: stable;
         }
@@ -312,8 +314,8 @@
     <button id="force-update" type="button" class="hidden fixed left-1/2 top-3 z-[70] -translate-x-1/2 rounded-full border border-blue-200/70 bg-white/70 px-4 py-2 text-xs font-bold text-blue-700 shadow-lg backdrop-blur-md transition hover:bg-white/85 active:scale-95" aria-label="更新網站版本">
         更新版本
     </button>
-    <main class="max-w-3xl w-full h-full min-h-0 flex flex-col">
-        <header class="quiz-header relative text-center mb-6 shrink-0">
+    <main class="max-w-3xl w-full h-full min-h-0 flex flex-col relative">
+        <header class="quiz-header absolute left-0 right-0 top-0 z-20 text-center">
             <button id="back-home" type="button" class="absolute left-0 top-0 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-2xl leading-none text-slate-600 shadow-sm hover:bg-slate-100 hover:text-blue-600 transition" aria-label="返回選題">
                 <span aria-hidden="true">←</span>
             </button>
@@ -382,6 +384,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-211454" defer></script>
+    <script src="app.js?v=20260905-212027" defer></script>
 </body>
 </html>
