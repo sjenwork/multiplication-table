@@ -302,5 +302,6 @@
         const state = loadState();
         if (document.getElementById('multiplication-grid')) initHome(state);
         if (document.getElementById('question-list')) initQuiz(state);
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
     });
 }());
