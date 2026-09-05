@@ -5,7 +5,7 @@ import { DEFAULT_STATE, migrateState, parseState, serializeState, STORAGE_KEY } 
 describe('state schema and migration', () => {
   it('keeps the storage key and migrates a legacy state safely', () => {
     expect(STORAGE_KEY).toBe('multiplication-practice-state');
-    const legacy = JSON.parse(readFileSync(new URL('../fixtures/legacy-state.json', import.meta.url), 'utf8')) as unknown;
+    const legacy = JSON.parse(readFileSync('tests/fixtures/legacy-state.json', 'utf8')) as unknown;
     const state = migrateState(legacy);
     expect(state.schemaVersion).toBe(1);
     expect(state.selected).toEqual(['1x2', '9x9']);
@@ -15,8 +15,8 @@ describe('state schema and migration', () => {
     expect(state.quiz?.activeKey).toBe('1x2');
   });
   it('defaults malformed data and preserves valid data through round-trip', () => {
-    const invalid = JSON.parse(readFileSync(new URL('../fixtures/invalid-state.json', import.meta.url), 'utf8')) as unknown;
-    const legacy = JSON.parse(readFileSync(new URL('../fixtures/legacy-state.json', import.meta.url), 'utf8')) as unknown;
+    const invalid = JSON.parse(readFileSync('tests/fixtures/invalid-state.json', 'utf8')) as unknown;
+    const legacy = JSON.parse(readFileSync('tests/fixtures/legacy-state.json', 'utf8')) as unknown;
     expect(parseState('{bad')).toEqual(DEFAULT_STATE);
     const migratedInvalid = migrateState(invalid);
     expect(migratedInvalid).toMatchObject({ selected: ['1x1'], quiz: null, theme: 'light', keypadPosition: { detached: false, left: null, top: null } });

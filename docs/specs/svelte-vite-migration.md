@@ -158,3 +158,5 @@ Vite 產出需能在 Cloudflare Pages 以 `/`、`/quiz.html` 或等價 SPA entry
 
 - Phase 1 review fixes: invalid selection keys are rejected; round results deduplicate question keys; quiz migration legalizes, deduplicates, limits, and reconciles active/completed state; records migration keeps only question-bank keys.
 - Added regression coverage and invalid-state fixture assertions for the above boundaries.
+- Phase 2 delivered the HomePage selection grid, record labels, StoragePort-backed persistence, and settings boundary.
+- Phase 3 resolved the entry decision: Vite uses native multi-page inputs `src/index.html` and `src/quiz.html`, producing `dist/index.html` and `dist/quiz.html`; `App.svelte` selects HomePage or QuizPage from pathname. Quiz keypad remains deferred to the next slice.
