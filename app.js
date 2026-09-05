@@ -55,20 +55,20 @@
         if (!grid) return;
         grid.innerHTML = '';
         const corner = document.createElement('div');
-        corner.className = 'p-2 font-bold text-slate-400 bg-slate-100 rounded-lg flex items-center justify-center';
+        corner.className = 'sticky top-0 left-0 z-30 p-2 font-bold text-slate-400 bg-slate-100 rounded-lg flex items-center justify-center';
         corner.textContent = '×';
         grid.appendChild(corner);
 
         for (let col = 1; col <= 9; col += 1) {
             const heading = document.createElement('div');
-            heading.className = 'p-2 font-bold text-slate-700 bg-slate-100 rounded-lg flex items-center justify-center text-sm md:text-base';
+            heading.className = 'sticky top-0 z-20 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg flex items-center justify-center text-sm md:text-base';
             heading.textContent = col;
             grid.appendChild(heading);
         }
 
         for (let row = 1; row <= 9; row += 1) {
             const rowHeading = document.createElement('div');
-            rowHeading.className = 'p-2 font-bold text-slate-700 bg-slate-100 rounded-lg flex items-center justify-center text-sm md:text-base';
+            rowHeading.className = 'sticky left-0 z-10 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg flex items-center justify-center text-sm md:text-base';
             rowHeading.textContent = row;
             grid.appendChild(rowHeading);
 
