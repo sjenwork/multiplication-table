@@ -160,3 +160,4 @@ Vite 產出需能在 Cloudflare Pages 以 `/`、`/quiz.html` 或等價 SPA entry
 - Added regression coverage and invalid-state fixture assertions for the above boundaries.
 - Phase 2 delivered the HomePage selection grid, record labels, StoragePort-backed persistence, and settings boundary.
 - Phase 3 resolved the entry decision: Vite uses native multi-page inputs `src/index.html` and `src/quiz.html`, producing `dist/index.html` and `dist/quiz.html`; `App.svelte` selects HomePage or QuizPage from pathname. Quiz keypad remains deferred to the next slice.
+- Phase 4B integrates `src/pwa/` manifest, versioned Service Worker, and icons through a Vite build plugin; `deploy.sh` builds first and uploads only `dist/`. The update capsule is port-driven and only appears for a waiting worker; pre-commit passes its date-time stamp as `PWA_VERSION` without changing tracked source. Capacitor and E2E remain deferred.

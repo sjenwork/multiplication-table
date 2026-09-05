@@ -77,3 +77,8 @@ React 的 LLM 與套件資源最多，但需額外決定 router、state、form�
 
 - 是否要在第一個原生版本加入檔案分享、狀態列控制或只保留 browser adapter，待 Capacitor smoke test 後決定。
 - 是否將 Tailwind CDN 改為 Vite 內建 CSS pipeline；重構初期應優先保持既有 token 與視覺結果，再另立決策。
+
+## Implementation Status Notes
+
+- Phase 4B uses `src/pwa/` as the source for the manifest, versioned Service Worker, and icons. A Vite build plugin emits these assets into `dist/` and injects a `YYYYMMDD-HHMMSS` cache version.
+- Cloudflare Pages deployment runs `npm run build` and uploads only `dist/`; the pre-commit hook passes `PWA_VERSION` to the build without modifying tracked source.

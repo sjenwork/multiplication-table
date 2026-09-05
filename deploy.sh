@@ -33,6 +33,9 @@ esac
 echo "部署分支：$branch" >&2
 echo "部署網址：$target_url" >&2
 
-exec npx --yes wrangler pages deploy . \
+echo "建置 PWA 產物：dist/" >&2
+npm run build
+
+exec npx --yes wrangler pages deploy dist \
   --project-name "$project_name" \
   --branch "$branch"
