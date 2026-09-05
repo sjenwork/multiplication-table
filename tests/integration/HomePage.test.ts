@@ -19,7 +19,7 @@ describe('HomePage integration', () => {
     render(HomePage, { props: { storage: new MemoryStorage() } });
     expect(screen.getByRole('heading', { name: '乘法小達人' })).toBeInTheDocument();
     expect(screen.getByRole('grid', { name: '九九乘法選題表' })).toBeInTheDocument();
-    expect(screen.getByText('\\')).toBeInTheDocument();
+    expect(screen.getByText('＼')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '選擇 1 乘 1' })).toBeInTheDocument();
     expect(screen.getAllByRole('columnheader')).toHaveLength(10);
     expect(screen.getAllByRole('rowheader')).toHaveLength(9);
@@ -129,7 +129,10 @@ describe('HomePage integration', () => {
     render(HomePage, { props: { storage, download } });
     await fireEvent.click(screen.getByRole('button', { name: '開啟設定' }));
     await fireEvent.click(screen.getByRole('button', { name: '匯出紀錄' }));
-    expect(download.download).toHaveBeenCalledWith('multiplication-records.csv', expect.stringContaining('1x1'), 'text/csv;charset=utf-8');
+    expect(download.download).toHaveBeenCalledWith(expect.stringMatching(/^multiplication-practice-.*\.csv$/), expect.stringMatching(/"題目","錯誤次數","作答次數","正確次數"/), 'text/csv;charset=utf-8');
+    expect(download.download.mock.calls[0][1]).toContain('"1×1","0","0","0"');
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    await fireEvent.click(screen.getByRole('button', { name: '開啟設定' }));
     await fireEvent.click(screen.getByRole('button', { name: '清除資料' }));
     expect(storage.get(STORAGE_KEY)).toBeNull();
     expect(document.documentElement.dataset.theme).toBe('light');

@@ -48,14 +48,18 @@
     persist({ ...state, theme });
   }
   function exportRecords() {
-    const rows = [['題目', '錯誤次數', '作答次數']];
+    const rows = [['題目', '錯誤次數', '作答次數', '正確次數']];
     for (const question of questionBank()) {
       const record = state.records[question.key] ?? { errors: 0, attempts: 0 };
-      rows.push([question.key, String(record.errors), String(record.attempts)]);
+      rows.push([`${question.row}×${question.col}`, String(record.errors || 0), String(record.attempts || 0), String(Math.max((record.attempts || 0) - (record.errors || 0), 0))]);
     }
-    download.download('multiplication-records.csv', `\uFEFF${rows.map((row) => row.join(',')).join('\n')}`, 'text/csv;charset=utf-8');
+    const csv = `\uFEFF${rows.map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(',')).join('\n')}`;
+    const timestamp = new Date().toISOString().slice(0, 19).replaceAll(':', '-');
+    download.download(`multiplication-practice-${timestamp}.csv`, csv, 'text/csv;charset=utf-8');
+    settingsOpen = false;
   }
   function clearState() {
+    if (typeof window !== 'undefined' && !window.confirm('確定要清除所有練習紀錄與目前進度嗎？此操作無法復原。')) return;
     storage.remove(STORAGE_KEY);
     state = migrateState(DEFAULT_STATE);
     document.documentElement.dataset.theme = state.theme;
@@ -118,5 +122,5 @@
   .settings-modal .modal-close { width: 2rem; height: 2rem; border: 0; background: transparent !important; color: var(--ds-text-muted); box-shadow: none; }
   .settings-modal .modal-close:hover { background: var(--ds-surface-muted) !important; color: var(--ds-text); }
   .settings-description { margin: 0.5rem 0 0; color: var(--ds-text-muted); font-size: 0.875rem; line-height: 1.5; }
-  fieldset { margin: 1.25rem 0; border: 0; padding: 0; } legend { width: 100%; margin-bottom: 0.5rem; color: var(--ds-text); font-size: 0.875rem; font-weight: 700; } .theme-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; } .theme-choices button { min-height: 3rem; border: 1px solid var(--ds-border-strong); border-radius: var(--ds-radius-sm); padding: 0.75rem 1rem; background: var(--ds-surface); color: var(--ds-text); font: inherit; font-size: 0.875rem; font-weight: 700; cursor: pointer; } .settings-actions { display: grid; gap: 0.75rem; } .settings-actions button { width: 100%; text-align: left; } .settings-actions .ds-secondary { border-color: var(--ds-brand-soft) !important; background: var(--ds-brand-soft) !important; color: var(--ds-brand-strong) !important; }
+  fieldset { margin: 1.25rem 0; border: 0; padding: 0; } legend { width: 100%; margin-bottom: 0.5rem; color: var(--ds-text); font-size: 0.875rem; font-weight: 700; } .theme-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; } .theme-choices button { min-height: 3rem; border: 1px solid var(--ds-theme-choice-border); border-radius: 0.5rem; padding: 0.75rem 1rem; background: var(--ds-theme-choice-surface); color: var(--ds-theme-choice-text); font: inherit; font-size: 0.875rem; font-weight: 700; cursor: pointer; } .settings-actions { display: grid; gap: 0.75rem; } .settings-actions button { width: 100%; text-align: left; } .settings-actions .ds-secondary { border-color: var(--ds-export-border) !important; background: var(--ds-export-surface) !important; color: var(--ds-export-text) !important; } .settings-actions .ds-danger { border-color: var(--ds-clear-border) !important; background: var(--ds-clear-surface) !important; color: var(--ds-clear-text) !important; }
 </style>
