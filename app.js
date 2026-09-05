@@ -28,7 +28,7 @@
     function applyTheme(state) {
         document.documentElement.dataset.theme = state.theme === 'dark' ? 'dark' : 'light';
         const themeColor = document.querySelector('meta[name="theme-color"]');
-        if (themeColor) themeColor.content = state.theme === 'dark' ? '#12243a' : '#f4fbff';
+        if (themeColor) themeColor.content = state.theme === 'dark' ? '#091a30' : '#f4fbff';
     }
 
     function questionKey(row, col) {

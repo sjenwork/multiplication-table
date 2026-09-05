@@ -36,10 +36,10 @@
 
 [data-theme="dark"] {
     color-scheme: dark;
-    --ds-canvas: #12243a;
-    --ds-surface: rgb(26 54 82 / 0.74);
-    --ds-surface-strong: rgb(24 47 72 / 0.84);
-    --ds-surface-muted: rgb(34 78 111 / 0.72);
+    --ds-canvas: #091a30;
+    --ds-surface: rgb(22 62 94 / 0.84);
+    --ds-surface-strong: rgb(31 78 111 / 0.94);
+    --ds-surface-muted: rgb(14 73 101 / 0.82);
     --ds-text: #e5f4ff;
     --ds-text-strong: #f4fbff;
     --ds-text-muted: #aac7dc;
@@ -55,8 +55,8 @@
     --ds-danger: #ff8b86;
     --ds-danger-soft: rgb(133 54 64 / 0.52);
     --ds-disabled: #40556b;
-    --ds-border: rgb(151 206 239 / 0.3);
-    --ds-border-strong: rgb(122 193 237 / 0.68);
+    --ds-border: rgb(157 215 244 / 0.42);
+    --ds-border-strong: rgb(134 207 246 / 0.78);
     --ds-focus: #8bd0ff;
     --ds-shadow-sm: 0 6px 18px rgb(0 0 0 / 0.2);
     --ds-shadow-md: 0 14px 34px rgb(0 0 0 / 0.3);
