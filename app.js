@@ -174,8 +174,13 @@
             gesture.clientY = event.clientY;
             if (!gesture.active) {
                 if (Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY) > MOVE_TOLERANCE) {
-                    gesture.moved = true;
                     window.clearTimeout(gesture.timer);
+                    if (gesture.pointerType === 'mouse') {
+                        gesture.moved = false;
+                        activateGesture();
+                    } else {
+                        gesture.moved = true;
+                    }
                 }
                 return;
             }
@@ -193,6 +198,7 @@
                 clientX: event.clientX,
                 clientY: event.clientY,
                 startCell: cell,
+                pointerType: event.pointerType,
                 selected: new Set(state.selected),
                 touched: new Set(),
                 active: false,
@@ -210,7 +216,17 @@
             if (Date.now() < suppressClickUntil) {
                 event.preventDefault();
                 event.stopPropagation();
+                return;
             }
+            const cell = event.target.closest('td[data-question]');
+            if (!cell || event.target.closest('input[data-question]')) return;
+            event.preventDefault();
+            const key = cell.dataset.question;
+            state.selected = state.selected.includes(key)
+                ? state.selected.filter((item) => item !== key)
+                : [...state.selected, key];
+            saveState(state);
+            renderHome(state);
         }, true);
     }
 
