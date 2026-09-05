@@ -26,6 +26,60 @@
             right: auto;
             bottom: auto;
             width: min(18rem, calc(100vw - 1rem));
+            border-radius: 1rem;
+            border: 1px solid rgb(148 163 184 / 0.45);
+            background: rgb(255 255 255 / 0.72);
+            box-shadow: 0 16px 36px rgb(15 23 42 / 0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .floating-keypad .floating-keypad-handle {
+            display: flex;
+        }
+
+        .floating-keypad-handle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 1.75rem;
+            color: rgb(100 116 139);
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+        }
+
+        .floating-keypad-handle:active {
+            cursor: grabbing;
+        }
+
+        .keypad-close {
+            display: none;
+            position: absolute;
+            top: -0.65rem;
+            right: -0.65rem;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border: 1px solid rgb(148 163 184 / 0.45);
+            border-radius: 9999px;
+            background: rgb(255 255 255 / 0.78);
+            color: rgb(71 85 105);
+            font-size: 1.25rem;
+            line-height: 1;
+            box-shadow: 0 8px 18px rgb(15 23 42 / 0.16);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .floating-keypad .keypad-close {
+            display: flex;
+        }
+
+        .keypad-close:hover {
+            background: rgb(255 255 255 / 0.95);
+            color: rgb(37 99 235);
         }
     </style>
 </head>
@@ -43,11 +97,15 @@
             <p id="progress" class="text-slate-600 text-sm md:text-base" role="status"></p>
         </header>
 
-        <section id="question-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2" aria-label="測驗題目"></section>
+        <section id="question-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-[15rem]" aria-label="測驗題目"></section>
         <div id="quiz-message" class="mt-6 p-4 rounded-xl text-center font-medium hidden" role="alert"></div>
     </main>
 
     <div id="number-pad" class="safe-keypad fixed left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-2 py-2 shadow-lg backdrop-blur-md">
+        <button id="close-keypad" type="button" class="keypad-close" aria-label="關閉浮動鍵盤">×</button>
+        <div id="keypad-handle" class="floating-keypad-handle" aria-label="拖曳移動數字鍵盤">
+            <span aria-hidden="true">⠿</span><span class="ml-2 text-xs font-semibold">拖曳鍵盤</span>
+        </div>
         <div class="numeric-pad mx-auto max-w-2xl">
             <button type="button" data-pad-value="1" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">1</button>
             <button type="button" data-pad-value="2" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">2</button>
@@ -81,6 +139,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-131120" defer></script>
+    <script src="app.js?v=20260905-132425" defer></script>
 </body>
 </html>

@@ -197,9 +197,14 @@
         const topLimit = 8;
         const preferredBelow = inputRect.bottom + 8;
         const preferredAbove = inputRect.top - keypadRect.height - 8;
-        const top = preferredBelow + keypadRect.height <= bottomLimit
-            ? preferredBelow
-            : Math.max(topLimit, preferredAbove);
+        const nextArticle = input.closest('article')?.nextElementSibling;
+        const nextRect = nextArticle?.getBoundingClientRect();
+        const overlapsNext = (top) => nextRect && top < nextRect.bottom && top + keypadRect.height > nextRect.top;
+        const top = preferredAbove >= topLimit
+            ? preferredAbove
+            : preferredBelow + keypadRect.height <= bottomLimit && !overlapsNext(preferredBelow)
+                ? preferredBelow
+                : Math.max(topLimit, preferredAbove);
         const left = Math.min(
             Math.max(8, inputRect.left + (inputRect.width - keypadRect.width) / 2),
             Math.max(8, window.innerWidth - keypadRect.width - 8),
@@ -213,11 +218,55 @@
         if (!keypad) return;
         const isFloating = state.inputMode === 'floating';
         keypad.classList.toggle('floating-keypad', isFloating);
-        if (isFloating) window.requestAnimationFrame(() => positionFloatingKeypad(input || document.getElementById(`answer-${state.quiz?.activeKey}`)));
-        else {
+        if (isFloating) {
+            keypad.classList.remove('hidden');
+            window.requestAnimationFrame(() => positionFloatingKeypad(input || document.getElementById(`answer-${state.quiz?.activeKey}`)));
+        } else {
+            keypad.classList.remove('hidden');
             keypad.style.left = '';
             keypad.style.top = '';
         }
+    }
+
+    function setupKeypadDrag() {
+        const keypad = document.getElementById('number-pad');
+        const handle = document.getElementById('keypad-handle');
+        if (!keypad || !handle) return;
+        let drag = null;
+        const clampPosition = (left, top) => {
+            const rect = keypad.getBoundingClientRect();
+            const submitBar = document.querySelector('.safe-action-bar');
+            const maxBottom = submitBar ? submitBar.getBoundingClientRect().top - 8 : window.innerHeight - 8;
+            return {
+                left: Math.min(Math.max(8, left), Math.max(8, window.innerWidth - rect.width - 8)),
+                top: Math.min(Math.max(8, top), Math.max(8, maxBottom - rect.height)),
+            };
+        };
+        handle.addEventListener('pointerdown', (event) => {
+            if (!keypad.classList.contains('floating-keypad')) return;
+            const rect = keypad.getBoundingClientRect();
+            drag = { offsetX: event.clientX - rect.left, offsetY: event.clientY - rect.top };
+            handle.setPointerCapture(event.pointerId);
+            event.preventDefault();
+        });
+        handle.addEventListener('pointermove', (event) => {
+            if (!drag) return;
+            const position = clampPosition(event.clientX - drag.offsetX, event.clientY - drag.offsetY);
+            keypad.style.left = `${position.left}px`;
+            keypad.style.top = `${position.top}px`;
+        });
+        const stopDrag = () => { drag = null; };
+        handle.addEventListener('pointerup', stopDrag);
+        handle.addEventListener('pointercancel', stopDrag);
+    }
+
+    function setupKeypadClose(state) {
+        const keypad = document.getElementById('number-pad');
+        const closeButton = document.getElementById('close-keypad');
+        if (!keypad || !closeButton) return;
+        closeButton.addEventListener('click', () => {
+            if (state.inputMode === 'floating') keypad.classList.add('hidden');
+        });
     }
 
     function renderQuiz(state) {
@@ -398,6 +447,8 @@
         if (!state.quiz || !state.quiz.questions.length) { window.location.href = 'index.html'; return; }
         renderQuiz(state);
         updateKeypadMode(state);
+        setupKeypadDrag();
+        setupKeypadClose(state);
         document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
         document.querySelectorAll('[data-pad-value]').forEach((button) => {
             button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
