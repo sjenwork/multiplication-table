@@ -41,6 +41,13 @@ test('opens quiz directly and restores the selected question set', async ({ page
   await expect(page.getByRole('textbox', { name: '第 1 題答案' })).toBeVisible();
 });
 
+test('recognizes the Cloudflare clean quiz route after html redirect', async ({ page }) => {
+  await seedState(page, { ...emptyState, selected: ['1x2'] });
+  await page.goto('/quiz?random=1');
+  await expect(page.getByRole('heading', { name: '乘法挑戰' })).toBeVisible();
+  await expect(page.getByRole('article')).toHaveCount(10);
+});
+
 test('enters a fixed-keypad answer and keeps the completion banner until closed', async ({ page }) => {
   await seedState(page, { ...emptyState, selected: ['1x2'] });
   await page.goto('/quiz.html');

@@ -80,6 +80,7 @@ test('desktop home runtime keeps sticky geometry, glass modal, theme contrast, a
   expect(geometry.position).toBe('sticky');
   expect(geometry.height).toBeGreaterThanOrEqual(48);
   expect(geometry.overflow).toBe('auto');
+  expect(await page.locator('td[data-question="1x1"]').evaluate((node) => getComputedStyle(node).userSelect)).toBe('none');
   await page.screenshot({ path: 'test-results/round-c-home-desktop-light.png', fullPage: true });
 
   await page.getByRole('button', { name: '開啟設定' }).click();

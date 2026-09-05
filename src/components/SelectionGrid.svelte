@@ -190,6 +190,7 @@
 </table>
 
 <style>
+  .selection-grid, .selection-grid * { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
   .selection-grid { border-collapse: separate; border-spacing: 0.25rem; width: 100%; min-width: 40.625rem; table-layout: fixed; text-align: center; }
   th, td { min-width: 3rem; height: 3rem; border: 1px solid var(--ds-border); border-radius: var(--ds-radius-sm); padding: 0.5rem; }
   th { font-weight: 700; }

@@ -11,7 +11,7 @@
   import type { PwaUpdatePort } from './ports';
 
   const storage = browserStorage();
-  const isQuizPage = typeof window !== 'undefined' && window.location.pathname.endsWith('/quiz.html');
+  const isQuizPage = typeof window !== 'undefined' && (window.location.pathname.endsWith('/quiz.html') || window.location.pathname.endsWith('/quiz'));
   const randomQuiz = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('random') === '1';
   let updatePort: PwaUpdatePort | null = null;
 
