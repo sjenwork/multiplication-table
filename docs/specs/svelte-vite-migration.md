@@ -154,3 +154,7 @@ Vite 產出需能在 Cloudflare Pages 以 `/`、`/quiz.html` 或等價 SPA entry
 - [Deferred] Capacitor 原生分享與震動的 plugin 清單，待 Web 版 port contract 穩定後決定。
 - [Known Gap] 目前 legacy 沒有現成測試；Phase 0 必須以 fixtures 與新測試補上行為基線。
 
+## Delivery Notes
+
+- Phase 1 review fixes: invalid selection keys are rejected; round results deduplicate question keys; quiz migration legalizes, deduplicates, limits, and reconciles active/completed state; records migration keeps only question-bank keys.
+- Added regression coverage and invalid-state fixture assertions for the above boundaries.

@@ -1,12 +1,12 @@
-const CACHE_NAME = 'multiplication-master-v20260905-225600';
+const CACHE_NAME = 'multiplication-master-v20260905-230412';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260905-225600',
-    '/design-tokens.css?v=20260905-225600',
-    '/theme-init.js?v=20260905-225600',
-    '/pwa.css?v=20260905-225600',
+    '/app.js?v=20260905-230412',
+    '/design-tokens.css?v=20260905-230412',
+    '/theme-init.js?v=20260905-230412',
+    '/pwa.css?v=20260905-230412',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',

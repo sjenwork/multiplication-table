@@ -1,0 +1,12 @@
+{
+  "selected": ["1x2", "1x2", "9x9"],
+  "records": {"1x2": {"errors": 2, "attempts": 4}},
+  "quiz": {
+    "questions": [{"row": 1, "col": 2, "answer": 2, "key": "1x2", "input": "", "wrongAttempts": 1, "resolved": false, "hadError": true}],
+    "activeKey": "1x2",
+    "completed": false
+  },
+  "theme": "dark",
+  "keypadPosition": {"detached": true, "left": 12, "top": 24},
+  "futureField": "ignored"
+}
