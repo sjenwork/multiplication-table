@@ -1,0 +1,30 @@
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+.app-shell {
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+    padding-left: max(1rem, env(safe-area-inset-left));
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+}
+
+.app-shell button,
+.app-shell input,
+.app-shell label {
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.safe-action-bar {
+    padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+}
+
+.safe-keypad {
+    bottom: calc(3.75rem + env(safe-area-inset-bottom));
+}

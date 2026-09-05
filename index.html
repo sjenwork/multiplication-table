@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1">
     <title>乘法小達人｜九九乘法練習</title>
     <meta name="theme-color" content="#2563eb">
     <meta name="mobile-web-app-capable" content="yes">
@@ -12,9 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="pwa.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 h-[100svh] overflow-hidden flex flex-col items-center p-4 pb-20">
+<body class="app-shell bg-slate-50 h-[100svh] overflow-hidden flex flex-col items-center p-4 pb-20">
     <button id="force-update" type="button" class="fixed left-1/2 top-3 z-[70] -translate-x-1/2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-bold text-blue-700 shadow-sm transition hover:bg-blue-100 active:scale-95" aria-label="更新網站版本">
         更新版本
     </button>
@@ -37,7 +38,7 @@
         </div>
     </main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-2.5 px-2 sm:px-4 md:px-6 flex flex-nowrap items-center gap-2 z-50">
+    <div class="safe-action-bar fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-2.5 px-2 sm:px-4 md:px-6 flex flex-nowrap items-center gap-2 z-50">
         <p id="selection-status" class="text-xs sm:text-sm font-medium leading-tight text-slate-600 flex-1 min-w-0" role="status"></p>
         <div class="flex items-center gap-2 shrink-0">
             <button id="start-quiz" type="button" class="whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer">
@@ -63,6 +64,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-124915" defer></script>
+    <script src="app.js?v=20260905-125203" defer></script>
 </body>
 </html>
