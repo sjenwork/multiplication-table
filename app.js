@@ -209,7 +209,9 @@
         const hasRoomBelow = preferredBelow + keypadRect.height <= bottomLimit && !overlapsNext(preferredBelow);
         const top = hasRoomBelow
             ? preferredBelow
-            : Math.max(topLimit, preferredAbove);
+            : preferredAbove >= topLimit
+                ? preferredAbove
+                : Math.max(topLimit, bottomLimit - keypadRect.height);
         const left = Math.min(
             Math.max(8, preferredLeft),
             Math.max(8, window.innerWidth - keypadRect.width - 8),
@@ -224,10 +226,20 @@
         const isFloating = state.inputMode === 'floating';
         keypad.classList.toggle('floating-keypad', isFloating);
         if (isFloating) {
+            keypad.style.right = 'auto';
+            keypad.style.bottom = 'auto';
+            keypad.style.width = 'min(18rem, calc(100vw - 1rem))';
+            keypad.classList.add('keypad-positioning');
             keypad.classList.remove('hidden');
-            window.requestAnimationFrame(() => positionFloatingKeypad(input || document.getElementById(`answer-${state.quiz?.activeKey}`)));
+            window.requestAnimationFrame(() => {
+                positionFloatingKeypad(input || document.getElementById(`answer-${state.quiz?.activeKey}`));
+                keypad.classList.remove('keypad-positioning');
+            });
         } else {
             keypad.classList.remove('hidden');
+            keypad.style.right = '';
+            keypad.style.bottom = '';
+            keypad.style.width = '';
             keypad.style.left = '';
             keypad.style.top = '';
         }
