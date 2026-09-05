@@ -148,7 +148,9 @@
         const selected = questionList().filter((question) => state.selected.includes(question.key));
         state.quiz = {
             questions: shuffled(selected).slice(0, 10).map((question) => ({ ...question, input: '', wrongAttempts: 0, resolved: false, hadError: false })),
+            activeKey: null,
         };
+        state.quiz.activeKey = state.quiz.questions[0]?.key || null;
         saveState(state);
         window.location.href = 'quiz.html';
     }
@@ -167,11 +169,13 @@
         progress.textContent = `本次挑戰 ${state.quiz.questions.length} 題 · 完成後即可檢查答案`;
         list.innerHTML = state.quiz.questions.map((item, index) => {
             const status = item.resolved ? (item.hadError ? `✕ ${item.answer}` : '✓') : (item.wrongAttempts ? `✕ ${item.wrongAttempts}/3` : '');
-            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="relative flex items-center justify-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex items-center justify-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="none" readonly value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></label><span class="absolute right-0 shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
+            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="relative flex items-center justify-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex items-center justify-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="none" readonly value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 ${item.key === state.quiz.activeKey ? 'ring-2 ring-blue-300' : ''} disabled:bg-slate-100" autocomplete="off"></label><span class="absolute right-0 shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
         }).join('');
         list.querySelectorAll('input[data-question]').forEach((input) => {
             input.addEventListener('click', () => {
                 state.quiz.activeKey = input.dataset.question;
+                list.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.remove('ring-2', 'ring-blue-300'));
+                input.classList.add('ring-2', 'ring-blue-300');
                 saveState(state);
             });
         });
@@ -187,6 +191,8 @@
         else active.input += value;
         const input = document.getElementById(`answer-${active.key}`);
         if (input) input.value = active.input;
+        document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-2', answerInput === input));
+        document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-blue-300', answerInput === input));
         saveState(state);
     }
 
