@@ -252,6 +252,10 @@
             const vertical = Math.max(first.top - second.bottom, second.top - first.bottom, 0);
             return Math.hypot(horizontal, vertical);
         };
+        const pointDistance = (x, y, rect) => Math.hypot(
+            Math.max(rect.left - x, 0, x - rect.right),
+            Math.max(rect.top - y, 0, y - rect.bottom),
+        );
         const setFloatingPosition = (left, top) => {
             const position = clampPosition(left, top);
             keypad.style.left = `${position.left}px`;
@@ -308,9 +312,11 @@
                 keypad.style.top = `${dockRect.top}px`;
             }
         };
-        const stopDrag = (clientY, pointerId = null, canceled = false) => {
+        const stopDrag = (clientX, clientY, pointerId = null, canceled = false) => {
             if (!drag) return;
-            const shouldSnap = !canceled && drag.detached && drag.overDock;
+            const dockRect = dock.getBoundingClientRect();
+            const releasedNearDock = pointDistance(clientX, clientY, dockRect) <= RELEASE_RADIUS;
+            const shouldSnap = !canceled && drag.detached && releasedNearDock;
             keypad.classList.remove('is-dragging', 'keypad-snap-preview');
             setDockState(false);
             if (canceled) {
@@ -333,8 +339,8 @@
             event.preventDefault();
         });
         handle.addEventListener('pointermove', (event) => moveDrag(event.clientX, event.clientY));
-        handle.addEventListener('pointerup', (event) => stopDrag(event.clientY, event.pointerId));
-        handle.addEventListener('pointercancel', (event) => stopDrag(event.clientY, event.pointerId, true));
+        handle.addEventListener('pointerup', (event) => stopDrag(event.clientX, event.clientY, event.pointerId));
+        handle.addEventListener('pointercancel', (event) => stopDrag(event.clientX, event.clientY, event.pointerId, true));
         if (!window.PointerEvent) {
             const getTouch = (event) => event.touches[0] || event.changedTouches[0];
             handle.addEventListener('touchstart', (event) => {
@@ -351,7 +357,7 @@
             }, { passive: false });
             handle.addEventListener('touchend', (event) => {
                 const touch = getTouch(event);
-                if (touch) stopDrag(touch.clientY);
+                if (touch) stopDrag(touch.clientX, touch.clientY);
             }, { passive: false });
             handle.addEventListener('touchcancel', () => stopDrag(0, null, true), { passive: false });
         }
