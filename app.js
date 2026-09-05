@@ -232,7 +232,16 @@
         if (!state.quiz || !state.quiz.questions.length) { window.location.href = 'index.html'; return; }
         renderQuiz(state);
         document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
-        document.getElementById('back-home').addEventListener('click', () => { state.quiz = null; saveState(state); window.location.href = 'index.html'; });
+        const modal = document.getElementById('leave-modal');
+        const closeModal = () => modal.classList.add('hidden');
+        document.getElementById('back-home').addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.getElementById('cancel-leave').focus();
+        });
+        document.getElementById('cancel-leave').addEventListener('click', closeModal);
+        document.getElementById('confirm-leave').addEventListener('click', () => { state.quiz = null; saveState(state); window.location.href = 'index.html'; });
+        modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
         document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
     }
 

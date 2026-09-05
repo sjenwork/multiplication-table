@@ -8,6 +8,10 @@
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-4 pb-28">
     <main class="max-w-2xl w-full mb-8">
+        <button id="back-home" type="button" class="mb-5 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 hover:text-blue-600 transition">
+            <span class="text-xl leading-none" aria-hidden="true">←</span>
+            <span>返回選題</span>
+        </button>
         <header class="text-center mb-6">
             <p class="text-sm font-semibold tracking-[0.2em] text-blue-600 mb-2">DAILY CHALLENGE</p>
             <h1 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">乘法挑戰</h1>
@@ -18,15 +22,23 @@
         <div id="quiz-message" class="mt-6 p-4 rounded-xl text-center font-medium hidden" role="alert"></div>
     </main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-4 px-6 flex justify-center items-center gap-4 z-50">
-        <button id="submit-answer" type="button" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer">
+    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-2.5 px-2 sm:px-4 md:px-6 flex flex-nowrap items-center gap-2 z-50">
+        <button id="submit-answer" type="button" class="ml-auto whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer">
             檢查答案
-        </button>
-        <button id="back-home" type="button" class="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-xl transition cursor-pointer">
-            返回選題
         </button>
     </div>
 
-    <script src="app.js?v=20260905-120826" defer></script>
+    <div id="leave-modal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
+        <div class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="leave-title">
+            <h2 id="leave-title" class="text-lg font-bold text-slate-800">要離開這次挑戰嗎？</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">目前的作答進度會被清除，確定要返回選題嗎？</p>
+            <div class="mt-5 flex justify-end gap-3">
+                <button id="cancel-leave" type="button" class="px-4 py-2.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">繼續作答</button>
+                <button id="confirm-leave" type="button" class="px-4 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">返回選題</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=20260905-121102" defer></script>
 </body>
 </html>
