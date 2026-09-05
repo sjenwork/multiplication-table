@@ -30,7 +30,7 @@
 ## 開發流程
 
 1. 從 `dev` 分支修改與測試。
-2. 執行 `git commit`；`.githooks/pre-commit` 會自動更新 `app.js` 的版本 query 與 Service Worker cache name。
+2. 執行 `git commit`；`.githooks/pre-commit` 會自動以「日期＋時間」同步更新所有前端 CSS/JS 資源的版本 query，以及 Service Worker cache name。新版本會先等待使用者按下更新膠囊，確認後才切換。
 3. 執行 `./deploy.sh` 部署測試版。
 4. 確認測試版無誤後，將 `dev` 合併到 `main`。
 5. 在 `main` 執行 `./deploy.sh`，才會更新正式版。
