@@ -270,6 +270,8 @@
                 detached: state.keypadPosition.detached,
                 overDock: false,
                 initialPosition: { ...state.keypadPosition },
+                lastX: clientX,
+                lastY: clientY,
             };
             if (pointerId !== null) {
                 try { handle.setPointerCapture(pointerId); } catch (error) { /* Safari may release the pointer before capture. */ }
@@ -282,6 +284,8 @@
         };
         const moveDrag = (clientX, clientY) => {
             if (!drag) return;
+            drag.lastX = clientX;
+            drag.lastY = clientY;
             if (!drag.detached && clientY < window.innerHeight - keypad.getBoundingClientRect().height - DETACH_DISTANCE) {
                 drag.detached = true;
                 state.keypadPosition.detached = true;
@@ -314,9 +318,11 @@
         };
         const stopDrag = (clientX, clientY, pointerId = null, canceled = false) => {
             if (!drag) return;
+            const releaseX = Number.isFinite(clientX) ? clientX : drag.lastX;
+            const releaseY = Number.isFinite(clientY) ? clientY : drag.lastY;
             const dockRect = dock.getBoundingClientRect();
-            const releasedNearDock = pointDistance(clientX, clientY, dockRect) <= RELEASE_RADIUS;
-            const shouldSnap = !canceled && drag.detached && releasedNearDock;
+            const releasedNearDock = pointDistance(releaseX, releaseY, dockRect) <= RELEASE_RADIUS;
+            const shouldSnap = !canceled && drag.detached && drag.overDock && releasedNearDock;
             keypad.classList.remove('is-dragging', 'keypad-snap-preview');
             setDockState(false);
             if (canceled) {
@@ -338,9 +344,9 @@
             beginDrag(event.clientX, event.clientY, event.pointerId);
             event.preventDefault();
         });
-        handle.addEventListener('pointermove', (event) => moveDrag(event.clientX, event.clientY));
-        handle.addEventListener('pointerup', (event) => stopDrag(event.clientX, event.clientY, event.pointerId));
-        handle.addEventListener('pointercancel', (event) => stopDrag(event.clientX, event.clientY, event.pointerId, true));
+        window.addEventListener('pointermove', (event) => moveDrag(event.clientX, event.clientY));
+        window.addEventListener('pointerup', (event) => stopDrag(event.clientX, event.clientY, event.pointerId));
+        window.addEventListener('pointercancel', (event) => stopDrag(event.clientX, event.clientY, event.pointerId, true));
         if (!window.PointerEvent) {
             const getTouch = (event) => event.touches[0] || event.changedTouches[0];
             handle.addEventListener('touchstart', (event) => {
