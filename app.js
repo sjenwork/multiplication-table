@@ -248,6 +248,16 @@
                 drag.offsetY = detachedRect.height / 2;
             }
             if (!drag.detached) return;
+            const inSnapZone = event.clientY >= window.innerHeight - SNAP_ZONE;
+            keypad.classList.toggle('keypad-snap-preview', inSnapZone);
+            if (inSnapZone) {
+                const rect = keypad.getBoundingClientRect();
+                const submitBar = document.querySelector('.safe-action-bar');
+                const snapTop = submitBar ? submitBar.getBoundingClientRect().top - rect.height : window.innerHeight - rect.height - 8;
+                keypad.style.left = `${Math.max(8, (window.innerWidth - rect.width) / 2)}px`;
+                keypad.style.top = `${Math.max(8, snapTop)}px`;
+                return;
+            }
             const position = clampPosition(event.clientX - drag.offsetX, event.clientY - drag.offsetY);
             keypad.style.left = `${position.left}px`;
             keypad.style.top = `${position.top}px`;
@@ -255,9 +265,11 @@
         const stopDrag = (event) => {
             if (!drag) return;
             if (drag.detached && event.clientY >= window.innerHeight - SNAP_ZONE) {
+                keypad.classList.remove('keypad-snap-preview');
                 state.keypadPosition = { detached: false, left: null, top: null };
                 applyKeypadPosition(state);
             } else if (drag.detached) {
+                keypad.classList.remove('keypad-snap-preview');
                 const rect = keypad.getBoundingClientRect();
                 state.keypadPosition = { detached: true, left: rect.left, top: rect.top };
                 applyKeypadPosition(state);
