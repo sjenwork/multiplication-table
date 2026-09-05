@@ -46,7 +46,7 @@
         const status = document.getElementById('selection-status');
         const start = document.getElementById('start-quiz');
         if (!status || !start) return;
-        status.textContent = state.selected.length ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！` : '從下方選擇題目，開始你的練習。';
+        status.textContent = state.selected.length ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！` : '尚未選擇題目，請先點擊表格中的格子。';
         start.disabled = state.selected.length === 0;
     }
 
