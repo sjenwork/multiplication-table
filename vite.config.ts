@@ -6,6 +6,9 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  resolve: {
+    conditions: ['browser'],
+  },
   plugins: [
     svelte(),
     {
@@ -40,7 +43,12 @@ export default defineConfig({
     },
   },
   test: {
-    environment: 'node',
+    environment: 'jsdom',
+    server: {
+      deps: {
+        inline: ['svelte'],
+      },
+    },
     include: ['tests/**/*.test.ts'],
   },
 });
