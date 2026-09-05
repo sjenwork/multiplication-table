@@ -223,7 +223,7 @@
         const dock = document.getElementById('keypad-dock');
         if (!keypad || !handle || !dock) return;
         const DETACH_DISTANCE = 48;
-        const SNAP_RADIUS = 40;
+        const SNAP_RADIUS = 24;
         let drag = null;
         const clampPosition = (left, top) => {
             const rect = keypad.getBoundingClientRect();
@@ -235,9 +235,10 @@
         const updateDock = () => {
             const keypadRect = keypad.getBoundingClientRect();
             const actionBar = document.querySelector('.safe-action-bar');
-            const top = actionBar ? actionBar.getBoundingClientRect().top - keypadRect.height : window.innerHeight - keypadRect.height - 8;
+            const dockHeight = Math.max(44, keypadRect.height * 0.5);
+            const top = actionBar ? actionBar.getBoundingClientRect().top - dockHeight : window.innerHeight - dockHeight - 8;
             dock.style.width = `${keypadRect.width}px`;
-            dock.style.height = `${keypadRect.height}px`;
+            dock.style.height = `${dockHeight}px`;
             dock.style.left = `${Math.max(8, (window.innerWidth - keypadRect.width) / 2)}px`;
             dock.style.top = `${Math.max(8, top)}px`;
         };
