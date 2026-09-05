@@ -53,30 +53,36 @@
     function renderHome(state) {
         const grid = document.getElementById('multiplication-grid');
         if (!grid) return;
-        grid.innerHTML = '';
-        const corner = document.createElement('div');
-        corner.className = 'sticky top-0 left-0 z-30 p-2 font-bold text-slate-400 bg-slate-100 rounded-lg flex items-center justify-center';
+        grid.innerHTML = '<thead><tr></tr></thead><tbody></tbody>';
+        const headerRow = grid.querySelector('thead tr');
+        const corner = document.createElement('th');
+        corner.className = 'sticky top-0 left-0 z-30 p-2 font-bold text-slate-400 bg-slate-100 rounded-lg';
+        corner.scope = 'col';
         corner.textContent = '×';
-        grid.appendChild(corner);
+        headerRow.appendChild(corner);
 
         for (let col = 1; col <= 9; col += 1) {
-            const heading = document.createElement('div');
-            heading.className = 'sticky top-0 z-20 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg flex items-center justify-center text-sm md:text-base';
+            const heading = document.createElement('th');
+            heading.className = 'sticky top-0 z-20 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg text-sm md:text-base';
+            heading.scope = 'col';
             heading.textContent = col;
-            grid.appendChild(heading);
+            headerRow.appendChild(heading);
         }
+        const body = grid.querySelector('tbody');
 
         for (let row = 1; row <= 9; row += 1) {
-            const rowHeading = document.createElement('div');
-            rowHeading.className = 'sticky left-0 z-10 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg flex items-center justify-center text-sm md:text-base';
+            const rowElement = document.createElement('tr');
+            const rowHeading = document.createElement('th');
+            rowHeading.className = 'sticky left-0 z-10 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg text-sm md:text-base';
+            rowHeading.scope = 'row';
             rowHeading.textContent = row;
-            grid.appendChild(rowHeading);
+            rowElement.appendChild(rowHeading);
 
             for (let col = 1; col <= 9; col += 1) {
                 const key = questionKey(row, col);
-                const cell = document.createElement('label');
-                cell.className = 'p-2 rounded-lg transition flex flex-col items-center justify-center border border-slate-200 bg-white relative text-xs md:text-sm cursor-pointer hover:border-blue-400';
-                cell.innerHTML = `<span class="text-slate-400 text-[10px] md:text-xs mb-1">${row}×${col}</span><input type="checkbox" class="h-5 w-5 accent-blue-600 cursor-pointer" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span>`;
+                const cell = document.createElement('td');
+                cell.className = 'p-2 rounded-lg transition border border-slate-200 bg-white relative text-xs md:text-sm';
+                cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer"><span class="text-slate-400 text-[10px] md:text-xs mb-1">${row}×${col}</span><input type="checkbox" class="h-5 w-5 accent-blue-600 cursor-pointer" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
                 const checkbox = cell.querySelector('input');
                 checkbox.checked = state.selected.includes(key);
                 checkbox.addEventListener('change', () => {
@@ -84,8 +90,9 @@
                     saveState(state);
                     updateSelectionStatus(state);
                 });
-                grid.appendChild(cell);
+                rowElement.appendChild(cell);
             }
+            body.appendChild(rowElement);
         }
         updateSelectionStatus(state);
     }
