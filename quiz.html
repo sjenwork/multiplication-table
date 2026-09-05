@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260905-220603">
+    <link rel="stylesheet" href="pwa.css?v=20260905-220706">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="design-tokens.css?v=20260905-220603">
-    <script src="theme-init.js?v=20260905-220603"></script>
+    <link rel="stylesheet" href="design-tokens.css?v=20260905-220706">
+    <script src="theme-init.js?v=20260905-220706"></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -240,6 +240,9 @@
         .quiz-question-list {
             overflow-y: auto;
             overscroll-behavior: contain;
+            align-content: start;
+            align-items: start;
+            grid-auto-rows: max-content;
             padding-top: var(--quiz-header-reserve, 7rem);
             padding-bottom: var(--quiz-scroll-reserve, 15rem);
             scrollbar-gutter: stable;
@@ -425,6 +428,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-220603" defer></script>
+    <script src="app.js?v=20260905-220706" defer></script>
 </body>
 </html>
