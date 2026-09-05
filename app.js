@@ -525,14 +525,46 @@
         }).join('');
         list.querySelectorAll('input[data-question]').forEach((input) => {
             input.addEventListener('click', () => {
-                state.quiz.activeKey = input.dataset.question;
-                list.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.remove('ring-2', 'ring-blue-300'));
-                input.classList.add('ring-2', 'ring-blue-300');
-                saveState(state);
-                showKeypad();
+                focusQuizQuestion(state, input.dataset.question);
             });
         });
         updateSubmitButton(state);
+    }
+
+    function scrollActiveQuestionIntoView(questionKey) {
+        const input = document.querySelector(`input[data-question="${questionKey}"]`);
+        const question = input?.closest('article');
+        if (!question) return;
+        window.requestAnimationFrame(() => {
+            const questionRect = question.getBoundingClientRect();
+            const actionBar = document.querySelector('.safe-action-bar');
+            const keypad = document.getElementById('number-pad');
+            const bottomCandidates = [window.innerHeight];
+            if (actionBar) bottomCandidates.push(actionBar.getBoundingClientRect().top);
+            if (keypad && !keypad.classList.contains('hidden')) {
+                const keypadRect = keypad.getBoundingClientRect();
+                if (keypadRect.bottom > 0 && keypadRect.top < window.innerHeight) bottomCandidates.push(keypadRect.top);
+            }
+            const visibleTop = 12;
+            const visibleBottom = Math.min(...bottomCandidates) - 12;
+            let scrollDistance = 0;
+            if (questionRect.bottom > visibleBottom) scrollDistance = questionRect.bottom - visibleBottom;
+            else if (questionRect.top < visibleTop) scrollDistance = questionRect.top - visibleTop;
+            if (scrollDistance) window.scrollBy({ top: scrollDistance, behavior: 'smooth' });
+        });
+    }
+
+    function focusQuizQuestion(state, questionKey) {
+        if (!state.quiz) return;
+        state.quiz.activeKey = questionKey;
+        document.querySelectorAll('input[data-question]').forEach((answerInput) => {
+            const active = answerInput.dataset.question === questionKey;
+            answerInput.classList.toggle('ring-2', active);
+            answerInput.classList.toggle('ring-blue-300', active);
+        });
+        saveState(state);
+        showKeypad();
+        scrollActiveQuestionIntoView(questionKey);
     }
 
     function showCompletionOverlay(allCorrect) {
@@ -551,16 +583,7 @@
             const unresolved = state.quiz.questions.filter((question) => !question.resolved);
             const activeIndex = unresolved.findIndex((question) => question.key === state.quiz.activeKey);
             const nextQuestion = unresolved[activeIndex + 1] || unresolved[0];
-            if (nextQuestion) {
-                state.quiz.activeKey = nextQuestion.key;
-                document.querySelectorAll('input[data-question]').forEach((answerInput) => {
-                    const active = answerInput.dataset.question === nextQuestion.key;
-                    answerInput.classList.toggle('ring-2', active);
-                    answerInput.classList.toggle('ring-blue-300', active);
-                });
-                saveState(state);
-                showKeypad();
-            }
+            if (nextQuestion) focusQuizQuestion(state, nextQuestion.key);
             return;
         }
         const active = state.quiz.questions.find((question) => question.key === state.quiz.activeKey && !question.resolved)
