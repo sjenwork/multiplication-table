@@ -39,7 +39,7 @@
     }
 
     function historyText(record) {
-        return record ? `${record.errors || 0}/${record.attempts || 0}` : '';
+        return `${record?.errors || 0}/${record?.attempts || 0}`;
     }
 
     function updateSelectionStatus(state) {
