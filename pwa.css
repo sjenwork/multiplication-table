@@ -13,6 +13,10 @@ html {
     touch-action: manipulation;
 }
 
+.app-shell.quiz-shell {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
 .app-shell button,
 .app-shell input,
 .app-shell label {
