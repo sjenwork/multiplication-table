@@ -595,13 +595,25 @@
         scrollActiveQuestionIntoView(questionKey);
     }
 
-    function showCompletionOverlay(allCorrect) {
+    function showCompletionOverlay(correctCount, total) {
         const overlay = document.getElementById('completion-overlay');
         if (!overlay) return;
         const title = overlay.querySelector('[data-completion-title]');
         const detail = overlay.querySelector('[data-completion-detail]');
-        if (title) title.textContent = allCorrect ? '你好棒！' : '挑戰完成！';
-        if (detail) detail.textContent = allCorrect ? '全部答對，你做到了！' : '成績已保存，繼續保持！';
+        const emoji = overlay.querySelector('[data-completion-emoji]');
+        const ratio = total ? correctCount / total : 0;
+        const result = ratio === 1
+            ? { title: '你好棒！', detail: '全部答對，你做到了！', emoji: '🎉', tone: 'score-high' }
+            : ratio >= 0.8
+                ? { title: '太棒了！', detail: `答對 ${correctCount} 題，再把錯題練熟就更厲害！`, emoji: '🌟', tone: 'score-good' }
+                : ratio >= 0.5
+                    ? { title: '做得很好！', detail: `答對 ${correctCount} 題，錯題再挑戰一次！`, emoji: '💪', tone: 'score-steady' }
+                    : { title: '繼續加油！', detail: `答對 ${correctCount} 題，一題一題來，你可以的！`, emoji: '🌱', tone: 'score-keep-going' };
+        if (title) title.textContent = result.title;
+        if (detail) detail.textContent = result.detail;
+        if (emoji) emoji.textContent = result.emoji;
+        overlay.querySelector('.completion-card')?.classList.remove('score-high', 'score-good', 'score-steady', 'score-keep-going');
+        overlay.querySelector('.completion-card')?.classList.add(result.tone);
         overlay.classList.remove('hidden');
     }
 
@@ -633,6 +645,10 @@
         });
     }
 
+    function hideCompletionOverlay() {
+        document.getElementById('completion-overlay')?.classList.add('hidden');
+    }
+
     function updateKeypadAnswer(state, value) {
         if (value === 'next') {
             const unresolved = state.quiz.questions.filter((question) => !question.resolved);
@@ -656,7 +672,7 @@
         showKeypad();
     }
 
-    function finishQuiz(state) {
+    function finishQuiz(state, correctCount) {
         if (state.quiz.completed) return;
         const allCorrect = state.quiz.questions.every((question) => !question.hadError);
         state.quiz.questions.forEach((question) => {
@@ -669,7 +685,7 @@
         saveState(state);
         renderQuiz(state);
         message(allCorrect ? '太棒了！這次全部答對。' : '本輪挑戰完成，紀錄已保存。', false);
-        showCompletionOverlay(allCorrect);
+        showCompletionOverlay(correctCount, state.quiz.questions.length);
     }
 
     function returnToHomeAfterQuiz(state) {
@@ -695,6 +711,7 @@
         state.quiz.activeKey = state.quiz.questions[0]?.key || null;
         state.quiz.completed = false;
         saveState(state);
+        hideCompletionOverlay();
         renderQuiz(state);
         showKeypad();
         scrollActiveQuestionIntoView(state.quiz.activeKey);
@@ -781,6 +798,8 @@
             return;
         }
         let unanswered = 0;
+        let correctCount = state.quiz.questions.filter((question) => question.resolved && !question.hadError).length;
+        let firstWrongKey = null;
         state.quiz.questions.forEach((question) => {
             if (question.resolved) return;
             const input = document.getElementById(`answer-${question.key}`);
@@ -788,8 +807,10 @@
             if (Number.isNaN(value)) { unanswered += 1; return; }
             if (value === question.answer) {
                 question.resolved = true;
+                correctCount += 1;
                 return;
             }
+            if (!firstWrongKey) firstWrongKey = question.key;
             question.hadError = true;
             question.wrongAttempts += 1;
             question.input = '';
@@ -798,10 +819,16 @@
         });
         saveState(state);
         const remaining = state.quiz.questions.filter((question) => !question.resolved).length;
-        if (remaining === 0) { finishQuiz(state); return; }
+        if (remaining === 0) {
+            finishQuiz(state, correctCount);
+            if (firstWrongKey) focusQuizQuestion(state, firstWrongKey);
+            return;
+        }
         if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
         else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
         renderQuiz(state);
+        showCompletionOverlay(correctCount, state.quiz.questions.length);
+        if (firstWrongKey) focusQuizQuestion(state, firstWrongKey);
     }
 
     function initHome(state) {
