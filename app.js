@@ -205,9 +205,11 @@
         } else {
             keypad.style.right = '';
             keypad.style.bottom = '';
-            keypad.style.width = '';
+            keypad.style.width = 'auto';
             keypad.style.left = '';
             keypad.style.top = '';
+            keypad.style.transform = 'none';
+            keypad.style.opacity = '1';
         }
     }
 
