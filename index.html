@@ -14,22 +14,23 @@
             <p class="text-slate-600 text-sm md:text-base">挑選想加強的題目，開始一場最多 10 題的隨機挑戰。</p>
         </header>
 
-        <div id="selection-status" class="mb-6 p-4 bg-blue-50 border border-blue-100 rounded-xl text-center text-blue-800 font-medium" role="status"></div>
-
         <div class="max-h-[min(60vh,36rem)] overflow-auto rounded-xl pb-2 isolate" tabindex="0" aria-label="九九乘法表，可上下左右捲動">
             <table id="multiplication-grid" class="min-w-[650px] border-separate border-spacing-1 text-center"></table>
         </div>
     </main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-4 px-6 flex justify-center items-center gap-4 z-50">
-        <button id="start-quiz" type="button" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer">
-            開始挑戰
-        </button>
-        <button id="clear-selection" type="button" class="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-xl transition cursor-pointer">
-            重新選擇
-        </button>
+    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg py-3 px-4 md:px-6 flex flex-wrap justify-between items-center gap-3 z-50">
+        <p id="selection-status" class="text-sm font-medium text-slate-600 flex-1 min-w-[10rem]" role="status"></p>
+        <div class="flex items-center gap-3 shrink-0">
+            <button id="start-quiz" type="button" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer">
+                開始挑戰
+            </button>
+            <button id="clear-selection" type="button" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-xl transition cursor-pointer">
+                重新選擇
+            </button>
+        </div>
     </div>
 
-    <script src="app.js?v=20260905-120058" defer></script>
+    <script src="app.js?v=20260905-120247" defer></script>
 </body>
 </html>
