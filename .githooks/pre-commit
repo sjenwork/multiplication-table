@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+version_stamp="$(date +%Y%m%d-%H%M%S)"
+
+perl -0pi -e "s/app\\.js\\?v=\\d{8}-\\d{6}/app.js?v=${version_stamp}/g" index.html quiz.html
+perl -0pi -e "s/multiplication-master-v\\d{8}-\\d{6}/multiplication-master-v${version_stamp}/g" sw.js
+
+git add index.html quiz.html sw.js
+echo "pre-commit: synchronized app version ${version_stamp}" >&2
