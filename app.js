@@ -247,7 +247,7 @@
         const corner = document.createElement('th');
         corner.className = `sticky top-0 left-0 z-30 p-2 font-bold text-slate-600 border ${headerTone(questionList().map((question) => question.key))} rounded-lg`;
         corner.scope = 'col';
-        corner.innerHTML = '<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span class="text-[0.65rem] leading-none"><span class="ds-factor-one">被</span><span aria-hidden="true">×</span><span class="ds-factor-two">乘</span></span><input type="checkbox" class="sr-only" data-select-all="all" aria-label="全選所有題目"></label>';
+        corner.innerHTML = '<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span class="text-[0.65rem] leading-none"><span class="ds-factor-one">被</span><span aria-hidden="true">＼</span><span class="ds-factor-two">乘</span></span><input type="checkbox" class="sr-only" data-select-all="all" aria-label="全選所有題目"></label>';
         corner.querySelector('input').addEventListener('change', (event) => {
             changeSelection(state, questionList().map((question) => question.key), event.target.checked);
             renderHome(state);
