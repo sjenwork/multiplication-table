@@ -896,6 +896,7 @@
 
     function initQuiz(state) {
         if (!state.quiz || !state.quiz.questions.length) { window.location.href = 'index.html'; return; }
+        initSettings(state);
         renderQuiz(state);
         applyKeypadPosition(state);
         setupKeypadDrag(state);
