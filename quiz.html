@@ -117,6 +117,86 @@
             background: rgb(255 255 255 / 0.95);
             color: rgb(37 99 235);
         }
+
+        .completion-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .completion-card {
+            padding: 1.25rem 1.75rem;
+            border: 1px solid rgb(147 197 253 / 0.72);
+            border-radius: 1.25rem;
+            background: rgb(255 255 255 / 0.86);
+            box-shadow: 0 18px 45px rgb(30 64 175 / 0.2);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            text-align: center;
+            animation: completion-pop 420ms cubic-bezier(.22, 1.2, .36, 1) both;
+        }
+
+        .completion-emoji {
+            font-size: 2.25rem;
+            line-height: 1;
+            animation: completion-bounce 700ms ease-in-out both;
+        }
+
+        .completion-confetti {
+            position: absolute;
+            inset: 0;
+        }
+
+        .completion-confetti span {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            width: 0.55rem;
+            height: 1rem;
+            border-radius: 999px;
+            background: var(--confetti-color);
+            animation: confetti-burst 1200ms cubic-bezier(.15, .8, .35, 1) both;
+            animation-delay: var(--confetti-delay);
+            transform: rotate(var(--confetti-rotate));
+        }
+
+        .completion-confetti span:nth-child(1) { --confetti-color: #f59e0b; --confetti-delay: 20ms; --confetti-rotate: 12deg; --confetti-x: -35vw; --confetti-y: -25vh; }
+        .completion-confetti span:nth-child(2) { --confetti-color: #10b981; --confetti-delay: 50ms; --confetti-rotate: 80deg; --confetti-x: -25vw; --confetti-y: -35vh; }
+        .completion-confetti span:nth-child(3) { --confetti-color: #3b82f6; --confetti-delay: 80ms; --confetti-rotate: 140deg; --confetti-x: -12vw; --confetti-y: -28vh; }
+        .completion-confetti span:nth-child(4) { --confetti-color: #ec4899; --confetti-delay: 30ms; --confetti-rotate: 200deg; --confetti-x: 10vw; --confetti-y: -32vh; }
+        .completion-confetti span:nth-child(5) { --confetti-color: #8b5cf6; --confetti-delay: 100ms; --confetti-rotate: 260deg; --confetti-x: 25vw; --confetti-y: -24vh; }
+        .completion-confetti span:nth-child(6) { --confetti-color: #f97316; --confetti-delay: 60ms; --confetti-rotate: 320deg; --confetti-x: 35vw; --confetti-y: -36vh; }
+        .completion-confetti span:nth-child(7) { --confetti-color: #14b8a6; --confetti-delay: 120ms; --confetti-rotate: 40deg; --confetti-x: -32vw; --confetti-y: 10vh; }
+        .completion-confetti span:nth-child(8) { --confetti-color: #eab308; --confetti-delay: 40ms; --confetti-rotate: 110deg; --confetti-x: -18vw; --confetti-y: 18vh; }
+        .completion-confetti span:nth-child(9) { --confetti-color: #ef4444; --confetti-delay: 90ms; --confetti-rotate: 180deg; --confetti-x: 18vw; --confetti-y: 16vh; }
+        .completion-confetti span:nth-child(10) { --confetti-color: #6366f1; --confetti-delay: 10ms; --confetti-rotate: 240deg; --confetti-x: 32vw; --confetti-y: 8vh; }
+
+        @keyframes completion-pop {
+            from { opacity: 0; transform: scale(.82) translateY(0.5rem); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes completion-bounce {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            35% { transform: translateY(-0.5rem) rotate(-8deg); }
+            70% { transform: translateY(0) rotate(8deg); }
+        }
+
+        @keyframes confetti-burst {
+            from { opacity: 0; transform: translate(-50%, -50%) rotate(var(--confetti-rotate)) scale(.5); }
+            15% { opacity: 1; }
+            to { opacity: 0; transform: translate(calc(-50% + var(--confetti-x)), calc(-50% + var(--confetti-y))) rotate(calc(var(--confetti-rotate) + 240deg)); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .completion-card, .completion-emoji, .completion-confetti span { animation: none; }
+            .completion-confetti { display: none; }
+        }
     </style>
 </head>
 <body class="app-shell bg-slate-50 min-h-screen flex flex-col items-center justify-center p-4 pb-44">
@@ -136,6 +216,18 @@
         <section id="question-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-[15rem]" aria-label="測驗題目"></section>
         <div id="quiz-message" class="mt-6 p-4 rounded-xl text-center font-medium hidden" role="alert"></div>
     </main>
+
+    <div id="completion-overlay" class="completion-overlay hidden" aria-live="polite" aria-atomic="true">
+        <div class="completion-confetti" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="completion-card">
+            <div class="completion-emoji" aria-hidden="true">🎉</div>
+            <h2 data-completion-title class="mt-2 text-xl font-black text-blue-700">你好棒！</h2>
+            <p data-completion-detail class="mt-1 text-sm font-semibold text-slate-600">全部答對，你做到了！</p>
+        </div>
+    </div>
 
     <div id="keypad-dock" class="keypad-dock" aria-hidden="true">放回底部</div>
     <div id="number-pad" class="safe-keypad fixed left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-2 py-2 shadow-lg backdrop-blur-md">
@@ -176,6 +268,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-152845" defer></script>
+    <script src="app.js?v=20260905-153728" defer></script>
 </body>
 </html>

@@ -81,6 +81,139 @@
         saveState(state);
     }
 
+    function selectionFeedback(grid) {
+        if (typeof navigator.vibrate === 'function') navigator.vibrate(12);
+        else {
+            grid.classList.add('selection-haptic-fallback');
+            window.setTimeout(() => grid.classList.remove('selection-haptic-fallback'), 180);
+        }
+    }
+
+    function setupSelectionGesture(state, grid) {
+        if (grid.dataset.gestureReady === 'true') return;
+        const scrollContainer = grid.closest('[data-selection-scroll]');
+        if (!scrollContainer) return;
+        grid.dataset.gestureReady = 'true';
+        const LONG_PRESS_MS = 400;
+        const MOVE_TOLERANCE = 10;
+        const EDGE_ZONE = 48;
+        const MAX_SCROLL_SPEED = 14;
+        let gesture = null;
+        let scrollFrame = null;
+        let suppressClickUntil = 0;
+
+        const cellAtPoint = (clientX, clientY) => {
+            const element = document.elementFromPoint(clientX, clientY);
+            return element?.closest('td[data-question]');
+        };
+        const updateCell = (cell) => {
+            if (!gesture || !cell || !grid.contains(cell)) return;
+            const key = cell.dataset.question;
+            if (!gesture.touched.has(key)) {
+                gesture.touched.add(key);
+                const selected = gesture.selecting;
+                cell.classList.toggle('bg-emerald-100', selected);
+                cell.classList.toggle('border-emerald-400', selected);
+                cell.classList.toggle('bg-white', !selected);
+                cell.classList.toggle('border-slate-200', !selected);
+                const checkbox = cell.querySelector('input[data-question]');
+                if (checkbox) checkbox.checked = selected;
+                if (selected) gesture.selected.add(key);
+                else gesture.selected.delete(key);
+            }
+        };
+        const stopAutoScroll = () => {
+            if (scrollFrame !== null) cancelAnimationFrame(scrollFrame);
+            scrollFrame = null;
+        };
+        const autoScroll = () => {
+            if (!gesture?.active) return;
+            const rect = scrollContainer.getBoundingClientRect();
+            const distanceFromTop = gesture.clientY - rect.top;
+            const distanceFromBottom = rect.bottom - gesture.clientY;
+            let delta = 0;
+            if (distanceFromTop < EDGE_ZONE && scrollContainer.scrollTop > 0) {
+                delta = -Math.ceil((EDGE_ZONE - distanceFromTop) / EDGE_ZONE * MAX_SCROLL_SPEED);
+            } else if (distanceFromBottom < EDGE_ZONE && scrollContainer.scrollTop < scrollContainer.scrollHeight - scrollContainer.clientHeight) {
+                delta = Math.ceil((EDGE_ZONE - distanceFromBottom) / EDGE_ZONE * MAX_SCROLL_SPEED);
+            }
+            if (delta) {
+                scrollContainer.scrollTop += delta;
+                updateCell(cellAtPoint(gesture.clientX, gesture.clientY));
+            }
+            scrollFrame = requestAnimationFrame(autoScroll);
+        };
+        const endGesture = (event, canceled = false) => {
+            if (!gesture) return;
+            window.clearTimeout(gesture.timer);
+            stopAutoScroll();
+            grid.classList.remove('selection-dragging');
+            scrollContainer.style.overflow = gesture.previousOverflow;
+            if (gesture.pointerId !== null && grid.hasPointerCapture(gesture.pointerId)) grid.releasePointerCapture(gesture.pointerId);
+            if (gesture.active && !canceled) {
+                state.selected = [...gesture.selected];
+                saveState(state);
+                suppressClickUntil = Date.now() + 450;
+                renderHome(state);
+            }
+            gesture = null;
+        };
+        const activateGesture = () => {
+            if (!gesture || gesture.moved || !gesture.startCell) return;
+            gesture.active = true;
+            gesture.selecting = !gesture.selected.has(gesture.startCell.dataset.question);
+            grid.classList.add('selection-dragging');
+            scrollContainer.style.overflow = 'hidden';
+            selectionFeedback(grid);
+            updateCell(gesture.startCell);
+            scrollFrame = requestAnimationFrame(autoScroll);
+        };
+        const moveGesture = (event) => {
+            if (!gesture) return;
+            gesture.clientX = event.clientX;
+            gesture.clientY = event.clientY;
+            if (!gesture.active) {
+                if (Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY) > MOVE_TOLERANCE) {
+                    gesture.moved = true;
+                    window.clearTimeout(gesture.timer);
+                }
+                return;
+            }
+            event.preventDefault();
+            updateCell(cellAtPoint(event.clientX, event.clientY));
+        };
+
+        grid.addEventListener('pointerdown', (event) => {
+            const cell = event.target.closest('td[data-question]');
+            if (!cell || event.button > 0) return;
+            gesture = {
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                clientX: event.clientX,
+                clientY: event.clientY,
+                startCell: cell,
+                selected: new Set(state.selected),
+                touched: new Set(),
+                active: false,
+                moved: false,
+                selecting: false,
+                previousOverflow: scrollContainer.style.overflow,
+                timer: window.setTimeout(activateGesture, LONG_PRESS_MS),
+            };
+            try { grid.setPointerCapture(event.pointerId); } catch (error) { /* Older Safari may not support capture here. */ }
+        });
+        grid.addEventListener('pointermove', moveGesture, { passive: false });
+        grid.addEventListener('pointerup', (event) => endGesture(event));
+        grid.addEventListener('pointercancel', (event) => endGesture(event, true));
+        grid.addEventListener('click', (event) => {
+            if (Date.now() < suppressClickUntil) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }, true);
+    }
+
     function renderHome(state) {
         const grid = document.getElementById('multiplication-grid');
         if (!grid) return;
@@ -132,6 +265,7 @@
                 const key = questionKey(row, col);
                 const cell = document.createElement('td');
                 const selected = selectedKeys.has(key);
+                cell.dataset.question = key;
                 const cellTone = selected ? 'bg-emerald-100 border-emerald-400' : 'bg-white border-slate-200';
                 cell.className = `p-2 rounded-lg transition border ${cellTone} relative text-xs md:text-sm`;
                 cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><input type="checkbox" class="sr-only" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
@@ -148,6 +282,7 @@
         }
         updateSelectionControls(state, grid);
         updateSelectionStatus(state);
+        setupSelectionGesture(state, grid);
     }
 
     function startQuiz(state) {
@@ -169,6 +304,7 @@
         state.quiz = {
             questions: shuffled(alreadyLimited ? selected : selected.slice(0, 10)).map((question) => ({ ...question, input: '', wrongAttempts: 0, resolved: false, hadError: false })),
             activeKey: null,
+            completed: false,
         };
         state.quiz.activeKey = state.quiz.questions[0]?.key || null;
         saveState(state);
@@ -185,7 +321,7 @@
     function updateSubmitButton(state) {
         const button = document.getElementById('submit-answer');
         if (!button || !state.quiz) return;
-        button.disabled = state.quiz.questions.some((question) => !question.resolved && !question.input);
+        button.disabled = state.quiz.completed || state.quiz.questions.some((question) => !question.resolved && !question.input);
     }
 
     function applyKeypadPosition(state) {
@@ -380,7 +516,9 @@
         const list = document.getElementById('question-list');
         const progress = document.getElementById('progress');
         if (!list || !progress || !state.quiz) return;
-        progress.textContent = `本次挑戰 ${state.quiz.questions.length} 題 · 完成後即可檢查答案`;
+        progress.textContent = state.quiz.completed
+            ? `本次挑戰 ${state.quiz.questions.length} 題 · 已完成，成績已保存`
+            : `本次挑戰 ${state.quiz.questions.length} 題 · 完成後即可檢查答案`;
         list.innerHTML = state.quiz.questions.map((item, index) => {
             const status = item.resolved ? (item.hadError ? `✕ ${item.answer}` : '✓') : (item.wrongAttempts ? `✕ ${item.wrongAttempts}/3` : '');
             return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="relative flex items-center justify-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex items-center justify-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="none" readonly value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 ${item.key === state.quiz.activeKey ? 'ring-2 ring-blue-300' : ''} disabled:bg-slate-100" autocomplete="off"></label><span class="absolute right-0 shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
@@ -395,6 +533,17 @@
             });
         });
         updateSubmitButton(state);
+    }
+
+    function showCompletionOverlay(allCorrect) {
+        const overlay = document.getElementById('completion-overlay');
+        if (!overlay) return;
+        const title = overlay.querySelector('[data-completion-title]');
+        const detail = overlay.querySelector('[data-completion-detail]');
+        if (title) title.textContent = allCorrect ? '你好棒！' : '挑戰完成！';
+        if (detail) detail.textContent = allCorrect ? '全部答對，你做到了！' : '成績已保存，繼續保持！';
+        overlay.classList.remove('hidden');
+        window.setTimeout(() => overlay.classList.add('hidden'), 1800);
     }
 
     function updateKeypadAnswer(state, value) {
@@ -415,15 +564,19 @@
     }
 
     function finishQuiz(state) {
+        if (state.quiz.completed) return;
+        const allCorrect = state.quiz.questions.every((question) => !question.hadError);
         state.quiz.questions.forEach((question) => {
             const record = state.records[question.key] || { errors: 0, attempts: 0 };
             record.attempts += 1;
             if (question.hadError) record.errors += 1;
             state.records[question.key] = record;
         });
-        state.quiz = null;
+        state.quiz.completed = true;
         saveState(state);
-        window.location.href = 'index.html';
+        renderQuiz(state);
+        message(allCorrect ? '太棒了！這次全部答對。' : '本輪挑戰完成，紀錄已保存。', false);
+        showCompletionOverlay(allCorrect);
     }
 
     function exportRecords(state) {
@@ -500,7 +653,7 @@
     }
 
     function submitAnswer(state) {
-        if (!state.quiz) return;
+        if (!state.quiz || state.quiz.completed) return;
         if (state.quiz.questions.some((question) => !question.resolved && !question.input)) {
             message('請先完成所有題目，再檢查答案。', true);
             updateSubmitButton(state);
@@ -524,7 +677,7 @@
         });
         saveState(state);
         const remaining = state.quiz.questions.filter((question) => !question.resolved).length;
-        if (remaining === 0) { message('本輪測驗完成，正在保存紀錄。', false); window.setTimeout(() => finishQuiz(state), 700); return; }
+        if (remaining === 0) { finishQuiz(state); return; }
         if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
         else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
         renderQuiz(state);
