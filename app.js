@@ -204,6 +204,25 @@
         URL.revokeObjectURL(link.href);
     }
 
+    function initSettings(state) {
+        const settingsModal = document.getElementById('settings-modal');
+        const closeSettings = () => settingsModal.classList.add('hidden');
+        document.getElementById('open-settings').addEventListener('click', () => {
+            settingsModal.classList.remove('hidden');
+            settingsModal.classList.add('flex');
+            document.getElementById('close-settings').focus();
+        });
+        document.getElementById('close-settings').addEventListener('click', closeSettings);
+        document.getElementById('export-records').addEventListener('click', () => { exportRecords(state); closeSettings(); });
+        document.getElementById('clear-storage').addEventListener('click', () => {
+            if (window.confirm('確定要清除所有練習紀錄與目前進度嗎？此操作無法復原。')) {
+                localStorage.removeItem(STORAGE_KEY);
+                window.location.href = 'index.html';
+            }
+        });
+        settingsModal.addEventListener('click', (event) => { if (event.target === settingsModal) closeSettings(); });
+    }
+
     function submitAnswer(state) {
         if (!state.quiz) return;
         let unanswered = 0;
@@ -236,6 +255,7 @@
             return;
         }
         renderHome(state);
+        initSettings(state);
         document.getElementById('start-quiz').addEventListener('click', () => startQuiz(state));
         document.getElementById('clear-selection').addEventListener('click', () => { state.selected = []; saveState(state); renderHome(state); });
     }
@@ -254,22 +274,6 @@
         document.getElementById('cancel-leave').addEventListener('click', closeModal);
         document.getElementById('confirm-leave').addEventListener('click', () => { state.quiz = null; saveState(state); window.location.href = 'index.html'; });
         modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
-        const settingsModal = document.getElementById('settings-modal');
-        const closeSettings = () => settingsModal.classList.add('hidden');
-        document.getElementById('open-settings').addEventListener('click', () => {
-            settingsModal.classList.remove('hidden');
-            settingsModal.classList.add('flex');
-            document.getElementById('close-settings').focus();
-        });
-        document.getElementById('close-settings').addEventListener('click', closeSettings);
-        document.getElementById('export-records').addEventListener('click', () => { exportRecords(state); closeSettings(); });
-        document.getElementById('clear-storage').addEventListener('click', () => {
-            if (window.confirm('確定要清除所有練習紀錄與目前進度嗎？此操作無法復原。')) {
-                localStorage.removeItem(STORAGE_KEY);
-                window.location.href = 'index.html';
-            }
-        });
-        settingsModal.addEventListener('click', (event) => { if (event.target === settingsModal) closeSettings(); });
         document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
     }
 
