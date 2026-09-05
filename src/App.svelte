@@ -15,7 +15,10 @@
   const randomQuiz = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('random') === '1';
   let updatePort: PwaUpdatePort | null = null;
 
-  onMount(async () => { updatePort = await registerBrowserServiceWorker(); });
+  onMount(async () => {
+    if (import.meta.env.DEV) return;
+    updatePort = await registerBrowserServiceWorker();
+  });
 </script>
 
 <svelte:head>

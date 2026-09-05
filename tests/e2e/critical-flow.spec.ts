@@ -27,8 +27,10 @@ test('loads home, selects a cell, and starts a challenge', async ({ page }) => {
   await page.getByRole('button', { name: '開始挑戰' }).click();
   await expect(page).toHaveURL(/\/quiz\.html$/);
   await expect(page.getByRole('heading', { name: '答題挑戰' })).toBeVisible();
-  await expect.poll(() => page.evaluate((key) => window.localStorage.getItem(key), storageKey)).toContain('1x2');
   await expect(page.getByRole('article')).toHaveCount(1);
+  await expect.poll(() => page.evaluate((key) => window.localStorage.getItem(key), storageKey)).toContain('1x2');
+  const persisted = await page.evaluate((key) => JSON.parse(window.localStorage.getItem(key) ?? '{}'), storageKey);
+  expect(persisted.quiz?.questions?.length).toBeGreaterThanOrEqual(1);
 });
 
 test('opens quiz directly and restores the selected question set', async ({ page }) => {

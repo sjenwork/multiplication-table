@@ -58,6 +58,18 @@ describe('HomePage integration', () => {
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toHaveLength(81);
   });
 
+  it('keeps select-all as an icon-only control with no visible select-all label', async () => {
+    const storage = new MemoryStorage();
+    render(HomePage, { props: { storage } });
+    const control = screen.getByRole('button', { name: '全選所有題目' });
+    expect(control).toBeVisible();
+    expect(control).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.queryByText('全選')).not.toBeInTheDocument();
+    await fireEvent.click(control);
+    expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toHaveLength(81);
+    expect(control).toHaveAttribute('aria-pressed', 'true');
+  });
+
   it('passes record history to cells with a 0/0 default', () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, records: { '1x1': { errors: 2, attempts: 3 } } }));
@@ -104,6 +116,10 @@ describe('HomePage integration', () => {
     expect(screen.getByRole('button', { name: '關閉設定' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: '深色主題' }));
     expect(JSON.parse(storage.get(STORAGE_KEY)!).theme).toBe('dark');
+    expect(screen.getByRole('button', { name: '匯出紀錄' })).toBeVisible();
+    expect(screen.getByRole('button', { name: '清除資料' })).toBeVisible();
+    await fireEvent.click(screen.getByRole('button', { name: '關閉設定' }));
+    expect(screen.queryByRole('dialog', { name: '設定' })).not.toBeInTheDocument();
   });
 
   it('exports records and clears persisted selection and theme from settings', async () => {
@@ -131,6 +147,26 @@ describe('HomePage integration', () => {
     await fireEvent.click(second);
     expect(first).toHaveAttribute('aria-pressed', 'true');
     expect(second).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('supports a 350ms touch long press followed by continuous drag without release click rollback', async () => {
+    vi.useFakeTimers();
+    const storage = new MemoryStorage();
+    render(HomePage, { props: { storage } });
+    const grid = screen.getByRole('grid', { name: '九九乘法選題表' });
+    const first = screen.getByRole('button', { name: '選擇 1 乘 1' });
+    const second = screen.getByRole('button', { name: '選擇 1 乘 2' });
+    const third = screen.getByRole('button', { name: '選擇 1 乘 3' });
+    await fireEvent.pointerDown(first, { button: 0, pointerType: 'touch', pointerId: 7 });
+    vi.advanceTimersByTime(350);
+    await fireEvent.pointerEnter(second, { pointerType: 'touch', pointerId: 7 });
+    await fireEvent.pointerEnter(third, { pointerType: 'touch', pointerId: 7 });
+    await fireEvent.pointerUp(grid, { pointerType: 'touch', pointerId: 7 });
+    await fireEvent.click(second);
+    expect(first).toHaveAttribute('aria-pressed', 'true');
+    expect(second).toHaveAttribute('aria-pressed', 'true');
+    expect(third).toHaveAttribute('aria-pressed', 'true');
+    vi.useRealTimers();
   });
 
   it('disables wrong-first without errors and starts it from persisted records', async () => {
