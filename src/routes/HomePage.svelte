@@ -92,7 +92,8 @@
   <div class="modal-backdrop ds-modal-backdrop" role="presentation" onclick={(event) => event.target === event.currentTarget && (settingsOpen = false)}>
     <dialog open class="settings-modal ds-modal-surface" aria-labelledby="settings-title">
       <div class="modal-heading"><h2 id="settings-title">設定</h2><button class="icon-button ds-secondary" type="button" aria-label="關閉設定" onclick={() => settingsOpen = false}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-      <fieldset><legend>主題</legend><button class="ds-theme-choice" type="button" aria-label="淺色主題" aria-pressed={state.theme === 'light'} onclick={() => changeTheme('light')}>淺色</button><button class="ds-theme-choice" type="button" aria-label="深色主題" aria-pressed={state.theme === 'dark'} onclick={() => changeTheme('dark')}>深色</button></fieldset>
+      <p class="settings-description">管理你的練習資料與成績統計。</p>
+      <fieldset><legend>顯示主題</legend><div class="theme-choices" role="group" aria-label="選擇顯示主題"><button class="ds-theme-choice" type="button" aria-label="淺色主題" aria-pressed={state.theme === 'light'} onclick={() => changeTheme('light')}>☀️ 明亮</button><button class="ds-theme-choice" type="button" aria-label="深色主題" aria-pressed={state.theme === 'dark'} onclick={() => changeTheme('dark')}>🌙 深色</button></div></fieldset>
       <div class="settings-actions"><button class="ds-secondary" type="button" aria-label="匯出紀錄" onclick={exportRecords}>匯出成績統計紀錄（CSV）</button><button class="ds-danger" type="button" aria-label="清除資料" onclick={clearState}>清除所有練習紀錄</button></div>
     </dialog>
   </div>
@@ -110,7 +111,8 @@
   .page-header > .icon-button { position: absolute; top: 50%; right: 0; transform: translateY(-50%); }
   .instruction { flex: 0 0 auto; margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: var(--ds-radius-md); color: var(--ds-text); font-size: 0.875rem; line-height: 1.5; text-align: center; }
   .selection-scroll { flex: 1 1 auto; min-height: 0; overflow: auto; isolation: isolate; border-radius: var(--ds-radius-md); padding-bottom: 0.5rem; overscroll-behavior: contain; }
-  .modal-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); background: var(--ds-shadow-color); }
-  .settings-modal { width: min(100%, 28rem); padding: 1.25rem; color: var(--ds-text); }
-  fieldset { display: flex; gap: 0.5rem; margin: 1.25rem 0; border: 0; padding: 0; } legend { width: 100%; margin-bottom: 0.5rem; font-weight: 800; } .settings-actions { display: grid; gap: 0.75rem; } .settings-actions button { width: 100%; text-align: left; }
+  .modal-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); background: var(--ds-modal-backdrop); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .settings-modal { box-sizing: border-box; width: min(100%, 24rem); max-height: calc(100svh - 2rem); margin: 0; overflow: auto; padding: 1.5rem; border-radius: var(--ds-radius-lg); color: var(--ds-text); }
+  .settings-description { margin: 0.5rem 0 0; color: var(--ds-text-muted); font-size: 0.875rem; line-height: 1.5; }
+  fieldset { margin: 1.25rem 0; border: 0; padding: 0; } legend { width: 100%; margin-bottom: 0.5rem; color: var(--ds-text); font-size: 0.875rem; font-weight: 700; } .theme-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; } .theme-choices button { min-height: 3rem; border: 1px solid var(--ds-border-strong); border-radius: var(--ds-radius-sm); padding: 0.75rem 1rem; background: var(--ds-surface); color: var(--ds-text); font: inherit; font-size: 0.875rem; font-weight: 700; cursor: pointer; } .settings-actions { display: grid; gap: 0.75rem; } .settings-actions button { width: 100%; text-align: left; }
 </style>

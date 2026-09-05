@@ -19,7 +19,7 @@ describe('HomePage integration', () => {
     render(HomePage, { props: { storage: new MemoryStorage() } });
     expect(screen.getByRole('heading', { name: '乘法小達人' })).toBeInTheDocument();
     expect(screen.getByRole('grid', { name: '九九乘法選題表' })).toBeInTheDocument();
-    expect(screen.getByText('被＼乘')).toBeInTheDocument();
+    expect(screen.getByText('\\')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '選擇 1 乘 1' })).toBeInTheDocument();
     expect(screen.getAllByRole('columnheader')).toHaveLength(10);
     expect(screen.getAllByRole('rowheader')).toHaveLength(9);
@@ -100,6 +100,8 @@ describe('HomePage integration', () => {
     render(HomePage, { props: { storage } });
     await fireEvent.click(screen.getByRole('button', { name: '開啟設定' }));
     expect(screen.getByRole('dialog', { name: '設定' })).toBeInTheDocument();
+    expect(screen.getByText('管理你的練習資料與成績統計。')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '關閉設定' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: '深色主題' }));
     expect(JSON.parse(storage.get(STORAGE_KEY)!).theme).toBe('dark');
   });

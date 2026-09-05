@@ -8,6 +8,7 @@
     --ds-table-selected: #dff8eb;
     --ds-modal-surface: rgb(255 255 255 / 0.9);
     --ds-modal-border: rgb(73 128 177 / 0.58);
+    --ds-modal-backdrop: rgb(15 23 42 / 0.4);
     --ds-text: #16324f;
     --ds-text-strong: #102a43;
     --ds-text-muted: #526b84;
@@ -54,6 +55,7 @@
     --ds-table-selected: #287a5b;
     --ds-modal-surface: rgb(28 73 106 / 0.98);
     --ds-modal-border: rgb(145 218 250 / 0.88);
+    --ds-modal-backdrop: rgb(2 10 22 / 0.68);
     --ds-text: #e5f4ff;
     --ds-text-strong: #f4fbff;
     --ds-text-muted: #aac7dc;

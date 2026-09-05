@@ -62,7 +62,7 @@
 <table class="selection-grid" role="grid" aria-label="九九乘法選題表" onpointerup={endPointer} onpointercancel={endPointer}>
     <thead>
       <tr>
-        <th scope="col" class:active={allSelected} class="corner"><span aria-label="被＼乘">被＼乘</span><button type="button" aria-label="全選所有題目" aria-pressed={allSelected} onclick={() => onAll(!allSelected)}>{allSelected ? '取消全選' : '全選'}</button></th>
+        <th scope="col" class:active={allSelected} class="corner"><span class="corner-divider" aria-label="被乘數與乘數分隔">\</span><button type="button" aria-label="全選所有題目" aria-pressed={allSelected} onclick={() => onAll(!allSelected)}>{allSelected ? '取消全選' : '全選'}</button></th>
         {#each factors as column}
           <th scope="col" class:active={factors.every((row) => selectedSet.has(`${row}x${column}`))} class="column-heading"><button type="button" aria-label={`選擇第 ${column} 欄`} aria-pressed={factors.every((row) => selectedSet.has(`${row}x${column}`))} onclick={() => onColumn(column)}>{column}</button></th>
         {/each}
@@ -96,7 +96,7 @@
   .corner, .row-heading { position: sticky; left: 0; z-index: 2; color: var(--ds-factor-one); background: var(--ds-table-surface); }
   thead th { position: sticky; top: 0; z-index: 3; background: var(--ds-table-surface); color: var(--ds-factor-two); }
   thead .corner { z-index: 4; }
-  .corner { color: var(--ds-text-strong); } th.active { background: var(--ds-brand-soft); } th.active button { border-color: var(--ds-brand-strong); }
+  .corner { color: var(--ds-text-strong); } .corner-divider { display: block; min-height: 1rem; color: var(--ds-text-muted); font-size: 0.8rem; line-height: 1; } .column-heading button { color: var(--ds-factor-two); } .row-heading button { color: var(--ds-factor-one); } th.active { background: var(--ds-brand-soft); } th.active button { border-color: var(--ds-brand-strong); }
   button { border: 1px solid var(--ds-border); border-radius: var(--ds-radius-sm); background: var(--ds-surface); color: var(--ds-text); min-width: 100%; min-height: 2.75rem; cursor: pointer; font: inherit; user-select: none; touch-action: manipulation; }
   td button { background: var(--ds-surface); }
   button[aria-pressed="true"], td.selected button { background: var(--ds-table-selected); border-color: var(--ds-success); color: var(--ds-text-strong); }
