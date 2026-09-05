@@ -2,7 +2,7 @@
     color-scheme: light;
     --ds-canvas: #f4fbff;
     --ds-surface: rgb(255 255 255 / 0.58);
-    --ds-surface-strong: rgb(255 255 255 / 0.82);
+    --ds-surface-strong: rgb(255 255 255 / 0.72);
     --ds-surface-muted: rgb(224 242 254 / 0.62);
     --ds-text: #16324f;
     --ds-text-strong: #102a43;
@@ -38,7 +38,7 @@
     color-scheme: dark;
     --ds-canvas: #12243a;
     --ds-surface: rgb(26 54 82 / 0.74);
-    --ds-surface-strong: rgb(24 47 72 / 0.92);
+    --ds-surface-strong: rgb(24 47 72 / 0.84);
     --ds-surface-muted: rgb(34 78 111 / 0.72);
     --ds-text: #e5f4ff;
     --ds-text-strong: #f4fbff;
@@ -87,6 +87,13 @@ body {
     background: var(--ds-surface-strong) !important;
     border-color: var(--ds-border) !important;
     color: var(--ds-text) !important;
+    backdrop-filter: blur(20px) saturate(145%);
+    -webkit-backdrop-filter: blur(20px) saturate(145%);
+}
+
+.ds-modal-backdrop {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .ds-text-muted {
