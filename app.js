@@ -190,6 +190,20 @@
         window.location.href = 'index.html';
     }
 
+    function exportRecords(state) {
+        const rows = [['題目', '錯誤次數', '作答次數', '正確次數']];
+        questionList().forEach((question) => {
+            const record = state.records[question.key] || { errors: 0, attempts: 0 };
+            rows.push([`${question.row}×${question.col}`, record.errors || 0, record.attempts || 0, Math.max((record.attempts || 0) - (record.errors || 0), 0)]);
+        });
+        const csv = `\uFEFF${rows.map((row) => row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\n')}`;
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+        link.download = `multiplication-practice-${new Date().toISOString().slice(0, 19).replaceAll(':', '-')}.csv`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
     function submitAnswer(state) {
         if (!state.quiz) return;
         let unanswered = 0;
@@ -240,6 +254,22 @@
         document.getElementById('cancel-leave').addEventListener('click', closeModal);
         document.getElementById('confirm-leave').addEventListener('click', () => { state.quiz = null; saveState(state); window.location.href = 'index.html'; });
         modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
+        const settingsModal = document.getElementById('settings-modal');
+        const closeSettings = () => settingsModal.classList.add('hidden');
+        document.getElementById('open-settings').addEventListener('click', () => {
+            settingsModal.classList.remove('hidden');
+            settingsModal.classList.add('flex');
+            document.getElementById('close-settings').focus();
+        });
+        document.getElementById('close-settings').addEventListener('click', closeSettings);
+        document.getElementById('export-records').addEventListener('click', () => { exportRecords(state); closeSettings(); });
+        document.getElementById('clear-storage').addEventListener('click', () => {
+            if (window.confirm('確定要清除所有練習紀錄與目前進度嗎？此操作無法復原。')) {
+                localStorage.removeItem(STORAGE_KEY);
+                window.location.href = 'index.html';
+            }
+        });
+        settingsModal.addEventListener('click', (event) => { if (event.target === settingsModal) closeSettings(); });
         document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
     }
 
