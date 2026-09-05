@@ -4,6 +4,8 @@
     --ds-surface: rgb(255 255 255 / 0.58);
     --ds-surface-strong: rgb(255 255 255 / 0.72);
     --ds-surface-muted: rgb(224 242 254 / 0.62);
+    --ds-table-surface: rgb(255 255 255 / 0.94);
+    --ds-table-selected: #dff8eb;
     --ds-modal-surface: rgb(255 255 255 / 0.9);
     --ds-modal-border: rgb(73 128 177 / 0.58);
     --ds-text: #16324f;
@@ -42,6 +44,8 @@
     --ds-surface: rgb(22 62 94 / 0.84);
     --ds-surface-strong: rgb(31 78 111 / 0.94);
     --ds-surface-muted: rgb(14 73 101 / 0.82);
+    --ds-table-surface: rgb(27 70 103 / 0.98);
+    --ds-table-selected: #287a5b;
     --ds-modal-surface: rgb(28 73 106 / 0.98);
     --ds-modal-border: rgb(145 218 250 / 0.88);
     --ds-text: #e5f4ff;
@@ -120,7 +124,8 @@ html {
 
 .ds-table-header,
 .ds-table-cell {
-    background: var(--ds-surface) !important;
+    background-color: var(--ds-table-surface) !important;
+    background-image: none !important;
     border-color: var(--ds-border) !important;
     color: var(--ds-text) !important;
     backdrop-filter: blur(10px) saturate(125%);
@@ -129,7 +134,8 @@ html {
 
 .ds-table-header.is-selected,
 .ds-table-cell.is-selected {
-    background: var(--ds-success-soft) !important;
+    background-color: var(--ds-table-selected) !important;
+    background-image: none !important;
     border-color: var(--ds-success) !important;
 }
 
