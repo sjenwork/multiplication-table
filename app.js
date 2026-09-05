@@ -823,9 +823,6 @@
         };
         button.addEventListener('click', forceUpdate);
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                if (document.visibilityState === 'visible') showUpdate();
-            });
             navigator.serviceWorker.ready.then((registration) => {
                 if (registration.waiting) showUpdate();
                 registration.update().catch(() => {});
