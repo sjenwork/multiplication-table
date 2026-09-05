@@ -546,6 +546,13 @@
             });
         });
         updateSubmitButton(state);
+        const allCorrect = state.quiz.questions.length > 0 && state.quiz.questions.every((question) => !question.hadError);
+        const completionActions = document.getElementById('completion-actions');
+        if (completionActions) {
+            const visible = state.quiz.completed && allCorrect;
+            completionActions.classList.toggle('hidden', !visible);
+            completionActions.classList.toggle('flex', visible);
+        }
     }
 
     function scrollActiveQuestionIntoView(questionKey) {
@@ -636,6 +643,34 @@
         renderQuiz(state);
         message(allCorrect ? '太棒了！這次全部答對。' : '本輪挑戰完成，紀錄已保存。', false);
         showCompletionOverlay(allCorrect);
+    }
+
+    function returnToHomeAfterQuiz(state) {
+        state.quiz = null;
+        saveState(state);
+        window.location.href = 'index.html';
+    }
+
+    function startAnotherQuiz(state) {
+        const selected = questionList().filter((question) => state.selected.includes(question.key));
+        startQuizWithQuestions(state, selected);
+    }
+
+    function restartQuiz(state) {
+        if (!state.quiz) return;
+        state.quiz.questions = state.quiz.questions.map((question) => ({
+            ...question,
+            input: '',
+            wrongAttempts: 0,
+            resolved: false,
+            hadError: false,
+        }));
+        state.quiz.activeKey = state.quiz.questions[0]?.key || null;
+        state.quiz.completed = false;
+        saveState(state);
+        renderQuiz(state);
+        showKeypad();
+        scrollActiveQuestionIntoView(state.quiz.activeKey);
     }
 
     function exportRecords(state) {
@@ -774,7 +809,10 @@
             document.getElementById('cancel-leave').focus();
         });
         document.getElementById('cancel-leave').addEventListener('click', closeModal);
-        document.getElementById('confirm-leave').addEventListener('click', () => { state.quiz = null; saveState(state); window.location.href = 'index.html'; });
+        document.getElementById('confirm-leave').addEventListener('click', () => returnToHomeAfterQuiz(state));
+        document.getElementById('return-home-after-quiz').addEventListener('click', () => returnToHomeAfterQuiz(state));
+        document.getElementById('another-quiz').addEventListener('click', () => startAnotherQuiz(state));
+        document.getElementById('retry-quiz').addEventListener('click', () => restartQuiz(state));
         modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
         document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
     }
