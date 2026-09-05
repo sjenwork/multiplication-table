@@ -4,13 +4,16 @@
     const STORAGE_KEY = 'multiplication-practice-state';
 
     function newState() {
-        return { selected: [], records: {}, quiz: null };
+        return { selected: [], records: {}, quiz: null, inputMode: 'fixed' };
     }
 
     function loadState() {
         try {
             const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            return saved && typeof saved === 'object' ? { ...newState(), ...saved } : newState();
+            if (!saved || typeof saved !== 'object') return newState();
+            const state = { ...newState(), ...saved };
+            if (!['fixed', 'floating'].includes(state.inputMode)) state.inputMode = 'fixed';
+            return state;
         } catch (error) {
             return newState();
         }
@@ -184,6 +187,39 @@
         button.disabled = state.quiz.questions.some((question) => !question.resolved && !question.input);
     }
 
+    function positionFloatingKeypad(input) {
+        const keypad = document.getElementById('number-pad');
+        if (!keypad || !input || !keypad.classList.contains('floating-keypad')) return;
+        const inputRect = input.getBoundingClientRect();
+        const keypadRect = keypad.getBoundingClientRect();
+        const submitBar = document.querySelector('.safe-action-bar');
+        const bottomLimit = submitBar ? submitBar.getBoundingClientRect().top - 8 : window.innerHeight - 8;
+        const topLimit = 8;
+        const preferredBelow = inputRect.bottom + 8;
+        const preferredAbove = inputRect.top - keypadRect.height - 8;
+        const top = preferredBelow + keypadRect.height <= bottomLimit
+            ? preferredBelow
+            : Math.max(topLimit, preferredAbove);
+        const left = Math.min(
+            Math.max(8, inputRect.left + (inputRect.width - keypadRect.width) / 2),
+            Math.max(8, window.innerWidth - keypadRect.width - 8),
+        );
+        keypad.style.left = `${left}px`;
+        keypad.style.top = `${Math.min(top, Math.max(topLimit, bottomLimit - keypadRect.height))}px`;
+    }
+
+    function updateKeypadMode(state, input) {
+        const keypad = document.getElementById('number-pad');
+        if (!keypad) return;
+        const isFloating = state.inputMode === 'floating';
+        keypad.classList.toggle('floating-keypad', isFloating);
+        if (isFloating) window.requestAnimationFrame(() => positionFloatingKeypad(input || document.getElementById(`answer-${state.quiz?.activeKey}`)));
+        else {
+            keypad.style.left = '';
+            keypad.style.top = '';
+        }
+    }
+
     function renderQuiz(state) {
         const list = document.getElementById('question-list');
         const progress = document.getElementById('progress');
@@ -199,6 +235,7 @@
                 list.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.remove('ring-2', 'ring-blue-300'));
                 input.classList.add('ring-2', 'ring-blue-300');
                 saveState(state);
+                updateKeypadMode(state, input);
             });
         });
         updateSubmitButton(state);
@@ -218,6 +255,7 @@
         document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-blue-300', answerInput === input));
         saveState(state);
         updateSubmitButton(state);
+        updateKeypadMode(state, input);
     }
 
     function finishQuiz(state) {
@@ -255,6 +293,14 @@
             document.getElementById('close-settings').focus();
         });
         document.getElementById('close-settings').addEventListener('click', closeSettings);
+        document.querySelectorAll('input[name="input-mode"]').forEach((input) => {
+            input.checked = input.value === state.inputMode;
+            input.addEventListener('change', () => {
+                if (!input.checked) return;
+                state.inputMode = input.value;
+                saveState(state);
+            });
+        });
         document.getElementById('export-records').addEventListener('click', () => { exportRecords(state); closeSettings(); });
         document.getElementById('clear-storage').addEventListener('click', () => {
             if (window.confirm('確定要清除所有練習紀錄與目前進度嗎？此操作無法復原。')) {
@@ -351,6 +397,7 @@
     function initQuiz(state) {
         if (!state.quiz || !state.quiz.questions.length) { window.location.href = 'index.html'; return; }
         renderQuiz(state);
+        updateKeypadMode(state);
         document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
         document.querySelectorAll('[data-pad-value]').forEach((button) => {
             button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
@@ -366,6 +413,9 @@
         document.getElementById('confirm-leave').addEventListener('click', () => { state.quiz = null; saveState(state); window.location.href = 'index.html'; });
         modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
         document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
+        window.addEventListener('resize', () => updateKeypadMode(state));
+        window.visualViewport?.addEventListener('resize', () => updateKeypadMode(state));
+        window.addEventListener('scroll', () => updateKeypadMode(state));
     }
 
     document.addEventListener('DOMContentLoaded', () => {

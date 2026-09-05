@@ -60,6 +60,21 @@
                 <button id="close-settings" type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full text-xl text-slate-500 hover:bg-slate-100" aria-label="關閉設定">×</button>
             </div>
             <p class="mt-2 text-sm leading-6 text-slate-600">管理你的練習資料與成績統計。</p>
+            <fieldset class="mt-5">
+                <legend class="text-sm font-bold text-slate-800">答題鍵盤</legend>
+                <div class="mt-2 grid grid-cols-2 gap-2">
+                    <label class="cursor-pointer rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm transition has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50">
+                        <input type="radio" name="input-mode" value="fixed" class="sr-only" checked>
+                        <span class="font-semibold text-slate-700">固定底部</span>
+                        <span class="mt-1 block text-xs text-slate-500">鍵盤固定在畫面下方</span>
+                    </label>
+                    <label class="cursor-pointer rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 text-sm transition has-[:checked]:border-blue-400 has-[:checked]:bg-blue-50">
+                        <input type="radio" name="input-mode" value="floating" class="sr-only">
+                        <span class="font-semibold text-slate-700">浮動鍵盤</span>
+                        <span class="mt-1 block text-xs text-slate-500">鍵盤靠近目前題目</span>
+                    </label>
+                </div>
+            </fieldset>
             <div class="mt-5 space-y-3">
                 <button id="export-records" type="button" class="w-full rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-left text-sm font-semibold text-blue-700 hover:bg-blue-100 transition">匯出成績統計紀錄（CSV）</button>
                 <button id="clear-storage" type="button" class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-left text-sm font-semibold text-red-700 hover:bg-red-100 transition">清除所有練習紀錄</button>
@@ -67,6 +82,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-130512" defer></script>
+    <script src="app.js?v=20260905-131120" defer></script>
 </body>
 </html>

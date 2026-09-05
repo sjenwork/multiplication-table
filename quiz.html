@@ -17,9 +17,15 @@
     <style>
         .numeric-pad {
             display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(4.5rem, auto);
-            grid-template-rows: repeat(2, minmax(0, 1fr));
-            gap: 0.25rem;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.375rem;
+        }
+
+        .floating-keypad {
+            left: auto;
+            right: auto;
+            bottom: auto;
+            width: min(18rem, calc(100vw - 1rem));
         }
     </style>
 </head>
@@ -43,20 +49,18 @@
 
     <div id="number-pad" class="safe-keypad fixed left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-2 py-2 shadow-lg backdrop-blur-md">
         <div class="numeric-pad mx-auto max-w-2xl">
-            <button type="button" data-pad-value="0" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">0</button>
             <button type="button" data-pad-value="1" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">1</button>
             <button type="button" data-pad-value="2" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">2</button>
             <button type="button" data-pad-value="3" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">3</button>
             <button type="button" data-pad-value="4" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">4</button>
-            <div class="col-start-6 row-span-2 grid grid-rows-2 gap-1">
-                <button type="button" data-pad-value="backspace" class="rounded-lg border border-amber-200 bg-amber-50 py-1.5 text-base font-semibold text-amber-700 transition hover:bg-amber-100 active:scale-95 active:bg-amber-200" aria-label="刪除最後一個數字">⌫</button>
-                <button type="button" data-pad-value="clear" class="rounded-lg border border-slate-300 bg-slate-100 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200 active:scale-95">清除</button>
-            </div>
             <button type="button" data-pad-value="5" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">5</button>
             <button type="button" data-pad-value="6" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">6</button>
             <button type="button" data-pad-value="7" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">7</button>
             <button type="button" data-pad-value="8" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">8</button>
             <button type="button" data-pad-value="9" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">9</button>
+            <button type="button" data-pad-value="clear" class="rounded-lg border border-slate-300 bg-slate-100 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200 active:scale-95">清除</button>
+            <button type="button" data-pad-value="0" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">0</button>
+            <button type="button" data-pad-value="backspace" class="rounded-lg border border-amber-200 bg-amber-50 py-1.5 text-base font-semibold text-amber-700 transition hover:bg-amber-100 active:scale-95 active:bg-amber-200" aria-label="刪除最後一個數字">⌫</button>
         </div>
     </div>
 
@@ -77,6 +81,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-130512" defer></script>
+    <script src="app.js?v=20260905-131120" defer></script>
 </body>
 </html>
