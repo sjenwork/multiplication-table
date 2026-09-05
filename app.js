@@ -547,12 +547,27 @@
     }
 
     function updateKeypadAnswer(state, value) {
+        if (value === 'next') {
+            const unresolved = state.quiz.questions.filter((question) => !question.resolved);
+            const activeIndex = unresolved.findIndex((question) => question.key === state.quiz.activeKey);
+            const nextQuestion = unresolved[activeIndex + 1] || unresolved[0];
+            if (nextQuestion) {
+                state.quiz.activeKey = nextQuestion.key;
+                document.querySelectorAll('input[data-question]').forEach((answerInput) => {
+                    const active = answerInput.dataset.question === nextQuestion.key;
+                    answerInput.classList.toggle('ring-2', active);
+                    answerInput.classList.toggle('ring-blue-300', active);
+                });
+                saveState(state);
+                showKeypad();
+            }
+            return;
+        }
         const active = state.quiz.questions.find((question) => question.key === state.quiz.activeKey && !question.resolved)
             || state.quiz.questions.find((question) => !question.resolved);
         if (!active) return;
         state.quiz.activeKey = active.key;
         if (value === 'backspace') active.input = active.input.slice(0, -1);
-        else if (value === 'clear') active.input = '';
         else active.input += value;
         const input = document.getElementById(`answer-${active.key}`);
         if (input) input.value = active.input;
