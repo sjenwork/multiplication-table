@@ -18,6 +18,10 @@
     --ds-on-accent: #3c2b09;
     --ds-accent: #f5a524;
     --ds-accent-strong: #d98208;
+    --ds-update-surface: #1769d1;
+    --ds-update-surface-active: #125bb7;
+    --ds-update-text: #ffffff;
+    --ds-update-border: #8bc8ff;
     --ds-success: #1fb879;
     --ds-success-soft: #dff8eb;
     --ds-danger: #e45757;
@@ -58,6 +62,10 @@
     --ds-on-accent: #3c2b09;
     --ds-accent: #ffc857;
     --ds-accent-strong: #ffd77f;
+    --ds-update-surface: #ffc857;
+    --ds-update-surface-active: #ffd77f;
+    --ds-update-text: #08233d;
+    --ds-update-border: #ffe4a3;
     --ds-success: #62d6a2;
     --ds-success-soft: rgb(28 116 86 / 0.46);
     --ds-danger: #ff8b86;
@@ -106,6 +114,21 @@ html {
 .ds-modal-backdrop {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+}
+
+.ds-update-pill {
+    background-color: var(--ds-update-surface) !important;
+    border-color: var(--ds-update-border) !important;
+    color: var(--ds-update-text) !important;
+    box-shadow: var(--ds-shadow-md), 0 0 0 2px rgb(255 255 255 / 0.18);
+}
+
+.ds-update-pill:hover {
+    background-color: var(--ds-update-surface-active) !important;
+}
+
+.ds-update-pill:active {
+    background-color: var(--ds-update-surface-active) !important;
 }
 
 .ds-modal-surface {
