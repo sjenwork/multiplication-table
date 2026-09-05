@@ -100,6 +100,21 @@ body {
     color: var(--ds-text-muted) !important;
 }
 
+.ds-table-header,
+.ds-table-cell {
+    background: var(--ds-surface) !important;
+    border-color: var(--ds-border) !important;
+    color: var(--ds-text) !important;
+    backdrop-filter: blur(10px) saturate(125%);
+    -webkit-backdrop-filter: blur(10px) saturate(125%);
+}
+
+.ds-table-header.is-selected,
+.ds-table-cell.is-selected {
+    background: var(--ds-success-soft) !important;
+    border-color: var(--ds-success) !important;
+}
+
 .ds-primary {
     background: var(--ds-brand) !important;
     color: var(--ds-on-brand) !important;

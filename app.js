@@ -119,10 +119,7 @@
             if (!gesture.touched.has(key)) {
                 gesture.touched.add(key);
                 const selected = gesture.selecting;
-                cell.classList.toggle('bg-emerald-100', selected);
-                cell.classList.toggle('border-emerald-400', selected);
-                cell.classList.toggle('bg-white', !selected);
-                cell.classList.toggle('border-slate-200', !selected);
+                cell.classList.toggle('is-selected', selected);
                 const checkbox = cell.querySelector('input[data-question]');
                 if (checkbox) checkbox.checked = selected;
                 if (selected) gesture.selected.add(key);
@@ -245,7 +242,7 @@
         const selectedKeys = new Set(state.selected);
         const headerTone = (keys) => {
             const count = keys.filter((key) => selectedKeys.has(key)).length;
-            return count > 0 ? 'bg-amber-50 border-amber-300' : 'bg-slate-100 border-transparent';
+            return count > 0 ? 'ds-table-header is-selected' : 'ds-table-header';
         };
         const corner = document.createElement('th');
         corner.className = `sticky top-0 left-0 z-30 p-2 font-bold text-slate-600 border ${headerTone(questionList().map((question) => question.key))} rounded-lg`;
@@ -289,7 +286,7 @@
                 const cell = document.createElement('td');
                 const selected = selectedKeys.has(key);
                 cell.dataset.question = key;
-                const cellTone = selected ? 'bg-emerald-100 border-emerald-400' : 'bg-white border-slate-200';
+                const cellTone = selected ? 'ds-table-cell is-selected' : 'ds-table-cell';
                 cell.className = `p-2 rounded-lg transition border ${cellTone} relative text-xs md:text-sm`;
                 cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><input type="checkbox" class="sr-only" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
                 const checkbox = cell.querySelector('input');
