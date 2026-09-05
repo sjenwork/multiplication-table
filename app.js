@@ -80,10 +80,16 @@
         if (!grid) return;
         grid.innerHTML = '<thead><tr></tr></thead><tbody></tbody>';
         const headerRow = grid.querySelector('thead tr');
+        const selectedQuestions = questionList().filter((question) => state.selected.includes(question.key));
+        const selectedKeys = new Set(state.selected);
+        const headerTone = (keys) => {
+            const count = keys.filter((key) => selectedKeys.has(key)).length;
+            return count === keys.length ? 'bg-emerald-100 border-emerald-400' : count > 0 ? 'bg-amber-50 border-amber-300' : 'bg-slate-100 border-transparent';
+        };
         const corner = document.createElement('th');
-        corner.className = 'sticky top-0 left-0 z-30 p-2 font-bold text-slate-400 bg-slate-100 rounded-lg';
+        corner.className = `sticky top-0 left-0 z-30 p-2 font-bold text-slate-600 border ${headerTone(questionList().map((question) => question.key))} rounded-lg`;
         corner.scope = 'col';
-        corner.innerHTML = '<label class="flex flex-col items-center justify-center gap-1 cursor-pointer"><span>×</span><input type="checkbox" class="h-4 w-4 accent-blue-600 cursor-pointer" data-select-all="all" aria-label="全選所有題目"></label>';
+        corner.innerHTML = '<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span>×</span><input type="checkbox" class="sr-only" data-select-all="all" aria-label="全選所有題目"></label>';
         corner.querySelector('input').addEventListener('change', (event) => {
             changeSelection(state, questionList().map((question) => question.key), event.target.checked);
             renderHome(state);
@@ -92,9 +98,10 @@
 
         for (let col = 1; col <= 9; col += 1) {
             const heading = document.createElement('th');
-            heading.className = 'sticky top-0 z-20 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg text-sm md:text-base';
+            const columnKeys = questionList().filter((question) => question.col === col).map((question) => question.key);
+            heading.className = `sticky top-0 z-20 p-2 font-bold text-slate-700 border ${headerTone(columnKeys)} rounded-lg text-sm md:text-base`;
             heading.scope = 'col';
-            heading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer"><span>${col}</span><input type="checkbox" class="h-4 w-4 accent-blue-600 cursor-pointer" data-select-all="column" data-column="${col}" aria-label="選擇第 ${col} 欄"></label>`;
+            heading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span>${col}</span><input type="checkbox" class="sr-only" data-select-all="column" data-column="${col}" aria-label="選擇第 ${col} 欄"></label>`;
             heading.querySelector('input').addEventListener('change', (event) => {
                 changeSelection(state, questionList().filter((question) => question.col === col).map((question) => question.key), event.target.checked);
                 renderHome(state);
@@ -106,9 +113,10 @@
         for (let row = 1; row <= 9; row += 1) {
             const rowElement = document.createElement('tr');
             const rowHeading = document.createElement('th');
-            rowHeading.className = 'sticky left-0 z-10 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg text-sm md:text-base';
+            const rowKeys = questionList().filter((question) => question.row === row).map((question) => question.key);
+            rowHeading.className = `sticky left-0 z-10 p-2 font-bold text-slate-700 border ${headerTone(rowKeys)} rounded-lg text-sm md:text-base`;
             rowHeading.scope = 'row';
-            rowHeading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer"><span>${row}</span><input type="checkbox" class="h-4 w-4 accent-blue-600 cursor-pointer" data-select-all="row" data-row="${row}" aria-label="選擇第 ${row} 列"></label>`;
+            rowHeading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span>${row}</span><input type="checkbox" class="sr-only" data-select-all="row" data-row="${row}" aria-label="選擇第 ${row} 列"></label>`;
             rowHeading.querySelector('input').addEventListener('change', (event) => {
                 changeSelection(state, questionList().filter((question) => question.row === row).map((question) => question.key), event.target.checked);
                 renderHome(state);
@@ -118,15 +126,17 @@
             for (let col = 1; col <= 9; col += 1) {
                 const key = questionKey(row, col);
                 const cell = document.createElement('td');
-                cell.className = 'p-2 rounded-lg transition border border-slate-200 bg-white relative text-xs md:text-sm';
-                cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer"><input type="checkbox" class="h-5 w-5 accent-blue-600 cursor-pointer" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
+                const selected = selectedKeys.has(key);
+                const highlighted = selectedQuestions.some((question) => question.row === row || question.col === col);
+                const cellTone = selected ? 'bg-emerald-100 border-emerald-400' : highlighted ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200';
+                cell.className = `p-2 rounded-lg transition border ${cellTone} relative text-xs md:text-sm`;
+                cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><input type="checkbox" class="sr-only" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
                 const checkbox = cell.querySelector('input');
                 checkbox.checked = state.selected.includes(key);
                 checkbox.addEventListener('change', () => {
                     state.selected = checkbox.checked ? [...state.selected, key] : state.selected.filter((item) => item !== key);
                     saveState(state);
-                    updateSelectionControls(state, grid);
-                    updateSelectionStatus(state);
+                    renderHome(state);
                 });
                 rowElement.appendChild(cell);
             }
@@ -159,7 +169,7 @@
         progress.textContent = `本次挑戰 ${state.quiz.questions.length} 題 · 完成後即可檢查答案`;
         list.innerHTML = state.quiz.questions.map((item, index) => {
             const status = item.resolved ? (item.hadError ? `✕ ${item.answer}` : '✓') : (item.wrongAttempts ? `✕ ${item.wrongAttempts}/3` : '');
-            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="flex items-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex min-w-0 flex-1 items-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="numeric" value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></label><span class="shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
+            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="relative flex items-center justify-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex items-center justify-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="numeric" value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></label><span class="absolute right-0 shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
         }).join('');
         list.querySelectorAll('input[data-question]').forEach((input) => {
             input.addEventListener('input', () => {
