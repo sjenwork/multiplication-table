@@ -50,6 +50,31 @@
         start.disabled = state.selected.length === 0;
     }
 
+    function updateSelectionControls(state, grid) {
+        const selected = new Set(state.selected);
+        const allKeys = questionList().map((question) => question.key);
+        const allSelected = allKeys.every((key) => selected.has(key));
+        const allToggle = grid.querySelector('[data-select-all="all"]');
+        allToggle.checked = allSelected;
+        allToggle.indeterminate = selected.size > 0 && !allSelected;
+
+        grid.querySelectorAll('[data-select-all="row"], [data-select-all="column"]').forEach((toggle) => {
+            const keys = toggle.dataset.selectAll === 'row'
+                ? allKeys.filter((key) => key.startsWith(`${toggle.dataset.row}x`))
+                : allKeys.filter((key) => key.endsWith(`x${toggle.dataset.column}`));
+            const count = keys.filter((key) => selected.has(key)).length;
+            toggle.checked = count === keys.length;
+            toggle.indeterminate = count > 0 && count < keys.length;
+        });
+    }
+
+    function changeSelection(state, keys, checked) {
+        const selected = new Set(state.selected);
+        keys.forEach((key) => (checked ? selected.add(key) : selected.delete(key)));
+        state.selected = [...selected];
+        saveState(state);
+    }
+
     function renderHome(state) {
         const grid = document.getElementById('multiplication-grid');
         if (!grid) return;
@@ -58,14 +83,22 @@
         const corner = document.createElement('th');
         corner.className = 'sticky top-0 left-0 z-30 p-2 font-bold text-slate-400 bg-slate-100 rounded-lg';
         corner.scope = 'col';
-        corner.textContent = '×';
+        corner.innerHTML = '<label class="flex flex-col items-center justify-center gap-1 cursor-pointer"><span>×</span><input type="checkbox" class="h-4 w-4 accent-blue-600 cursor-pointer" data-select-all="all" aria-label="全選所有題目"></label>';
+        corner.querySelector('input').addEventListener('change', (event) => {
+            changeSelection(state, questionList().map((question) => question.key), event.target.checked);
+            renderHome(state);
+        });
         headerRow.appendChild(corner);
 
         for (let col = 1; col <= 9; col += 1) {
             const heading = document.createElement('th');
             heading.className = 'sticky top-0 z-20 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg text-sm md:text-base';
             heading.scope = 'col';
-            heading.textContent = col;
+            heading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer"><span>${col}</span><input type="checkbox" class="h-4 w-4 accent-blue-600 cursor-pointer" data-select-all="column" data-column="${col}" aria-label="選擇第 ${col} 欄"></label>`;
+            heading.querySelector('input').addEventListener('change', (event) => {
+                changeSelection(state, questionList().filter((question) => question.col === col).map((question) => question.key), event.target.checked);
+                renderHome(state);
+            });
             headerRow.appendChild(heading);
         }
         const body = grid.querySelector('tbody');
@@ -75,7 +108,11 @@
             const rowHeading = document.createElement('th');
             rowHeading.className = 'sticky left-0 z-10 p-2 font-bold text-slate-700 bg-slate-100 rounded-lg text-sm md:text-base';
             rowHeading.scope = 'row';
-            rowHeading.textContent = row;
+            rowHeading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer"><span>${row}</span><input type="checkbox" class="h-4 w-4 accent-blue-600 cursor-pointer" data-select-all="row" data-row="${row}" aria-label="選擇第 ${row} 列"></label>`;
+            rowHeading.querySelector('input').addEventListener('change', (event) => {
+                changeSelection(state, questionList().filter((question) => question.row === row).map((question) => question.key), event.target.checked);
+                renderHome(state);
+            });
             rowElement.appendChild(rowHeading);
 
             for (let col = 1; col <= 9; col += 1) {
@@ -88,12 +125,14 @@
                 checkbox.addEventListener('change', () => {
                     state.selected = checkbox.checked ? [...state.selected, key] : state.selected.filter((item) => item !== key);
                     saveState(state);
+                    updateSelectionControls(state, grid);
                     updateSelectionStatus(state);
                 });
                 rowElement.appendChild(cell);
             }
             body.appendChild(rowElement);
         }
+        updateSelectionControls(state, grid);
         updateSelectionStatus(state);
     }
 
@@ -120,7 +159,7 @@
         progress.textContent = `本次挑戰 ${state.quiz.questions.length} 題 · 完成後即可檢查答案`;
         list.innerHTML = state.quiz.questions.map((item, index) => {
             const status = item.resolved ? (item.hadError ? `✕ ${item.answer}` : '✓') : (item.wrongAttempts ? `✕ ${item.wrongAttempts}/3` : '');
-            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="flex items-center justify-between gap-1 whitespace-nowrap leading-tight"><label class="flex items-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${index + 1}. ${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="numeric" value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></label><span class="text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
+            return `<article class="border rounded-lg p-2 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="flex items-center gap-2 whitespace-nowrap leading-tight"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">${index + 1}</span><label class="flex min-w-0 flex-1 items-center gap-1 text-base md:text-lg font-bold text-slate-800 whitespace-nowrap" for="answer-${item.key}">${item.row} × ${item.col} =<input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="numeric" value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} aria-label="第 ${index + 1} 題答案" class="w-12 md:w-14 shrink-0 text-center text-base md:text-lg py-1 bg-white border border-slate-300 rounded-md font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></label><span class="shrink-0 text-xs font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${status}</span></div></article>`;
         }).join('');
         list.querySelectorAll('input[data-question]').forEach((input) => {
             input.addEventListener('input', () => {
