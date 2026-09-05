@@ -223,8 +223,7 @@
         const dock = document.getElementById('keypad-dock');
         if (!keypad || !handle || !dock) return;
         const DETACH_DISTANCE = 48;
-        const SNAP_RADIUS = 72;
-        const RELEASE_RADIUS = 112;
+        const SNAP_RADIUS = 40;
         let drag = null;
         const clampPosition = (left, top) => {
             const rect = keypad.getBoundingClientRect();
@@ -306,14 +305,12 @@
             const dockRect = dock.getBoundingClientRect();
             const keypadRect = keypad.getBoundingClientRect();
             const distance = rectDistance(keypadRect, dockRect);
-            const nearDock = drag.overDock ? distance <= RELEASE_RADIUS : distance <= SNAP_RADIUS;
+            const nearDock = distance <= SNAP_RADIUS;
             drag.overDock = nearDock;
             setDockState(true, nearDock);
             if (nearDock) {
                 keypad.classList.remove('is-dragging');
                 keypad.classList.add('keypad-snap-preview');
-                keypad.style.left = `${dockRect.left}px`;
-                keypad.style.top = `${dockRect.top}px`;
             }
         };
         const stopDrag = (clientX, clientY, pointerId = null, canceled = false) => {
@@ -321,7 +318,7 @@
             const releaseX = Number.isFinite(clientX) ? clientX : drag.lastX;
             const releaseY = Number.isFinite(clientY) ? clientY : drag.lastY;
             const dockRect = dock.getBoundingClientRect();
-            const releasedNearDock = pointDistance(releaseX, releaseY, dockRect) <= RELEASE_RADIUS;
+            const releasedNearDock = pointDistance(releaseX, releaseY, dockRect) <= SNAP_RADIUS;
             const shouldSnap = !canceled && drag.detached && drag.overDock && releasedNearDock;
             keypad.classList.remove('is-dragging', 'keypad-snap-preview');
             setDockState(false);
