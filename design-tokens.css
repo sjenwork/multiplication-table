@@ -69,6 +69,10 @@ body {
     color: var(--ds-text);
 }
 
+html {
+    min-height: 100%;
+}
+
 .app-shell {
     background: var(--ds-canvas) !important;
     color: var(--ds-text) !important;
