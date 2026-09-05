@@ -300,6 +300,10 @@
         startQuizWithQuestions(state, wrongQuestions.slice(0, 10), false);
     }
 
+    function startRandomQuiz(state) {
+        startQuizWithQuestions(state, questionList());
+    }
+
     function startQuizWithQuestions(state, selected, alreadyLimited = false) {
         state.quiz = {
             questions: shuffled(alreadyLimited ? selected : selected.slice(0, 10)).map((question) => ({ ...question, input: '', wrongAttempts: 0, resolved: false, hadError: false })),
@@ -843,8 +847,8 @@
         renderHome(state);
         initSettings(state);
         document.getElementById('start-quiz').addEventListener('click', () => startQuiz(state));
+        document.getElementById('start-random-quiz').addEventListener('click', () => startRandomQuiz(state));
         document.getElementById('start-wrong-quiz').addEventListener('click', () => startWrongQuiz(state));
-        document.getElementById('clear-selection').addEventListener('click', () => { state.selected = []; saveState(state); renderHome(state); });
     }
 
     function initQuiz(state) {
