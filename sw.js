@@ -1,4 +1,4 @@
-const CACHE_NAME = 'multiplication-master-v20260905-211108';
+const CACHE_NAME = 'multiplication-master-v20260905-211240';
 const APP_SHELL = [
     '/',
     '/index.html',
