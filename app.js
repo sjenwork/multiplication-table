@@ -45,9 +45,11 @@
     function updateSelectionStatus(state) {
         const status = document.getElementById('selection-status');
         const start = document.getElementById('start-quiz');
+        const startWrong = document.getElementById('start-wrong-quiz');
         if (!status || !start) return;
         status.textContent = state.selected.length ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！` : '尚未選擇題目，請先點擊表格中的格子。';
         start.disabled = state.selected.length === 0;
+        if (startWrong) startWrong.disabled = !questionList().some((question) => (state.records[question.key]?.errors || 0) > 0);
     }
 
     function updateSelectionControls(state, grid) {
@@ -146,8 +148,22 @@
 
     function startQuiz(state) {
         const selected = questionList().filter((question) => state.selected.includes(question.key));
+        startQuizWithQuestions(state, selected);
+    }
+
+    function startWrongQuiz(state) {
+        const wrongQuestions = questionList()
+            .filter((question) => (state.records[question.key]?.errors || 0) > 0)
+            .sort((a, b) => {
+                const errorDifference = (state.records[b.key]?.errors || 0) - (state.records[a.key]?.errors || 0);
+                return errorDifference || Math.random() - 0.5;
+            });
+        startQuizWithQuestions(state, wrongQuestions.slice(0, 10), false);
+    }
+
+    function startQuizWithQuestions(state, selected, alreadyLimited = false) {
         state.quiz = {
-            questions: shuffled(selected).slice(0, 10).map((question) => ({ ...question, input: '', wrongAttempts: 0, resolved: false, hadError: false })),
+            questions: shuffled(alreadyLimited ? selected : selected.slice(0, 10)).map((question) => ({ ...question, input: '', wrongAttempts: 0, resolved: false, hadError: false })),
             activeKey: null,
         };
         state.quiz.activeKey = state.quiz.questions[0]?.key || null;
@@ -261,15 +277,20 @@
     function initVersionUpdate() {
         const button = document.getElementById('force-update');
         if (!button) return;
+        const showUpdate = () => {
+            button.classList.remove('hidden');
+            button.textContent = '有新版本，立即更新';
+        };
         button.addEventListener('click', forceUpdate);
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.ready.then((registration) => {
-                if (registration.waiting) button.textContent = '有新版本，立即更新';
+                if (registration.waiting) showUpdate();
+                registration.update().catch(() => {});
                 registration.addEventListener('updatefound', () => {
                     const worker = registration.installing;
                     if (!worker) return;
                     worker.addEventListener('statechange', () => {
-                        if (worker.state === 'installed' && navigator.serviceWorker.controller) button.textContent = '有新版本，立即更新';
+                        if (worker.state === 'installed' && navigator.serviceWorker.controller) showUpdate();
                     });
                 });
             }).catch(() => {});
@@ -310,6 +331,7 @@
         renderHome(state);
         initSettings(state);
         document.getElementById('start-quiz').addEventListener('click', () => startQuiz(state));
+        document.getElementById('start-wrong-quiz').addEventListener('click', () => startWrongQuiz(state));
         document.getElementById('clear-selection').addEventListener('click', () => { state.selected = []; saveState(state); renderHome(state); });
     }
 
