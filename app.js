@@ -82,7 +82,7 @@
                 const key = questionKey(row, col);
                 const cell = document.createElement('td');
                 cell.className = 'p-2 rounded-lg transition border border-slate-200 bg-white relative text-xs md:text-sm';
-                cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer"><span class="text-slate-400 text-[10px] md:text-xs mb-1">${row}×${col}</span><input type="checkbox" class="h-5 w-5 accent-blue-600 cursor-pointer" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
+                cell.innerHTML = `<label class="flex flex-col items-center justify-center cursor-pointer"><input type="checkbox" class="h-5 w-5 accent-blue-600 cursor-pointer" data-question="${key}" aria-label="選擇 ${row} 乘 ${col}"><span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${historyText(state.records[key])}</span></label>`;
                 const checkbox = cell.querySelector('input');
                 checkbox.checked = state.selected.includes(key);
                 checkbox.addEventListener('change', () => {
