@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import ActionBar from '../components/ActionBar.svelte';
   import SelectionGrid from '../components/SelectionGrid.svelte';
-  import { invertSelection, selectAll, toggleColumn, toggleKey, toggleRow } from '../domain/selection';
+  import { selectAll, toggleColumn, toggleKey, toggleRow } from '../domain/selection';
   import { questionBank, type Factor } from '../domain/question';
   import { DEFAULT_STATE, migrateState, parseState, serializeState, STORAGE_KEY, type AppState } from '../domain/state';
   import { startWrongQuiz } from '../application/quiz-session';
@@ -67,45 +67,50 @@
 
 <main class="home-page" aria-labelledby="migration-title">
   <header class="page-header">
-    <div><p class="eyebrow">DAILY PRACTICE / 01</p><h1 id="migration-title">乘法小達人</h1></div>
-    <button class="ds-secondary" type="button" aria-label="設定" onclick={() => settingsOpen = true}>設定</button>
+    <div class="brand-lockup"><p class="eyebrow">MULTIPLICATION MASTER</p><h1 id="migration-title">乘法小達人</h1></div>
+    <button class="icon-button ds-secondary" type="button" aria-label="開啟設定" onclick={() => settingsOpen = true}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+    </button>
   </header>
-  <section class="intro" aria-labelledby="selection-title">
-    <p class="kicker">挑一組，開始變熟</p>
-    <h2 id="selection-title">選擇今天要練的題目</h2>
-    <p>點選格子挑題，也可以一次選取整列或整欄。每題的紀錄會留在你的裝置上。</p>
+  <section class="instruction ds-surface" aria-label="選題說明">
+    點選或長按滑動選題；每次隨機 10 題，不足則全部出題。
   </section>
-  <p role="status" aria-live="polite">{status}</p>
-  <SelectionGrid
-    selected={state.selected}
-    records={state.records}
-    onToggle={(key) => updateSelection(toggleKey(state.selected, key))}
-    onRow={(row: Factor) => updateSelection(toggleRow(state.selected, row))}
-    onColumn={(column: Factor) => updateSelection(toggleColumn(state.selected, column))}
-    onAll={(selected: boolean) => updateSelection(selectAll(state.selected, selected))}
-  />
-  <ActionBar hasSelection={hasSelection} hasWrongAnswers={hasWrongAnswers} onStart={startChallenge} onRandom={randomQuiz} onWrongFirst={wrongFirstQuiz} onInvert={() => updateSelection(invertSelection(state.selected))} onSettings={() => settingsOpen = true} />
+  <div class="selection-scroll" data-selection-scroll aria-label="九九乘法表，可上下左右捲動；長按格子後滑動可批次選題">
+    <SelectionGrid
+      selected={state.selected}
+      records={state.records}
+      onToggle={(key) => updateSelection(toggleKey(state.selected, key))}
+      onRow={(row: Factor) => updateSelection(toggleRow(state.selected, row))}
+      onColumn={(column: Factor) => updateSelection(toggleColumn(state.selected, column))}
+      onAll={(selected: boolean) => updateSelection(selectAll(state.selected, selected))}
+    />
+  </div>
+  <ActionBar status={status} hasSelection={hasSelection} hasWrongAnswers={hasWrongAnswers} onStart={startChallenge} onRandom={randomQuiz} onWrongFirst={wrongFirstQuiz} />
 </main>
 
 {#if settingsOpen}
   <div class="modal-backdrop ds-modal-backdrop" role="presentation" onclick={(event) => event.target === event.currentTarget && (settingsOpen = false)}>
     <dialog open class="settings-modal ds-modal-surface" aria-labelledby="settings-title">
-      <div class="modal-heading"><h2 id="settings-title">設定</h2><button class="ds-secondary" type="button" aria-label="關閉設定" onclick={() => settingsOpen = false}>關閉</button></div>
+      <div class="modal-heading"><h2 id="settings-title">設定</h2><button class="icon-button ds-secondary" type="button" aria-label="關閉設定" onclick={() => settingsOpen = false}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
       <fieldset><legend>主題</legend><button class="ds-theme-choice" type="button" aria-label="淺色主題" aria-pressed={state.theme === 'light'} onclick={() => changeTheme('light')}>淺色</button><button class="ds-theme-choice" type="button" aria-label="深色主題" aria-pressed={state.theme === 'dark'} onclick={() => changeTheme('dark')}>深色</button></fieldset>
-      <div class="settings-actions"><button class="ds-secondary" type="button" aria-label="匯出紀錄" onclick={exportRecords}>匯出紀錄</button><button class="ds-danger" type="button" aria-label="清除資料" onclick={clearState}>清除資料</button></div>
+      <div class="settings-actions"><button class="ds-secondary" type="button" aria-label="匯出紀錄" onclick={exportRecords}>匯出成績統計紀錄（CSV）</button><button class="ds-danger" type="button" aria-label="清除資料" onclick={clearState}>清除所有練習紀錄</button></div>
     </dialog>
   </div>
 {/if}
 
 <style>
-  .home-page { max-width: 68rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
+  .home-page { box-sizing: border-box; display: flex; flex-direction: column; width: min(100%, 72rem); height: 100svh; min-height: 0; margin: 0 auto; padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) calc(5rem + env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); overflow: hidden; }
   .page-header, .modal-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-  .eyebrow, .kicker { margin: 0; color: var(--ds-factor-two); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.14em; }
-  h1, h2, p { margin-top: 0; } h1 { margin-bottom: 0; color: var(--ds-text-strong); font-size: clamp(2rem, 6vw, 4.5rem); letter-spacing: -0.06em; } h2 { margin-bottom: 0.5rem; color: var(--ds-text-strong); }
-  .intro { max-width: 40rem; margin: 4rem 0 1.5rem; } .intro p:last-child { color: var(--ds-text-muted); line-height: 1.7; }
-  .page-header button, .modal-heading button, fieldset button, .settings-actions button { border: 1px solid var(--ds-border-strong); border-radius: var(--ds-radius-sm); padding: 0.6rem 0.9rem; background: var(--ds-surface); color: var(--ds-text); font: inherit; cursor: pointer; }
-  [role="status"] { color: var(--ds-text-muted); font-weight: 700; }
+  .page-header { position: relative; flex: 0 0 auto; justify-content: center; margin-bottom: 1.5rem; text-align: center; }
+  .brand-lockup { min-width: 0; }
+  .eyebrow { margin: 0 0 0.5rem; color: var(--ds-brand-strong); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; }
+  h1, h2, p { margin-top: 0; } h1 { margin-bottom: 0; color: var(--ds-text-strong); font-size: clamp(1.5rem, 4vw, 1.875rem); font-weight: 800; } h2 { margin-bottom: 0.5rem; color: var(--ds-text-strong); }
+  .icon-button { display: inline-flex; width: 2.25rem; height: 2.25rem; align-items: center; justify-content: center; padding: 0; border-radius: 999px; }
+  .icon-button svg { width: 1.125rem; height: 1.125rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+  .page-header > .icon-button { position: absolute; top: 50%; right: 0; transform: translateY(-50%); }
+  .instruction { flex: 0 0 auto; margin-bottom: 1rem; padding: 0.75rem 1rem; border-radius: var(--ds-radius-md); color: var(--ds-text); font-size: 0.875rem; line-height: 1.5; text-align: center; }
+  .selection-scroll { flex: 1 1 auto; min-height: 0; overflow: auto; isolation: isolate; border-radius: var(--ds-radius-md); padding-bottom: 0.5rem; overscroll-behavior: contain; }
   .modal-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); background: var(--ds-shadow-color); }
   .settings-modal { width: min(100%, 28rem); padding: 1.25rem; color: var(--ds-text); }
-  fieldset { display: flex; gap: 0.5rem; margin: 1.25rem 0; border: 0; padding: 0; } legend { width: 100%; margin-bottom: 0.5rem; font-weight: 800; } .settings-actions { display: flex; gap: 0.5rem; }
+  fieldset { display: flex; gap: 0.5rem; margin: 1.25rem 0; border: 0; padding: 0; } legend { width: 100%; margin-bottom: 0.5rem; font-weight: 800; } .settings-actions { display: grid; gap: 0.75rem; } .settings-actions button { width: 100%; text-align: left; }
 </style>

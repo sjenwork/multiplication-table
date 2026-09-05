@@ -49,11 +49,11 @@ describe('HomePage integration', () => {
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toEqual([]);
   });
 
-  it('offers explicit inversion and disables challenge until a selection exists', async () => {
+  it('keeps challenge disabled until a selection exists and supports select-all', async () => {
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
     expect(screen.getByRole('button', { name: '開始挑戰' })).toBeDisabled();
-    await fireEvent.click(screen.getByRole('button', { name: '反選題目' }));
+    await fireEvent.click(screen.getByRole('button', { name: '全選所有題目' }));
     expect(screen.getByRole('button', { name: '開始挑戰' })).not.toBeDisabled();
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toHaveLength(81);
   });
@@ -72,7 +72,7 @@ describe('HomePage integration', () => {
     render(HomePage, { props: { storage: new MemoryStorage() } });
     const toolbar = screen.getByRole('toolbar', { name: '題目操作' });
     expect(getComputedStyle(toolbar).flexWrap).toBe('nowrap');
-    expect(toolbar.querySelectorAll('button')).toHaveLength(5);
+    expect(toolbar.querySelectorAll('button')).toHaveLength(3);
   });
 
   it('suppresses the synthetic click after a long-press drag and guards pointer boundaries', async () => {
@@ -98,7 +98,7 @@ describe('HomePage integration', () => {
   it('keeps settings behind a testable dialog boundary', async () => {
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
-    await fireEvent.click(screen.getAllByRole('button', { name: '設定' })[0]);
+    await fireEvent.click(screen.getByRole('button', { name: '開啟設定' }));
     expect(screen.getByRole('dialog', { name: '設定' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: '深色主題' }));
     expect(JSON.parse(storage.get(STORAGE_KEY)!).theme).toBe('dark');
@@ -109,7 +109,7 @@ describe('HomePage integration', () => {
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, selected: ['1x1'], theme: 'dark' }));
     const download = { download: vi.fn() };
     render(HomePage, { props: { storage, download } });
-    await fireEvent.click(screen.getAllByRole('button', { name: '設定' })[0]);
+    await fireEvent.click(screen.getByRole('button', { name: '開啟設定' }));
     await fireEvent.click(screen.getByRole('button', { name: '匯出紀錄' }));
     expect(download.download).toHaveBeenCalledWith('multiplication-records.csv', expect.stringContaining('1x1'), 'text/csv;charset=utf-8');
     await fireEvent.click(screen.getByRole('button', { name: '清除資料' }));
@@ -135,7 +135,7 @@ describe('HomePage integration', () => {
     const emptyStorage = new MemoryStorage();
     render(HomePage, { props: { storage: emptyStorage } });
     expect(screen.getByRole('button', { name: '錯題優先' })).toBeDisabled();
-    await fireEvent.click(screen.getByRole('button', { name: '反選題目' }));
+    await fireEvent.click(screen.getByRole('button', { name: '全選所有題目' }));
     expect(screen.getByRole('button', { name: '錯題優先' })).toBeDisabled();
     cleanup();
 

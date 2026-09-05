@@ -59,8 +59,7 @@
   }
 </script>
 
-<div class="selection-grid-wrap" data-selection-scroll>
-  <table class="selection-grid" role="grid" aria-label="九九乘法選題表" onpointerup={endPointer} onpointercancel={endPointer}>
+<table class="selection-grid" role="grid" aria-label="九九乘法選題表" onpointerup={endPointer} onpointercancel={endPointer}>
     <thead>
       <tr>
         <th scope="col" class:active={allSelected} class="corner"><span aria-label="被＼乘">被＼乘</span><button type="button" aria-label="全選所有題目" aria-pressed={allSelected} onclick={() => onAll(!allSelected)}>{allSelected ? '取消全選' : '全選'}</button></th>
@@ -88,16 +87,15 @@
         </tr>
       {/each}
     </tbody>
-  </table>
-</div>
+ </table>
 
 <style>
-  .selection-grid-wrap { overflow: auto; max-height: min(62vh, 38rem); border: 1px solid var(--ds-border); border-radius: var(--ds-radius-md); background: var(--ds-table-surface); padding-bottom: env(safe-area-inset-bottom); }
-  .selection-grid { border-collapse: separate; border-spacing: 0.25rem; width: 100%; min-width: 34rem; text-align: center; }
+  .selection-grid { border-collapse: separate; border-spacing: 0.25rem; width: 100%; min-width: 40.625rem; table-layout: fixed; text-align: center; }
   th, td { min-width: 3rem; height: 3rem; }
   th { font-weight: 700; }
   .corner, .row-heading { position: sticky; left: 0; z-index: 2; color: var(--ds-factor-one); background: var(--ds-table-surface); }
   thead th { position: sticky; top: 0; z-index: 3; background: var(--ds-table-surface); color: var(--ds-factor-two); }
+  thead .corner { z-index: 4; }
   .corner { color: var(--ds-text-strong); } th.active { background: var(--ds-brand-soft); } th.active button { border-color: var(--ds-brand-strong); }
   button { border: 1px solid var(--ds-border); border-radius: var(--ds-radius-sm); background: var(--ds-surface); color: var(--ds-text); min-width: 100%; min-height: 2.75rem; cursor: pointer; font: inherit; user-select: none; touch-action: manipulation; }
   td button { background: var(--ds-surface); }
