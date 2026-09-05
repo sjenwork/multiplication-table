@@ -1,7 +1,7 @@
 import { createQuiz, inputDigit, backspace, submitAnswer, nextQuestion, type AnswerStatus, type Rng, type QuizState } from '../domain/quiz';
 import { finalizeQuiz } from '../domain/records';
 import { questionBank } from '../domain/question';
-import { migrateState, parseState, serializeState, STORAGE_KEY, type AppState } from '../domain/state';
+import { migrateState, parseState, serializeState, STORAGE_KEY, type AppState, type KeypadPosition } from '../domain/state';
 import type { StoragePort } from '../ports';
 
 export interface QuizSessionResult { quiz: QuizState; status: AnswerStatus; state: AppState; }
@@ -18,6 +18,12 @@ export function loadOrCreateQuiz(storage: StoragePort, rng: Rng = Math.random, r
 
 export function saveQuiz(storage: StoragePort, state: AppState, quiz: QuizState): AppState {
   const nextState = { ...state, quiz };
+  storage.set(STORAGE_KEY, serializeState(nextState));
+  return nextState;
+}
+
+export function saveKeypadPosition(storage: StoragePort, state: AppState, keypadPosition: KeypadPosition): AppState {
+  const nextState = { ...state, keypadPosition: { ...keypadPosition } };
   storage.set(STORAGE_KEY, serializeState(nextState));
   return nextState;
 }
