@@ -19,6 +19,9 @@ export default defineConfig({
         const stamp = process.env.PWA_VERSION ?? versionStamp();
         this.emitFile({ type: 'asset', fileName: 'manifest.webmanifest', source: readFileSync(resolve(pwaRoot, 'manifest.webmanifest')) });
         this.emitFile({ type: 'asset', fileName: 'sw.js', source: readFileSync(resolve(pwaRoot, 'sw.js'), 'utf8').replaceAll('__VERSION__', stamp) });
+        if (process.env.E2E_PWA === '1') {
+          for (const worker of ['e2e-sw-one.js', 'e2e-sw-two.js']) this.emitFile({ type: 'asset', fileName: worker, source: readFileSync(resolve(pwaRoot, worker), 'utf8') });
+        }
         for (const icon of ['icon.svg', 'icon-192.png', 'icon-512.png']) this.emitFile({ type: 'asset', fileName: `icons/${icon}`, source: readFileSync(resolve(pwaRoot, 'icons', icon)) });
       },
     },

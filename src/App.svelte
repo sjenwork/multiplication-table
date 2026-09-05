@@ -17,7 +17,10 @@
 
   onMount(async () => {
     if (import.meta.env.DEV) return;
-    updatePort = await registerBrowserServiceWorker();
+    const isE2eWorker = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('e2e-sw') === '1';
+    const testWorker = isE2eWorker ? `/e2e-sw-${sessionStorage.getItem('e2e-sw-ready') ? 'two' : 'one'}.js` : '/sw.js';
+    if (isE2eWorker) sessionStorage.setItem('e2e-sw-ready', '1');
+    updatePort = await registerBrowserServiceWorker(testWorker);
   });
 </script>
 
@@ -26,8 +29,8 @@
 </svelte:head>
 
 {#if isQuizPage}
-  <QuizPage storage={storage} navigation={browserNavigation} random={randomQuiz} />
-{:else}
+  <QuizPage storage={storage} navigation={browserNavigation} download={browserDownload} random={randomQuiz} />
+  {:else}
   <HomePage storage={storage} navigation={browserNavigation} download={browserDownload} haptics={browserHaptics} />
 {/if}
 

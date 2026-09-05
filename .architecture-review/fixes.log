@@ -1,0 +1,27 @@
+# Architecture Review Fixes
+
+尚未有本輪 commit；依要求所有修復保留在工作區，完成後以 `working-tree` 回溯。
+
+## 2026-09-06 Round B（working-tree）
+
+- 恢復 selection grid 的 hidden checkbox + label DOM，補全選、列、欄 indeterminate 與 long-press/desktop drag regression tests。
+- 修正首頁選取後建立 fresh quiz session，並補 selected/random/wrong-first Playwright navigation flow。
+- 對齊 quiz inline question row、fixed/floating keypad positioning/drag/close、共用 settings modal 與 wrong feedback banner。
+- 驗證：46 Vitest、7 targeted Chromium E2E、check/build/tsc/diff-check 全數通過。
+- Round C/D 尚未開始；未 commit、未部署。
+
+## 2026-09-06 Round C/D（working-tree）
+
+- Round C：48/48 DOM inventory rows 完成 real Chromium evidence；覆蓋 1440×900、390×844、light/dark、settings/return modal、touch long-press、scroll clearance、fixed/floating keypad、banner、console 與 screenshots。
+- 修正 quiz inner scroll 的 box sizing/keyboard clearance、floating keypad dock 回 fixed、synthetic pointer capture safety，以及 PWA initial-install/update race。
+- Round D：建立 `04-test-gap-matrix.md`，15/15 behavior contracts 對應測試；完整 quality gates 通過。
+- 測試：46 Vitest + 16 Chromium Playwright = 62 cases；Round C/D 新增 9 個 Playwright cases（既有 runtime pending 3 個一併納入）。
+- 唯一 open finding：未跑 WebKit/iOS Safari 原生 runtime；未 commit、未部署。
+
+## 2026-09-06 parity review follow-up（working-tree）
+
+- Home/Quiz 改共用 `src/application/export-records.ts`，統一四欄 quoted CSV、row×col、正確次數與 timestamp filename；補 Quiz integration/download E2E。
+- SettingsModal 控件改用共用 design-token classes；補 Home/Quiz light/dark computed-style equality E2E。
+- 補 Q-08/Q-14/Q-15/Q-16/Q-19 的 dedicated runtime assertions。
+- `e2e-sw-one/two.js` 改為只有 `E2E_PWA=1` 才由 Vite emit；production dist negative assertion PASS；Playwright webServer 已帶 flag。
+- latest gates：47 Vitest、17 Chromium E2E；check/build/tsc/diff-check PASS；未 commit、未部署。

@@ -15,6 +15,7 @@ describe('PWA build and update boundaries', () => {
   it('reports waiting updates and sends skip-waiting without permanent visibility', async () => {
     const waiting = { postMessage: vi.fn() } as unknown as ServiceWorker;
     const registration = { waiting, installing: null, addEventListener: vi.fn() } as unknown as ServiceWorkerRegistration;
+    Object.defineProperty(navigator, 'serviceWorker', { configurable: true, value: { controller: {}, addEventListener: vi.fn() } });
     const update = serviceWorkerUpdate(registration);
     const listener = vi.fn();
     update.onUpdateAvailable(listener);
@@ -32,4 +33,5 @@ describe('PWA build and update boundaries', () => {
     expect(manifest.start_url).toBe('/');
     expect(manifest.icons).toHaveLength(2);
   });
+
 });

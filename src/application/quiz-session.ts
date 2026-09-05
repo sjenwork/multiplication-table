@@ -94,6 +94,12 @@ export function startRandomQuiz(storage: StoragePort, state: AppState, rng: Rng 
   return { state: nextState, quiz };
 }
 
+export function startSelectedQuiz(storage: StoragePort, state: AppState, rng: Rng = Math.random): { state: AppState; quiz: QuizState } {
+  const quiz = createQuiz(questionBank().filter((question) => state.selected.includes(question.key)), rng);
+  const nextState = saveQuiz(storage, state, quiz);
+  return { state: nextState, quiz };
+}
+
 export function startWrongQuiz(storage: StoragePort, state: AppState, rng: Rng = Math.random): { state: AppState; quiz: QuizState } | null {
   const questions = selectWrongFirstQuestions(questionBank(), state.records);
   if (questions.length === 0) return null;

@@ -29,6 +29,11 @@
   $: selectedSet = new Set(selected);
   $: allSelected = questions.every((question) => selectedSet.has(question.key));
 
+  function setIndeterminate(node: HTMLInputElement, mixed: boolean) {
+    node.indeterminate = mixed;
+    return { update: (next: boolean) => { node.indeterminate = next; } };
+  }
+
   function keyAtPoint(x: number, y: number): string | null {
     const target = document.elementFromPoint(x, y)?.closest('td[data-question]');
     return target instanceof HTMLElement ? target.dataset.question ?? null : null;
@@ -81,7 +86,7 @@
       touched: new Set(), selecting: false, active: false, previousOverflow: scrollContainer?.style.overflow ?? '', timer: setTimeout(() => activateGesture(), LONG_PRESS_MS),
     };
     if (event.pointerType === 'mouse') activateGesture();
-    grid.setPointerCapture?.(event.pointerId);
+    try { grid.setPointerCapture?.(event.pointerId); } catch { /* synthetic/test events may not have an active pointer */ }
   }
 
   function movePointer(event: PointerEvent) {
@@ -119,7 +124,7 @@
       suppressClickUntil = Date.now() + 450;
     }
     dragChanges = new Map();
-    grid.releasePointerCapture?.(event.pointerId);
+    try { grid.releasePointerCapture?.(event.pointerId); } catch { /* synthetic/test events may not have an active pointer */ }
     gesture = null;
   }
 
@@ -127,7 +132,9 @@
     if (Date.now() < suppressClickUntil) {
       event.preventDefault(); event.stopPropagation(); return;
     }
-    const cell = (event.target as HTMLElement).closest('td[data-question]');
+    const target = event.target as HTMLElement;
+    if (target.closest('label, input')) return;
+    const cell = target.closest('td[data-question]');
     if (!(cell instanceof HTMLElement)) return;
     const key = cell.dataset.question;
     if (key) onToggle(key);
@@ -142,14 +149,18 @@
   <thead>
     <tr>
       <th scope="col" class:active={allSelected} class:is-selected={allSelected} class="corner ds-table-header">
-        <button type="button" class="corner-control" aria-label="全選所有題目" aria-pressed={allSelected} onclick={() => onAll(!allSelected)}>
+        <label class="header-control corner-control">
           <span class="corner-divider" aria-hidden="true"><span class="ds-factor-one">被</span><span>＼</span><span class="ds-factor-two">乘</span></span>
-        </button>
+          <input class="sr-only" type="checkbox" checked={allSelected} use:setIndeterminate={selected.length > 0 && !allSelected} aria-label="全選所有題目" onchange={(event) => onAll((event.currentTarget as HTMLInputElement).checked)} />
+        </label>
       </th>
       {#each factors as column}
         {@const columnSelected = factors.every((row) => selectedSet.has(`${row}x${column}`))}
         <th scope="col" class:active={columnSelected} class:is-selected={columnSelected} class="column-heading ds-table-header">
-          <button type="button" aria-label={`選擇第 ${column} 欄`} aria-pressed={columnSelected} onclick={() => onColumn(column)}>{column}</button>
+          <label class="header-control">
+            <span>{column}</span>
+            <input class="sr-only" type="checkbox" checked={columnSelected} use:setIndeterminate={factors.some((row) => selectedSet.has(`${row}x${column}`)) && !columnSelected} aria-label={`選擇第 ${column} 欄`} onchange={() => onColumn(column)} />
+          </label>
         </th>
       {/each}
     </tr>
@@ -159,14 +170,18 @@
       {@const rowSelected = factors.every((column) => selectedSet.has(`${row}x${column}`))}
       <tr>
         <th scope="row" class:active={rowSelected} class:is-selected={rowSelected} class="row-heading ds-table-header">
-          <button type="button" aria-label={`選擇第 ${row} 列`} aria-pressed={rowSelected} onclick={() => onRow(row)}>{row}</button>
+          <label class="header-control">
+            <span>{row}</span>
+            <input class="sr-only" type="checkbox" checked={rowSelected} use:setIndeterminate={factors.some((column) => selectedSet.has(`${row}x${column}`)) && !rowSelected} aria-label={`選擇第 ${row} 列`} onchange={() => onRow(row)} />
+          </label>
         </th>
         {#each factors as column}
           {@const question = questions.find((item) => item.row === row && item.col === column) as Question}
           <td data-question={question.key} onpointerenter={enterCell} class="ds-table-cell" class:selected={dragChanges.has(question.key) ? dragChanges.get(question.key) : selectedSet.has(question.key)} class:is-selected={dragChanges.has(question.key) ? dragChanges.get(question.key) : selectedSet.has(question.key)}>
-            <button type="button" onpointerenter={enterCell} aria-label={`選擇 ${row} 乘 ${column}`} aria-pressed={dragChanges.has(question.key) ? dragChanges.get(question.key) : selectedSet.has(question.key)}>
+            <label class="cell-control" onpointerenter={enterCell}>
+              <input class="sr-only" type="checkbox" onpointerenter={enterCell} checked={dragChanges.has(question.key) ? dragChanges.get(question.key) : selectedSet.has(question.key)} aria-label={`選擇 ${row} 乘 ${column}`} onchange={() => onToggle(question.key)} />
               <small>{recordLabel(records[question.key])}</small>
-            </button>
+            </label>
           </td>
         {/each}
       </tr>
@@ -183,14 +198,15 @@
   thead .corner { z-index: 4; }
   .corner { color: var(--ds-text-strong); }
   .corner-divider { display: inline-flex; align-items: center; justify-content: center; gap: 0.15rem; min-height: 1.1rem; color: var(--ds-text-muted); font-size: 0.65rem; line-height: 1; }
-  .column-heading button { color: var(--ds-factor-two); }
-  .row-heading button { color: var(--ds-factor-one); }
+  .column-heading .header-control { color: var(--ds-factor-two); }
+  .row-heading .header-control { color: var(--ds-factor-one); }
   th.active { background: var(--ds-table-selected); border-color: var(--ds-success); }
-  th.active button { color: var(--ds-text-strong); }
-  button { display: flex; width: 100%; min-width: 100%; min-height: 2.75rem; align-items: center; justify-content: center; border: 0; border-radius: var(--ds-radius-sm); padding: 0; background: transparent; color: var(--ds-text); cursor: pointer; font: inherit; user-select: none; touch-action: manipulation; }
-  button[aria-pressed="true"] { color: var(--ds-text-strong); }
+  th.active .header-control { color: var(--ds-text-strong); }
+  .header-control, .cell-control { position: relative; display: grid; width: 100%; min-width: 100%; min-height: 2.75rem; place-items: center; border: 0; border-radius: var(--ds-radius-sm); padding: 0; background: transparent; color: var(--ds-text); cursor: pointer; font: inherit; user-select: none; touch-action: manipulation; }
+  td.selected .cell-control, td.is-selected .cell-control, .header-control:has(input:checked) { background: var(--ds-table-selected); color: var(--ds-text-strong); }
   .corner-control { display: grid; place-items: center; }
-  button:focus-visible { outline: 3px solid var(--ds-focus); outline-offset: 2px; }
+  .header-control:focus-within, .cell-control:focus-within { outline: 3px solid var(--ds-focus); outline-offset: 2px; }
+  .sr-only { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 0; margin: 0; overflow: hidden; opacity: 0; cursor: pointer; }
   td small { display: block; color: var(--ds-text-muted); font-size: 0.7rem; }
   :global(.selection-dragging) { outline: 3px solid rgb(59 130 246 / 0.22); outline-offset: 2px; }
   :global(.selection-haptic-fallback) { animation: selection-feedback 180ms ease-out; }

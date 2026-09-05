@@ -20,7 +20,7 @@ Capacitor smoke ──> Android/iOS webview 啟動與關鍵 native ports
 - `npm run check`：Svelte check、TypeScript、必要的 lint。
 - `npm run test`：Vitest 全量。
 - `npm run test:coverage`：domain/application 行為至少 90% statement/branch；adapter 至少 80%；UI component 以關鍵互動覆蓋，不用單純追求行數。
-- `npm run test:e2e`：由 `playwright.config.ts` 啟動 `npm run build` 與本地 `vite preview` 後執行 Chromium critical flows；CI 不依賴 Cloudflare 網路環境。
+- `npm run test:e2e`：由 `playwright.config.ts` 以 `E2E_PWA=1` 建立含測試 worker fixture 的 preview，再執行 Chromium flows；一般 `npm run build` 不會輸出 e2e worker，避免測試資產部署到正式環境。
 - 首次在開發機或 CI 執行需先安裝 browser：`npx playwright install chromium`（Linux CI 可用 `npx playwright install --with-deps chromium`）。若 browser binary 未安裝，E2E 會明確失敗，不視為通過。
 - 每次 commit 至少執行 `npm run check && npm run test && npm run build`；selection、quiz、PWA、CSS layout 變更追加 E2E。
 
@@ -50,7 +50,7 @@ Capacitor smoke ──> Android/iOS webview 啟動與關鍵 native ports
 
 ## E2E Tests（Playwright）
 
-目前可執行的最小交付套件位於 `tests/e2e/critical-flow.spec.ts`，實際命令為 `npm run test:e2e`。它只驗證本地 preview 的首頁選題／開始、`quiz.html` deep link、固定鍵盤輸入與完成 banner；不使用外網或脆弱 screenshot。WebKit、mobile viewport、PWA waiting-worker 與完整 pointer layout suite 仍是後續擴充項目，不能以目前 Chromium critical flow 代替。
+目前完整交付套件由 `tests/e2e/critical-flow.spec.ts`、`home-parity.spec.ts`、`runtime-parity.spec.ts` 組成，實際命令為 `npm run test:e2e`。它使用 `E2E_PWA=1` 的本地 preview 驗證首頁/quiz、mobile viewport、PWA waiting-worker、pointer layout 與 computed style；一般 production `npm run build` 不會輸出 e2e worker。WebKit/iOS Safari 原生 runtime 仍未納入本環境。
 
 每個測試先建立隔離 browser context 與空的 localStorage，必要時注入 fixture；不得依賴前一個測試的資料。至少包含：
 

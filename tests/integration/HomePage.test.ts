@@ -12,7 +12,7 @@ class MemoryStorage implements StoragePort {
   remove(key: string) { this.values.delete(key); }
 }
 
-afterEach(() => cleanup());
+afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('HomePage integration', () => {
   it('renders the 9x9 grid with factor headers and the 被＼乘 corner', () => {
@@ -20,7 +20,7 @@ describe('HomePage integration', () => {
     expect(screen.getByRole('heading', { name: '乘法小達人' })).toBeInTheDocument();
     expect(screen.getByRole('grid', { name: '九九乘法選題表' })).toBeInTheDocument();
     expect(screen.getByText('＼')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '選擇 1 乘 1' })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: '選擇 1 乘 1' })).toBeInTheDocument();
     expect(screen.getAllByRole('columnheader')).toHaveLength(10);
     expect(screen.getAllByRole('rowheader')).toHaveLength(9);
   });
@@ -29,15 +29,15 @@ describe('HomePage integration', () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, selected: ['1x1'] }));
     render(HomePage, { props: { storage } });
-    expect(screen.getByRole('button', { name: '選擇 1 乘 1' })).toHaveAttribute('aria-pressed', 'true');
-    await fireEvent.click(screen.getByRole('button', { name: '選擇 2 乘 2' }));
+    expect(screen.getByRole('checkbox', { name: '選擇 1 乘 1' })).toBeChecked();
+    await fireEvent.click(screen.getByRole('checkbox', { name: '選擇 2 乘 2' }));
     expect(storage.get(STORAGE_KEY)).toContain('2x2');
-    await fireEvent.click(screen.getByRole('button', { name: '選擇第 1 列' }));
-    expect(screen.getByRole('button', { name: '選擇 1 乘 9' })).toHaveAttribute('aria-pressed', 'true');
-    await fireEvent.click(screen.getByRole('button', { name: '選擇第 3 欄' }));
-    expect(screen.getByRole('button', { name: '選擇 9 乘 3' })).toHaveAttribute('aria-pressed', 'true');
-    await fireEvent.click(screen.getByRole('button', { name: '全選所有題目' }));
-    expect(screen.getByRole('button', { name: '選擇 9 乘 9' })).toHaveAttribute('aria-pressed', 'true');
+    await fireEvent.click(screen.getByRole('checkbox', { name: '選擇第 1 列' }));
+    expect(screen.getByRole('checkbox', { name: '選擇 1 乘 9' })).toBeChecked();
+    await fireEvent.click(screen.getByRole('checkbox', { name: '選擇第 3 欄' }));
+    expect(screen.getByRole('checkbox', { name: '選擇 9 乘 3' })).toBeChecked();
+    await fireEvent.click(screen.getByRole('checkbox', { name: '全選所有題目' }));
+    expect(screen.getByRole('checkbox', { name: '選擇 9 乘 9' })).toBeChecked();
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toHaveLength(81);
   });
 
@@ -45,7 +45,7 @@ describe('HomePage integration', () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, selected: ['1x1'] }));
     render(HomePage, { props: { storage } });
-    await fireEvent.click(screen.getByRole('button', { name: '選擇 1 乘 1' }));
+    await fireEvent.click(screen.getByRole('checkbox', { name: '選擇 1 乘 1' }));
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toEqual([]);
   });
 
@@ -53,7 +53,7 @@ describe('HomePage integration', () => {
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
     expect(screen.getByRole('button', { name: '開始挑戰' })).toBeDisabled();
-    await fireEvent.click(screen.getByRole('button', { name: '全選所有題目' }));
+    await fireEvent.click(screen.getByRole('checkbox', { name: '全選所有題目' }));
     expect(screen.getByRole('button', { name: '開始挑戰' })).not.toBeDisabled();
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toHaveLength(81);
   });
@@ -61,21 +61,22 @@ describe('HomePage integration', () => {
   it('keeps select-all as an icon-only control with no visible select-all label', async () => {
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
-    const control = screen.getByRole('button', { name: '全選所有題目' });
+    const control = screen.getByRole('checkbox', { name: '全選所有題目' });
     expect(control).toBeVisible();
-    expect(control).toHaveAttribute('aria-pressed', 'false');
+    expect(control).not.toBeChecked();
     expect(screen.queryByText('全選')).not.toBeInTheDocument();
     await fireEvent.click(control);
     expect(JSON.parse(storage.get(STORAGE_KEY)!).selected).toHaveLength(81);
-    expect(control).toHaveAttribute('aria-pressed', 'true');
+    expect(control).toBeChecked();
   });
 
   it('passes record history to cells with a 0/0 default', () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, records: { '1x1': { errors: 2, attempts: 3 } } }));
     render(HomePage, { props: { storage } });
-    expect(within(screen.getByRole('button', { name: '選擇 1 乘 1' })).getByText('2/3')).toBeInTheDocument();
-    const emptyCell = screen.getByRole('button', { name: '選擇 1 乘 2' });
+    const historyCell = screen.getByRole('checkbox', { name: '選擇 1 乘 1' }).closest('label')!;
+    expect(within(historyCell).getByText('2/3')).toBeInTheDocument();
+    const emptyCell = screen.getByRole('checkbox', { name: '選擇 1 乘 2' }).closest('label')!;
     expect(within(emptyCell).getByText('0/0')).toBeInTheDocument();
     expect(within(emptyCell).queryByText('2')).not.toBeInTheDocument();
   });
@@ -91,19 +92,19 @@ describe('HomePage integration', () => {
     vi.useFakeTimers();
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
-    const cell = screen.getByRole('button', { name: '選擇 1 乘 1' });
+    const cell = screen.getByRole('checkbox', { name: '選擇 1 乘 1' });
     await fireEvent.pointerDown(cell, { button: 0, pointerType: 'touch' });
-    await fireEvent.pointerEnter(screen.getByRole('button', { name: '選擇 1 乘 2' }));
-    expect(cell).toHaveAttribute('aria-pressed', 'false');
+    await fireEvent.pointerEnter(screen.getByRole('checkbox', { name: '選擇 1 乘 2' }));
+    expect(cell).not.toBeChecked();
     vi.advanceTimersByTime(350);
     await fireEvent.pointerUp(screen.getByRole('grid', { name: '九九乘法選題表' }));
-    expect(cell).toHaveAttribute('aria-pressed', 'true');
+    expect(cell).toBeChecked();
     await fireEvent.click(cell);
-    expect(cell).toHaveAttribute('aria-pressed', 'true');
-    const rightClickCell = screen.getByRole('button', { name: '選擇 1 乘 3' });
+    expect(cell).toBeChecked();
+    const rightClickCell = screen.getByRole('checkbox', { name: '選擇 1 乘 3' });
     await fireEvent.pointerDown(rightClickCell, { button: 2, pointerType: 'mouse' });
     vi.advanceTimersByTime(350);
-    expect(rightClickCell).toHaveAttribute('aria-pressed', 'false');
+    expect(rightClickCell).not.toBeChecked();
     vi.useRealTimers();
   });
 
@@ -123,6 +124,7 @@ describe('HomePage integration', () => {
   });
 
   it('exports records and clears persisted selection and theme from settings', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, selected: ['1x1'], theme: 'dark' }));
     const download = { download: vi.fn() };
@@ -142,14 +144,14 @@ describe('HomePage integration', () => {
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
     const grid = screen.getByRole('grid', { name: '九九乘法選題表' });
-    const first = screen.getByRole('button', { name: '選擇 1 乘 1' });
-    const second = screen.getByRole('button', { name: '選擇 1 乘 2' });
+    const first = screen.getByRole('checkbox', { name: '選擇 1 乘 1' });
+    const second = screen.getByRole('checkbox', { name: '選擇 1 乘 2' });
     await fireEvent.pointerDown(first, { button: 0, pointerType: 'mouse' });
     await fireEvent.pointerEnter(second);
     await fireEvent.pointerUp(grid);
     await fireEvent.click(second);
-    expect(first).toHaveAttribute('aria-pressed', 'true');
-    expect(second).toHaveAttribute('aria-pressed', 'true');
+    expect(first).toBeChecked();
+    expect(second).toBeChecked();
   });
 
   it('supports a 350ms touch long press followed by continuous drag without release click rollback', async () => {
@@ -157,18 +159,18 @@ describe('HomePage integration', () => {
     const storage = new MemoryStorage();
     render(HomePage, { props: { storage } });
     const grid = screen.getByRole('grid', { name: '九九乘法選題表' });
-    const first = screen.getByRole('button', { name: '選擇 1 乘 1' });
-    const second = screen.getByRole('button', { name: '選擇 1 乘 2' });
-    const third = screen.getByRole('button', { name: '選擇 1 乘 3' });
+    const first = screen.getByRole('checkbox', { name: '選擇 1 乘 1' });
+    const second = screen.getByRole('checkbox', { name: '選擇 1 乘 2' });
+    const third = screen.getByRole('checkbox', { name: '選擇 1 乘 3' });
     await fireEvent.pointerDown(first, { button: 0, pointerType: 'touch', pointerId: 7 });
     vi.advanceTimersByTime(350);
     await fireEvent.pointerEnter(second, { pointerType: 'touch', pointerId: 7 });
     await fireEvent.pointerEnter(third, { pointerType: 'touch', pointerId: 7 });
     await fireEvent.pointerUp(grid, { pointerType: 'touch', pointerId: 7 });
     await fireEvent.click(second);
-    expect(first).toHaveAttribute('aria-pressed', 'true');
-    expect(second).toHaveAttribute('aria-pressed', 'true');
-    expect(third).toHaveAttribute('aria-pressed', 'true');
+    expect(first).toBeChecked();
+    expect(second).toBeChecked();
+    expect(third).toBeChecked();
     vi.useRealTimers();
   });
 
@@ -176,7 +178,7 @@ describe('HomePage integration', () => {
     const emptyStorage = new MemoryStorage();
     render(HomePage, { props: { storage: emptyStorage } });
     expect(screen.getByRole('button', { name: '錯題優先' })).toBeDisabled();
-    await fireEvent.click(screen.getByRole('button', { name: '全選所有題目' }));
+    await fireEvent.click(screen.getByRole('checkbox', { name: '全選所有題目' }));
     expect(screen.getByRole('button', { name: '錯題優先' })).toBeDisabled();
     cleanup();
 

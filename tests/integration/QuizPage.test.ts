@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/svelte';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import QuizPage from '../../src/routes/QuizPage.svelte';
 import type { StoragePort, NavigationPort } from '../../src/ports';
 import { DEFAULT_STATE, STORAGE_KEY, serializeState } from '../../src/domain/state';
@@ -21,7 +21,7 @@ describe('QuizPage integration', () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, quiz: createQuiz([{ row: 1, col: 2, answer: 2, key: '1x2' }, { row: 2, col: 2, answer: 4, key: '2x2' }], () => 0) }));
     render(QuizPage, { props: { storage, navigation } });
-    expect(screen.getByRole('heading', { name: '答題挑戰' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '乘法挑戰' })).toBeInTheDocument();
     expect(screen.getAllByRole('article')).toHaveLength(2);
     expect(new Set(screen.getAllByRole('article').map((card) => card.getAttribute('data-question'))).size).toBe(2);
   });
@@ -57,7 +57,7 @@ describe('QuizPage integration', () => {
     const storage = new MemoryStorage();
     const calls: string[] = [];
     render(QuizPage, { props: { storage, navigation: { go: (path: string) => calls.push(path), back: () => calls.push('back') } } });
-    await fireEvent.click(screen.getByRole('button', { name: '返回' }));
+    await fireEvent.click(screen.getByRole('button', { name: '返回選題' }));
     expect(screen.getByRole('dialog', { name: '確認返回' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: '確認返回' }));
     expect(calls).toEqual(['index.html']);
@@ -70,10 +70,23 @@ describe('QuizPage integration', () => {
     expect(screen.getByRole('region', { name: '固定數字鍵盤' })).toBeInTheDocument();
     await fireEvent.click(screen.getByRole('button', { name: '數字 1' }));
     await fireEvent.click(screen.getByRole('button', { name: '退格' }));
-    expect(screen.getByRole('textbox', { name: '答案 1 乘 2' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: '第 1 題答案' })).toHaveValue('');
     await fireEvent.click(screen.getByRole('button', { name: '數字 2' }));
     await fireEvent.click(screen.getByRole('button', { name: '送出答案' }));
     expect(screen.getByRole('status')).toHaveTextContent('答對了');
+  });
+
+  it('exports the same four-column quoted CSV contract as HomePage', async () => {
+    const storage = new MemoryStorage();
+    storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, records: { '1x2': { errors: 1, attempts: 3 } }, quiz: createQuiz([{ row: 1, col: 2, answer: 2, key: '1x2' }], () => 0) }));
+    const download = { download: vi.fn() };
+    render(QuizPage, { props: { storage, navigation, download } });
+    await fireEvent.click(screen.getByRole('button', { name: '設定' }));
+    await fireEvent.click(screen.getByRole('button', { name: '匯出紀錄' }));
+    expect(download.download).toHaveBeenCalledWith(expect.stringMatching(/^multiplication-practice-.*\.csv$/), expect.stringContaining('"題目","錯誤次數","作答次數","正確次數"'), 'text/csv;charset=utf-8');
+    const csv = download.download.mock.calls[0][1] as string;
+    expect(csv).toContain('"1×2","1","3","2"');
+    expect(csv).toContain('"1×1","0","0","0"');
   });
 
   it('switches to floating mode, persists its mode/position, and closes with X', async () => {
@@ -93,16 +106,16 @@ describe('QuizPage integration', () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, quiz: createQuiz([{ row: 1, col: 2, answer: 2, key: '1x2' }], () => 0) }));
     render(QuizPage, { props: { storage, navigation } });
-    expect(screen.getByRole('textbox', { name: '答案 1 乘 2' })).toHaveAttribute('inputmode', 'none');
-    expect(screen.getByRole('textbox', { name: '答案 1 乘 2' })).toHaveAttribute('readonly');
+    expect(screen.getByRole('textbox', { name: '第 1 題答案' })).toHaveAttribute('inputmode', 'none');
+    expect(screen.getByRole('textbox', { name: '第 1 題答案' })).toHaveAttribute('readonly');
   });
 
   it('keeps header actions independent and guards the overall check until every answer is entered', async () => {
     const storage = new MemoryStorage();
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, quiz: createQuiz([{ row: 1, col: 2, answer: 2, key: '1x2' }, { row: 2, col: 2, answer: 4, key: '2x2' }], () => 0) }));
     render(QuizPage, { props: { storage, navigation } });
-    expect(screen.getByRole('button', { name: '返回' })).toHaveTextContent('←');
-    expect(screen.getByRole('button', { name: '設定' })).toHaveTextContent('⚙');
+    expect(screen.getByRole('button', { name: '返回選題' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '設定' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '檢查全部答案' })).toBeDisabled();
     await fireEvent.click(screen.getByRole('button', { name: '設定' }));
     expect(screen.getByRole('dialog', { name: '設定' })).toBeInTheDocument();
@@ -114,12 +127,23 @@ describe('QuizPage integration', () => {
     storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, quiz: createQuiz([{ row: 1, col: 2, answer: 2, key: '1x2' }, { row: 2, col: 2, answer: 4, key: '2x2' }], () => 0) }));
     render(QuizPage, { props: { storage, navigation } });
     await fireEvent.click(screen.getByRole('button', { name: '數字 1' }));
-    await fireEvent.click(screen.getByRole('button', { name: /選擇第 \d+ 題 2 乘 2/ }));
+    await fireEvent.click(screen.getByRole('textbox', { name: '第 2 題答案' }));
     await fireEvent.click(screen.getByRole('button', { name: '數字 4' }));
-    await fireEvent.click(screen.getByRole('button', { name: /選擇第 \d+ 題 1 乘 2/ }));
+    await fireEvent.click(screen.getByRole('textbox', { name: '第 1 題答案' }));
     await fireEvent.click(screen.getByRole('button', { name: '檢查全部答案' }));
     expect(screen.getByRole('button', { name: '對答案' })).toBeInTheDocument();
     expect(screen.getAllByRole('article')[0]).toHaveClass('active');
+  });
+
+  it('shows persistent wrong-answer feedback and allows closing it before completion', async () => {
+    const storage = new MemoryStorage();
+    storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, quiz: createQuiz([{ row: 1, col: 2, answer: 2, key: '1x2' }], () => 0) }));
+    render(QuizPage, { props: { storage, navigation } });
+    await fireEvent.click(screen.getByRole('button', { name: '數字 1' }));
+    await fireEvent.click(screen.getByRole('button', { name: '送出答案' }));
+    expect(screen.getByRole('complementary', { name: '答題回饋' })).toBeInTheDocument();
+    await fireEvent.click(screen.getByRole('button', { name: '關閉答題回饋' }));
+    expect(screen.queryByRole('complementary', { name: '答題回饋' })).not.toBeInTheDocument();
   });
 
   it('keeps completion banner until closed, closes the keypad, and supports replay/random actions', async () => {
@@ -144,11 +168,11 @@ describe('QuizPage integration', () => {
     render(QuizPage, { props: { storage, navigation } });
     await fireEvent.click(screen.getByRole('button', { name: '數字 2' }));
     await fireEvent.click(screen.getByRole('button', { name: '送出答案' }));
-    await fireEvent.click(screen.getByRole('button', { name: '重新測驗' }));
+    await fireEvent.click(screen.getByRole('button', { name: '重新測驗目前題目' }));
     expect(JSON.parse(storage.get(STORAGE_KEY)!).quiz.completed).toBe(false);
     await fireEvent.click(screen.getByRole('button', { name: '數字 2' }));
     await fireEvent.click(screen.getByRole('button', { name: '送出答案' }));
-    await fireEvent.click(screen.getByRole('button', { name: '隨機出題' }));
+    await fireEvent.click(screen.getByRole('button', { name: '依目前題庫再次出題' }));
     const saved = JSON.parse(storage.get(STORAGE_KEY)!);
     expect(saved.quiz.completed).toBe(false);
     expect(saved.quiz.questions).toHaveLength(10);

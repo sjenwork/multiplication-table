@@ -25,7 +25,7 @@ test.describe('home legacy parity', () => {
     const grid = page.getByRole('grid', { name: '九九乘法選題表' });
     await expect(grid).toBeVisible();
     await expect(page.locator('[data-selection-scroll]')).toHaveCSS('overflow', 'auto');
-    await expect(page.getByRole('button', { name: '全選所有題目' })).toBeVisible();
+    await expect(page.getByRole('checkbox', { name: '全選所有題目' })).toBeVisible();
     await expect(page.getByText('全選', { exact: true })).toHaveCount(0);
 
     await page.getByRole('button', { name: '開啟設定' }).click();
@@ -47,8 +47,8 @@ test.describe('home legacy parity', () => {
     const grid = page.getByRole('grid', { name: '九九乘法選題表' });
     await expect(grid).toBeVisible();
     await expect(page.getByRole('toolbar', { name: '題目操作' })).toBeVisible();
-    await expect(page.getByRole('button', { name: '選擇 1 乘 1' })).toBeVisible();
-    await page.getByRole('button', { name: '選擇 1 乘 1' }).click();
+    await expect(page.getByRole('checkbox', { name: '選擇 1 乘 1' })).toBeVisible();
+    await page.getByRole('checkbox', { name: '選擇 1 乘 1' }).check();
     await expect(page.getByRole('button', { name: '開始挑戰' })).toBeEnabled();
     await expect(page.locator('body')).toHaveCSS('overscroll-behavior-x', 'none');
   });
