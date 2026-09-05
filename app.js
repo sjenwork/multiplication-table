@@ -46,7 +46,7 @@
         const status = document.getElementById('selection-status');
         const start = document.getElementById('start-quiz');
         if (!status || !start) return;
-        status.textContent = state.selected.length ? `已勾選 ${state.selected.length} 題，可開始測驗。` : '請先勾選想練習的題目。';
+        status.textContent = state.selected.length ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！` : '從下方選擇題目，開始你的練習。';
         start.disabled = state.selected.length === 0;
     }
 
@@ -117,7 +117,7 @@
         const list = document.getElementById('question-list');
         const progress = document.getElementById('progress');
         if (!list || !progress || !state.quiz) return;
-        progress.textContent = `本輪共 ${state.quiz.questions.length} 題，完成後送出`;
+        progress.textContent = `本次挑戰 ${state.quiz.questions.length} 題 · 完成後即可檢查答案`;
         list.innerHTML = state.quiz.questions.map((item, index) => `<article class="border rounded-xl p-4 shadow-sm ${item.resolved ? (item.hadError ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200') : 'bg-white border-slate-200'}"><div class="flex items-center justify-between gap-4"><span class="text-xl font-bold text-slate-800">${index + 1}. ${item.row} × ${item.col} = ?</span><span class="text-sm font-semibold ${item.resolved && item.hadError ? 'text-red-600' : 'text-slate-500'}">${item.resolved ? (item.hadError ? `✕ 正確答案：${item.answer}` : '✓ 答對') : `錯誤 ${item.wrongAttempts} / 3`}</span></div><label class="block text-sm font-medium text-slate-600 mt-3" for="answer-${item.key}">請輸入答案</label><input id="answer-${item.key}" data-question="${item.key}" type="number" inputmode="numeric" value="${item.input || ''}" ${item.resolved ? 'disabled' : ''} class="mt-2 w-full text-center text-xl py-3 bg-white border border-slate-300 rounded-lg font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-slate-100" autocomplete="off"></article>`).join('');
         list.querySelectorAll('input[data-question]').forEach((input) => {
             input.addEventListener('input', () => {
@@ -161,8 +161,8 @@
         saveState(state);
         const remaining = state.quiz.questions.filter((question) => !question.resolved).length;
         if (remaining === 0) { message('本輪測驗完成，正在保存紀錄。', false); window.setTimeout(() => finishQuiz(state), 700); return; }
-        if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，請完成後再送出。`, true);
-        else message(`有 ${remaining} 題需要再次輸入，錯誤的答案已清空。`, true);
+        if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
+        else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
         renderQuiz(state);
     }
 
