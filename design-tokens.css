@@ -149,6 +149,14 @@ html {
     color: var(--ds-text-muted) !important;
 }
 
+.ds-factor-one {
+    color: var(--ds-factor-one) !important;
+}
+
+.ds-factor-two {
+    color: var(--ds-factor-two) !important;
+}
+
 .ds-table-header,
 .ds-table-cell {
     background-color: var(--ds-table-surface) !important;

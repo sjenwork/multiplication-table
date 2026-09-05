@@ -247,7 +247,7 @@
         const corner = document.createElement('th');
         corner.className = `sticky top-0 left-0 z-30 p-2 font-bold text-slate-600 border ${headerTone(questionList().map((question) => question.key))} rounded-lg`;
         corner.scope = 'col';
-        corner.innerHTML = '<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span>×</span><input type="checkbox" class="sr-only" data-select-all="all" aria-label="全選所有題目"></label>';
+        corner.innerHTML = '<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span class="text-[0.65rem] leading-none"><span class="ds-factor-one">被</span><span aria-hidden="true">×</span><span class="ds-factor-two">乘</span></span><input type="checkbox" class="sr-only" data-select-all="all" aria-label="全選所有題目"></label>';
         corner.querySelector('input').addEventListener('change', (event) => {
             changeSelection(state, questionList().map((question) => question.key), event.target.checked);
             renderHome(state);
@@ -259,7 +259,7 @@
             const columnKeys = questionList().filter((question) => question.col === col).map((question) => question.key);
             heading.className = `sticky top-0 z-20 p-2 font-bold text-slate-700 border ${headerTone(columnKeys)} rounded-lg text-sm md:text-base`;
             heading.scope = 'col';
-            heading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span>${col}</span><input type="checkbox" class="sr-only" data-select-all="column" data-column="${col}" aria-label="選擇第 ${col} 欄"></label>`;
+            heading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span class="ds-factor-two">${col}</span><input type="checkbox" class="sr-only" data-select-all="column" data-column="${col}" aria-label="選擇第 ${col} 欄"></label>`;
             heading.querySelector('input').addEventListener('change', (event) => {
                 changeSelection(state, questionList().filter((question) => question.col === col).map((question) => question.key), event.target.checked);
                 renderHome(state);
@@ -274,7 +274,7 @@
             const rowKeys = questionList().filter((question) => question.row === row).map((question) => question.key);
             rowHeading.className = `sticky left-0 z-10 p-2 font-bold text-slate-700 border ${headerTone(rowKeys)} rounded-lg text-sm md:text-base`;
             rowHeading.scope = 'row';
-            rowHeading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span>${row}</span><input type="checkbox" class="sr-only" data-select-all="row" data-row="${row}" aria-label="選擇第 ${row} 列"></label>`;
+            rowHeading.innerHTML = `<label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded"><span class="ds-factor-one">${row}</span><input type="checkbox" class="sr-only" data-select-all="row" data-row="${row}" aria-label="選擇第 ${row} 列"></label>`;
             rowHeading.querySelector('input').addEventListener('change', (event) => {
                 changeSelection(state, questionList().filter((question) => question.row === row).map((question) => question.key), event.target.checked);
                 renderHome(state);
