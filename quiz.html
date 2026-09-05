@@ -8,11 +8,10 @@
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-4 pb-28">
     <main class="max-w-2xl w-full mb-8">
-        <button id="back-home" type="button" class="mb-5 inline-flex items-center gap-1 text-sm font-semibold text-slate-600 hover:text-blue-600 transition">
-            <span class="text-xl leading-none" aria-hidden="true">←</span>
-            <span>返回選題</span>
-        </button>
-        <header class="text-center mb-6">
+        <header class="relative text-center mb-6">
+            <button id="back-home" type="button" class="absolute left-0 top-0 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-2xl leading-none text-slate-600 shadow-sm hover:bg-slate-100 hover:text-blue-600 transition" aria-label="返回選題">
+                <span aria-hidden="true">←</span>
+            </button>
             <p class="text-sm font-semibold tracking-[0.2em] text-blue-600 mb-2">DAILY CHALLENGE</p>
             <h1 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">乘法挑戰</h1>
             <p id="progress" class="text-slate-600 text-sm md:text-base" role="status"></p>
@@ -39,6 +38,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-121421" defer></script>
+    <script src="app.js?v=20260905-121510" defer></script>
 </body>
 </html>
