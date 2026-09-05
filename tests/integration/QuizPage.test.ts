@@ -153,4 +153,11 @@ describe('QuizPage integration', () => {
     expect(saved.quiz.completed).toBe(false);
     expect(saved.quiz.questions).toHaveLength(10);
   });
+
+  it('does not present an empty quiz as a completed challenge', () => {
+    render(QuizPage, { props: { storage: new MemoryStorage(), navigation } });
+    expect(screen.getByRole('status')).toHaveTextContent('目前沒有可練習的題目');
+    expect(screen.queryByRole('complementary', { name: '完成提示' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: '開啟數字鍵盤' })).not.toBeInTheDocument();
+  });
 });
