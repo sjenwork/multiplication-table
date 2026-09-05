@@ -48,6 +48,7 @@
   function clearState() {
     storage.remove(STORAGE_KEY);
     state = migrateState(DEFAULT_STATE);
+    document.documentElement.dataset.theme = state.theme;
     settingsOpen = false;
   }
 </script>
@@ -57,7 +58,7 @@
 <main class="home-page" aria-labelledby="migration-title">
   <header class="page-header">
     <div><p class="eyebrow">DAILY PRACTICE / 01</p><h1 id="migration-title">乘法小達人</h1></div>
-    <button type="button" aria-label="設定" onclick={() => settingsOpen = true}>設定</button>
+    <button class="ds-secondary" type="button" aria-label="設定" onclick={() => settingsOpen = true}>設定</button>
   </header>
   <section class="intro" aria-labelledby="selection-title">
     <p class="kicker">挑一組，開始變熟</p>
@@ -77,11 +78,11 @@
 </main>
 
 {#if settingsOpen}
-  <div class="modal-backdrop" role="presentation" onclick={(event) => event.target === event.currentTarget && (settingsOpen = false)}>
-    <dialog open class="settings-modal" aria-labelledby="settings-title">
-      <div class="modal-heading"><h2 id="settings-title">設定</h2><button type="button" aria-label="關閉設定" onclick={() => settingsOpen = false}>關閉</button></div>
-      <fieldset><legend>主題</legend><button type="button" aria-label="淺色主題" aria-pressed={state.theme === 'light'} onclick={() => changeTheme('light')}>淺色</button><button type="button" aria-label="深色主題" aria-pressed={state.theme === 'dark'} onclick={() => changeTheme('dark')}>深色</button></fieldset>
-      <div class="settings-actions"><button type="button" aria-label="匯出紀錄" onclick={exportRecords}>匯出紀錄</button><button type="button" aria-label="清除資料" onclick={clearState}>清除資料</button></div>
+  <div class="modal-backdrop ds-modal-backdrop" role="presentation" onclick={(event) => event.target === event.currentTarget && (settingsOpen = false)}>
+    <dialog open class="settings-modal ds-modal-surface" aria-labelledby="settings-title">
+      <div class="modal-heading"><h2 id="settings-title">設定</h2><button class="ds-secondary" type="button" aria-label="關閉設定" onclick={() => settingsOpen = false}>關閉</button></div>
+      <fieldset><legend>主題</legend><button class="ds-theme-choice" type="button" aria-label="淺色主題" aria-pressed={state.theme === 'light'} onclick={() => changeTheme('light')}>淺色</button><button class="ds-theme-choice" type="button" aria-label="深色主題" aria-pressed={state.theme === 'dark'} onclick={() => changeTheme('dark')}>深色</button></fieldset>
+      <div class="settings-actions"><button class="ds-secondary" type="button" aria-label="匯出紀錄" onclick={exportRecords}>匯出紀錄</button><button class="ds-danger" type="button" aria-label="清除資料" onclick={clearState}>清除資料</button></div>
     </dialog>
   </div>
 {/if}
@@ -94,7 +95,7 @@
   .intro { max-width: 40rem; margin: 4rem 0 1.5rem; } .intro p:last-child { color: var(--ds-text-muted); line-height: 1.7; }
   .page-header button, .modal-heading button, fieldset button, .settings-actions button { border: 1px solid var(--ds-border-strong); border-radius: var(--ds-radius-sm); padding: 0.6rem 0.9rem; background: var(--ds-surface); color: var(--ds-text); font: inherit; cursor: pointer; }
   [role="status"] { color: var(--ds-text-muted); font-weight: 700; }
-  .modal-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 1rem; background: rgb(8 35 61 / 0.45); }
-  .settings-modal { width: min(100%, 28rem); padding: 1.25rem; border: 1px solid var(--ds-modal-border); border-radius: var(--ds-radius-md); background: var(--ds-modal-surface); color: var(--ds-text); box-shadow: var(--ds-shadow-md); }
+  .modal-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); background: var(--ds-shadow-color); }
+  .settings-modal { width: min(100%, 28rem); padding: 1.25rem; color: var(--ds-text); }
   fieldset { display: flex; gap: 0.5rem; margin: 1.25rem 0; border: 0; padding: 0; } legend { width: 100%; margin-bottom: 0.5rem; font-weight: 800; } .settings-actions { display: flex; gap: 0.5rem; }
 </style>

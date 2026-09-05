@@ -95,4 +95,31 @@ describe('HomePage integration', () => {
     await fireEvent.click(screen.getByRole('button', { name: '深色主題' }));
     expect(JSON.parse(storage.get(STORAGE_KEY)!).theme).toBe('dark');
   });
+
+  it('exports records and clears persisted selection and theme from settings', async () => {
+    const storage = new MemoryStorage();
+    storage.set(STORAGE_KEY, serializeState({ ...DEFAULT_STATE, selected: ['1x1'], theme: 'dark' }));
+    const download = { download: vi.fn() };
+    render(HomePage, { props: { storage, download } });
+    await fireEvent.click(screen.getAllByRole('button', { name: '設定' })[0]);
+    await fireEvent.click(screen.getByRole('button', { name: '匯出紀錄' }));
+    expect(download.download).toHaveBeenCalledWith('multiplication-records.csv', expect.stringContaining('1x1'), 'text/csv;charset=utf-8');
+    await fireEvent.click(screen.getByRole('button', { name: '清除資料' }));
+    expect(storage.get(STORAGE_KEY)).toBeNull();
+    expect(document.documentElement.dataset.theme).toBe('light');
+  });
+
+  it('supports a desktop pointer drag without toggling the release click back', async () => {
+    const storage = new MemoryStorage();
+    render(HomePage, { props: { storage } });
+    const grid = screen.getByRole('grid', { name: '九九乘法選題表' });
+    const first = screen.getByRole('button', { name: '選擇 1 乘 1' });
+    const second = screen.getByRole('button', { name: '選擇 1 乘 2' });
+    await fireEvent.pointerDown(first, { button: 0, pointerType: 'mouse' });
+    await fireEvent.pointerEnter(second);
+    await fireEvent.pointerUp(grid);
+    await fireEvent.click(second);
+    expect(first).toHaveAttribute('aria-pressed', 'true');
+    expect(second).toHaveAttribute('aria-pressed', 'true');
+  });
 });

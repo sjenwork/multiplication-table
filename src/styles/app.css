@@ -2,4 +2,6 @@
 @import '../../pwa.css';
 
 body { margin: 0; min-width: 20rem; font-family: ui-rounded, "PingFang TC", "Noto Sans TC", sans-serif; }
-button { -webkit-tap-highlight-color: transparent; }
+html { touch-action: manipulation; }
+body { overscroll-behavior-x: none; }
+button { -webkit-tap-highlight-color: transparent; user-select: none; }

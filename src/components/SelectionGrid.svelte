@@ -21,6 +21,12 @@
 
   function beginPointer(event: PointerEvent, question: Question) {
     if (event.button !== 0) return;
+    if (event.pointerType === 'mouse') {
+      dragging = true;
+      dragSelecting = !selectedSet.has(question.key);
+      onToggle(question.key);
+      return;
+    }
     longPress = setTimeout(() => {
       dragging = true;
       dragSelecting = !selectedSet.has(question.key);
@@ -86,14 +92,14 @@
 </div>
 
 <style>
-  .selection-grid-wrap { overflow: auto; max-height: min(62vh, 38rem); border: 1px solid var(--ds-border); border-radius: var(--ds-radius-md); background: var(--ds-table-surface); }
+  .selection-grid-wrap { overflow: auto; max-height: min(62vh, 38rem); border: 1px solid var(--ds-border); border-radius: var(--ds-radius-md); background: var(--ds-table-surface); padding-bottom: env(safe-area-inset-bottom); }
   .selection-grid { border-collapse: separate; border-spacing: 0.25rem; width: 100%; min-width: 34rem; text-align: center; }
   th, td { min-width: 3rem; height: 3rem; }
   th { font-weight: 700; }
   .corner, .row-heading { position: sticky; left: 0; z-index: 2; color: var(--ds-factor-one); background: var(--ds-table-surface); }
   thead th { position: sticky; top: 0; z-index: 3; background: var(--ds-table-surface); color: var(--ds-factor-two); }
   .corner { color: var(--ds-text-strong); } th.active { background: var(--ds-brand-soft); } th.active button { border-color: var(--ds-brand-strong); }
-  button { border: 1px solid var(--ds-border); border-radius: var(--ds-radius-sm); background: var(--ds-surface); color: var(--ds-text); min-width: 100%; min-height: 2.75rem; cursor: pointer; font: inherit; }
+  button { border: 1px solid var(--ds-border); border-radius: var(--ds-radius-sm); background: var(--ds-surface); color: var(--ds-text); min-width: 100%; min-height: 2.75rem; cursor: pointer; font: inherit; user-select: none; touch-action: manipulation; }
   td button { background: var(--ds-surface); }
   button[aria-pressed="true"], td.selected button { background: var(--ds-table-selected); border-color: var(--ds-success); color: var(--ds-text-strong); }
   button:focus-visible { outline: 3px solid var(--ds-focus); outline-offset: 2px; }
