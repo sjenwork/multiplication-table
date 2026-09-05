@@ -120,31 +120,44 @@
 
         .completion-overlay {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             position: fixed;
             inset: 0;
             z-index: 80;
             pointer-events: none;
             overflow: hidden;
+            padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0;
         }
 
         .completion-card {
-            padding: 1.25rem 1.75rem;
+            width: min(100%, 32rem);
+            padding: 0.75rem 1.25rem;
             border: 1px solid rgb(147 197 253 / 0.72);
-            border-radius: 1.25rem;
+            border-radius: 9999px;
             background: rgb(255 255 255 / 0.86);
             box-shadow: 0 18px 45px rgb(30 64 175 / 0.2);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
             animation: completion-pop 420ms cubic-bezier(.22, 1.2, .36, 1) both;
         }
 
         .completion-emoji {
-            font-size: 2.25rem;
+            font-size: 1.5rem;
             line-height: 1;
             animation: completion-bounce 700ms ease-in-out both;
+        }
+
+        .quiz-question-list {
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            padding-bottom: var(--quiz-scroll-reserve, 15rem);
+            scrollbar-gutter: stable;
         }
 
         .completion-confetti {
@@ -199,12 +212,12 @@
         }
     </style>
 </head>
-<body class="app-shell bg-slate-50 min-h-screen flex flex-col items-center justify-center p-4 pb-44">
+<body class="app-shell bg-slate-50 h-[100svh] overflow-hidden flex flex-col items-center p-4 pb-44">
     <button id="force-update" type="button" class="hidden fixed left-1/2 top-3 z-[70] -translate-x-1/2 rounded-full border border-blue-200/70 bg-white/70 px-4 py-2 text-xs font-bold text-blue-700 shadow-lg backdrop-blur-md transition hover:bg-white/85 active:scale-95" aria-label="更新網站版本">
         更新版本
     </button>
-    <main class="max-w-2xl w-full mb-8">
-        <header class="relative text-center mb-6">
+    <main class="max-w-3xl w-full h-full min-h-0 flex flex-col">
+        <header class="relative text-center mb-6 shrink-0">
             <button id="back-home" type="button" class="absolute left-0 top-0 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-2xl leading-none text-slate-600 shadow-sm hover:bg-slate-100 hover:text-blue-600 transition" aria-label="返回選題">
                 <span aria-hidden="true">←</span>
             </button>
@@ -213,7 +226,7 @@
             <p id="progress" class="text-slate-600 text-sm md:text-base" role="status"></p>
         </header>
 
-        <section id="question-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-[15rem]" aria-label="測驗題目"></section>
+        <section id="question-list" class="quiz-question-list grid grid-cols-1 sm:grid-cols-2 gap-2 min-h-0 flex-1" aria-label="測驗題目"></section>
         <div id="quiz-message" class="mt-6 p-4 rounded-xl text-center font-medium hidden" role="alert"></div>
     </main>
 
@@ -268,6 +281,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260905-154517" defer></script>
+    <script src="app.js?v=20260905-155149" defer></script>
 </body>
 </html>

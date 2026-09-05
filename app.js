@@ -347,6 +347,22 @@
             keypad.style.transform = 'none';
             keypad.style.opacity = '1';
         }
+        updateQuizScrollReserve();
+    }
+
+    function updateQuizScrollReserve() {
+        const list = document.getElementById('question-list');
+        if (!list) return;
+        const actionBar = document.querySelector('.safe-action-bar');
+        const keypad = document.getElementById('number-pad');
+        const bottomCandidates = [window.innerHeight];
+        if (actionBar) bottomCandidates.push(actionBar.getBoundingClientRect().top);
+        if (keypad && !keypad.classList.contains('hidden') && !keypad.classList.contains('floating-keypad')) {
+            const keypadRect = keypad.getBoundingClientRect();
+            if (keypadRect.bottom > 0 && keypadRect.top < window.innerHeight) bottomCandidates.push(keypadRect.top);
+        }
+        const reserve = Math.max(96, window.innerHeight - Math.min(...bottomCandidates) + 24);
+        list.style.setProperty('--quiz-scroll-reserve', `${reserve}px`);
     }
 
     function showKeypad() {
@@ -509,6 +525,7 @@
         if (!keypad || !closeButton) return;
         closeButton.addEventListener('click', () => {
             keypad.classList.add('hidden');
+            updateQuizScrollReserve();
         });
     }
 
@@ -534,23 +551,27 @@
     function scrollActiveQuestionIntoView(questionKey) {
         const input = document.querySelector(`input[data-question="${questionKey}"]`);
         const question = input?.closest('article');
-        if (!question) return;
+        const list = document.getElementById('question-list');
+        if (!question || !list) return;
         window.requestAnimationFrame(() => {
             const questionRect = question.getBoundingClientRect();
+            const listRect = list.getBoundingClientRect();
             const actionBar = document.querySelector('.safe-action-bar');
             const keypad = document.getElementById('number-pad');
-            const bottomCandidates = [window.innerHeight];
+            const bottomCandidates = [listRect.bottom];
             if (actionBar) bottomCandidates.push(actionBar.getBoundingClientRect().top);
             if (keypad && !keypad.classList.contains('hidden')) {
                 const keypadRect = keypad.getBoundingClientRect();
-                if (keypadRect.bottom > 0 && keypadRect.top < window.innerHeight) bottomCandidates.push(keypadRect.top);
+                const overlapsQuestion = questionRect.bottom > keypadRect.top && questionRect.top < keypadRect.bottom;
+                const isFixedKeypad = !keypad.classList.contains('floating-keypad');
+                if (isFixedKeypad || overlapsQuestion) bottomCandidates.push(keypadRect.top);
             }
-            const visibleTop = 12;
+            const visibleTop = listRect.top + 12;
             const visibleBottom = Math.min(...bottomCandidates) - 12;
             let scrollDistance = 0;
             if (questionRect.bottom > visibleBottom) scrollDistance = questionRect.bottom - visibleBottom;
             else if (questionRect.top < visibleTop) scrollDistance = questionRect.top - visibleTop;
-            if (scrollDistance) window.scrollBy({ top: scrollDistance, behavior: 'smooth' });
+            if (scrollDistance) list.scrollBy({ top: scrollDistance, behavior: 'smooth' });
         });
     }
 
@@ -739,6 +760,8 @@
         applyKeypadPosition(state);
         setupKeypadDrag(state);
         setupKeypadClose();
+        updateQuizScrollReserve();
+        window.addEventListener('resize', updateQuizScrollReserve);
         document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
         document.querySelectorAll('[data-pad-value]').forEach((button) => {
             button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
