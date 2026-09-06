@@ -272,7 +272,7 @@ function startRandomQuiz(state) {
     startQuizWithQuestions(state, questionList());
 }
 
-function startQuizWithQuestions(state, selected, alreadyLimited = false) {
+export function startQuizWithQuestions(state, selected, alreadyLimited = false) {
     state.quiz = {
         questions: shuffled(alreadyLimited ? selected : selected.slice(0, 10)).map((question) => ({ ...question, input: '', wrongAttempts: 0, resolved: false, hadError: false })),
         activeKey: null,
