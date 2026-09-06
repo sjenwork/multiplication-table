@@ -42,6 +42,7 @@ test('settings modal is a Lit component with an explicit public contract', () =>
     assert.match(source, /customElements\.define\(['"]app-settings-modal['"]/);
     assert.match(source, /<app-modal \.open=\$\{this\.open\} size="md"/);
     assert.match(source, /<app-button data-modal-close/);
+    assert.match(source, /<app-button data-theme-choice="\$\{theme\}" variant="secondary" full/);
     assert.match(source, /CustomEvent\(['"]theme-change['"]/);
 });
 

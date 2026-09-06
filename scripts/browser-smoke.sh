@@ -134,7 +134,7 @@ if evaluate("document.querySelector('td[data-question]').click(); document.getEl
     raise SystemExit('browser smoke failed: selection interaction did not work')
 if not evaluate("document.getElementById('open-settings').click(); document.getElementById('settings-modal').classList.contains('flex')"):
     raise SystemExit('browser smoke failed: settings modal did not open')
-evaluate("document.getElementById('close-settings').click(); document.getElementById('start-quiz').click()")
+evaluate("document.querySelector('app-settings-modal [data-modal-close]').click(); document.getElementById('start-quiz').click()")
 time.sleep(2)
 if evaluate("document.querySelectorAll('#question-list article').length") == 0:
     raise SystemExit('browser smoke failed: quiz questions did not render')

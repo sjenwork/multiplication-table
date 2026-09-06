@@ -1,6 +1,6 @@
 import { LitElement, html } from '../../vendor/lit-core.min.js';
-import './app-modal.js?v=20260906-115745';
-import './app-button.js?v=20260906-115745';
+import './app-modal.js?v=20260906-120229';
+import './app-button.js?v=20260906-120229';
 
 export class SettingsModal extends LitElement {
     static properties = {
@@ -54,7 +54,7 @@ export class SettingsModal extends LitElement {
     }
 
     themeButton(theme, label) {
-        return html`<app-button data-theme-choice="${theme}" variant="secondary" aria-pressed="${this.theme === theme}" class="ds-theme-choice">${label}</app-button>`;
+        return html`<app-button data-theme-choice="${theme}" variant="secondary" full aria-pressed="${this.theme === theme}" class="ds-theme-choice">${label}</app-button>`;
     }
 
     firstUpdated() {
