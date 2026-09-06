@@ -54,7 +54,7 @@
     --ds-input-focus: rgb(59 130 246 / 0.5);
     --ds-index-surface: #dbeafe;
     --ds-index-text: #1d4ed8;
-    --ds-layer-update: 70;
+    --ds-layer-update: 100;
     --ds-layer-keypad: 50;
     --ds-layer-dock: 40;
     --ds-layer-modal: 60;
@@ -264,7 +264,10 @@ html {
     box-shadow: var(--ds-focus-shadow) !important;
 }
 
-.ds-layer-update { z-index: var(--ds-layer-update); }
+.ds-layer-update {
+    position: fixed !important;
+    z-index: var(--ds-layer-update) !important;
+}
 .ds-layer-keypad { z-index: var(--ds-layer-keypad); }
 .ds-layer-dock { z-index: var(--ds-layer-dock); }
 .ds-layer-modal { z-index: var(--ds-layer-modal); }
