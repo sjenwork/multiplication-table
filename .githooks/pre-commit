@@ -3,26 +3,13 @@ set -euo pipefail
 
 version_stamp="$(date +%Y%m%d-%H%M%S)"
 
-perl -0pi -e "s#(app/state\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
-perl -0pi -e "s#(\\n\\s+'/app/state\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-perl -0pi -e "s#(app/keypad\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
-perl -0pi -e "s#(app/state\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app/keypad.js
-perl -0pi -e "s#(app/settings\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
-perl -0pi -e "s#(app/state\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app/settings.js
-perl -0pi -e "s#(app/update\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
-perl -0pi -e "s#(app/quiz-view\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
-perl -0pi -e "s#(app/completion\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
-perl -0pi -e "s#(app/home\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
-perl -0pi -e "s#(\\n\\s+'/app/home\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-perl -0pi -e "s#(\\n\\s+'/app/completion\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-perl -0pi -e "s#(\\n\\s+'/app/quiz-view\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-perl -0pi -e "s#(\\n\\s+'/app/update\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-perl -0pi -e "s#(\\n\\s+'/app/keypad\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-perl -0pi -e "s#(\\n\\s+'/app/settings\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-
-perl -0pi -e "s#(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" index.html quiz.html
-perl -0pi -e "s#(\\n\\s+'/)(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1\$2?v=${version_stamp}'#g" sw.js
+for module_path in app/*.js; do
+    module_name="$(basename "$module_path")"
+    perl -0pi -e "s#((?:\\./|/app/)?${module_name})(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js app/*.js sw.js
+done
+perl -0pi -e "s#(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" index.html quiz.html sw.js
 perl -0pi -e "s/multiplication-master-v\\d{8}-\\d{6}/multiplication-master-v${version_stamp}/g" sw.js
 
-git add app.js app/keypad.js app/settings.js app/update.js app/quiz-view.js app/completion.js app/home.js index.html quiz.html sw.js
+git add app.js app/*.js index.html quiz.html sw.js
 echo "pre-commit: synchronized app version ${version_stamp}" >&2
+scripts/check-static.sh

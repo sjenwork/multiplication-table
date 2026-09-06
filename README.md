@@ -37,6 +37,20 @@
 
 部署前不要直接使用沒有 `--branch` 的 Wrangler 指令，也不要從其他分支部署。
 
+### 驗證防線
+
+Git hooks 位於 `.githooks/`，目前的 `core.hooksPath` 指向這個目錄：
+
+- `pre-commit`：同步前端資源版本，檢查所有 JavaScript 語法、相對 import、Service Worker app shell 與 whitespace diff。
+- `pre-push`：重跑靜態檢查；設定 `SMOKE_URL` 時，另外用 headless Chrome 驗證首頁選題、設定 modal 與 quiz 啟動。
+- `deploy.sh`：部署前一定執行靜態檢查；部署後可用 `RUN_BROWSER_SMOKE=1 ./deploy.sh` 執行實際網址 smoke test。
+
+若 Git 沒有套用 hooks，可執行：
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## Design System 與主題
 
 共用視覺 token 集中在 `design-tokens.css`，包含畫布、表面、文字、品牌色、狀態色、邊框、陰影、圓角與間距。不要在新元件中新增散落的 raw color；優先使用 `--ds-*` token 或既有 `.ds-*` 語意 class。

@@ -1,19 +1,19 @@
-const CACHE_NAME = 'multiplication-master-v20260906-093336';
+const CACHE_NAME = 'multiplication-master-v20260906-095156';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-093336',
-    '/app/state.js?v=20260906-093336',
-    '/app/keypad.js?v=20260906-093336',
-    '/app/settings.js?v=20260906-093336',
-    '/app/update.js?v=20260906-093336',
-    '/app/quiz-view.js?v=20260906-093336',
-    '/app/completion.js?v=20260906-093336',
-    '/app/home.js?v=20260906-093336',
-    '/design-tokens.css?v=20260906-093336',
-    '/theme-init.js?v=20260906-093336',
-    '/pwa.css?v=20260906-093336',
+    '/app.js?v=20260906-095156',
+    '/app/state.js?v=20260906-095156',
+    '/app/keypad.js?v=20260906-095156',
+    '/app/settings.js?v=20260906-095156',
+    '/app/update.js?v=20260906-095156',
+    '/app/quiz-view.js?v=20260906-095156',
+    '/app/completion.js?v=20260906-095156',
+    '/app/home.js?v=20260906-095156',
+    '/design-tokens.css?v=20260906-095156',
+    '/theme-init.js?v=20260906-095156',
+    '/pwa.css?v=20260906-095156',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -40,14 +40,14 @@ self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
     const latestFirst = event.request.mode === 'navigate'
         || requestUrl.pathname.endsWith('.html')
-        || requestUrl.pathname.endsWith('/app.js')
-        || requestUrl.pathname.endsWith('/app/state.js')
-        || requestUrl.pathname.endsWith('/app/keypad.js')
-        || requestUrl.pathname.endsWith('/app/settings.js')
-        || requestUrl.pathname.endsWith('/app/update.js')
-        || requestUrl.pathname.endsWith('/app/quiz-view.js')
-        || requestUrl.pathname.endsWith('/app/completion.js')
-        || requestUrl.pathname.endsWith('/app/home.js');
+        || requestUrl.pathname.endsWith('/app.js?v=20260906-095156')
+        || requestUrl.pathname.endsWith('/app/state.js?v=20260906-095156')
+        || requestUrl.pathname.endsWith('/app/keypad.js?v=20260906-095156')
+        || requestUrl.pathname.endsWith('/app/settings.js?v=20260906-095156')
+        || requestUrl.pathname.endsWith('/app/update.js?v=20260906-095156')
+        || requestUrl.pathname.endsWith('/app/quiz-view.js?v=20260906-095156')
+        || requestUrl.pathname.endsWith('/app/completion.js?v=20260906-095156')
+        || requestUrl.pathname.endsWith('/app/home.js?v=20260906-095156');
     if (latestFirst) {
         event.respondWith(
             fetch(event.request).then((response) => {
