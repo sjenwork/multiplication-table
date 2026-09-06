@@ -8,16 +8,22 @@
 | --- | --- | --- | --- | --- |
 | Static UI style consistency | completed | 2026-09-06 | 6 | `runs/20260906-static-ui-style-AUDIT.md` |
 | `app.js` module boundaries | completed | 2026-09-06 | 1 | `runs/20260906-app-js-boundary-AUDIT.md` |
+| Style hardcode and theme boundary | completed | 2026-09-06 | 10 | `runs/20260906-style-hardcode-AUDIT.md` |
 
 ## 下一步建議動作
 
-1. 在 dev 部署後做 light/dark、首頁／測驗頁的 smoke check。
-2. 若未來新增控制項，沿用 semantic class contract，避免重新引入 raw palette。
-3. 在下一個中型功能前，先依 `REV-20260906-05` 抽出 state／question helpers，再拆 keypad 與頁面功能。
+1. 先依 `REV-20260906-07` 建立 semantic text/input/focus classes，並分批遷移 theme-sensitive raw palette。
+2. 獨立處理 `REV-20260906-08` confetti palette 與 `REV-20260906-09` scrim/shadow fallback。
+3. 清洗後在 dev 做 light/dark、首頁／測驗頁 smoke check，再處理 `REV-20260906-06` theme-color source consolidation。
 
 ## 還沒修復的高優先發現（open findings）
 
 - `REV-20260906-05`：`app.js` 應在下一個中型功能前分割；目前不要求立即重構。
+- `REV-20260906-06`：theme-color source 重複，尚未清洗。
+- `REV-20260906-07`：theme-sensitive raw palette，尚未清洗。
+- `REV-20260906-08`：confetti palette，尚未清洗。
+- `REV-20260906-09`：scrim/shadow fallback，尚未清洗。
+- `REV-20260906-10`：layer/effect 數值，排在色彩清洗後。
 
 ## 已關閉（不需要動作）
 
