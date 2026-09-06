@@ -375,6 +375,18 @@ html {
     width: 100%;
 }
 
+/* Visual styles belong to the native button inside the Light-DOM component. */
+app-button {
+    display: inline-block;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+app-button[full] {
+    display: block;
+}
+
 [data-theme="dark"] .text-slate-800,
 [data-theme="dark"] .text-slate-700,
 [data-theme="dark"] .text-slate-600,

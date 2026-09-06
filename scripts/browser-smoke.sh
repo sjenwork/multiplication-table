@@ -141,6 +141,8 @@ if grid_cells != 81:
     raise SystemExit(f'browser smoke failed: home grid did not render 81 cells (got {grid_cells})')
 if evaluate("getComputedStyle(document.querySelector('#start-quiz button')).borderRadius") != '9999px':
     raise SystemExit('browser smoke failed: shared action button is not pill-shaped')
+if not evaluate("[...document.querySelectorAll('app-button')].every((host) => getComputedStyle(host).boxShadow === 'none' && [...host.querySelectorAll('button')].every((button) => getComputedStyle(button).borderRadius === '9999px'))"):
+    raise SystemExit('browser smoke failed: app-button host leaked a non-rounded visual style')
 if evaluate("document.querySelector('td[data-question]').click(); document.getElementById('selection-status').textContent") != '已選擇 1 題，準備好就開始挑戰！':
     raise SystemExit('browser smoke failed: selection interaction did not work')
 if not evaluate("(async () => { document.getElementById('open-settings').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return document.querySelector('app-settings-modal [data-modal-scrim]').classList.contains('flex'); })()"):

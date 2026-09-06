@@ -23,6 +23,7 @@ test('semantic theme contracts exist for migrated controls', () => {
     assert.match(tokens, /\.ds-layer-update\s*\{[\s\S]*?z-index:\s*var\(--ds-layer-update\)\s*!important/);
     assert.match(tokens, /\.ds-theme-choice\s*\{[\s\S]*?width:\s*100%/);
     assert.match(tokens, /\.ds-theme-choice\s*>\s*button\s*\{[\s\S]*?width:\s*100%/);
+    assert.match(tokens, /app-button\s*\{[\s\S]*?box-shadow:\s*none\s*!important/);
 });
 
 test('migrated style sources do not reintroduce raw palette utilities', () => {
