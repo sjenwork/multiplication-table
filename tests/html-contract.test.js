@@ -12,10 +12,12 @@ test('pages load the bootstrap as an ES module', () => {
     assert.match(quizHtml, /<script src="app\/theme-colors\.js\?v=\d{8}-\d{6}"><\/script>/);
 });
 
-test('optional Tailwind CDN cannot block application startup', () => {
+test('optional Tailwind CDN loads after the application markup', () => {
     for (const file of ['index.html', 'quiz.html']) {
         const source = fs.readFileSync(file, 'utf8');
-        assert.match(source, /<script src="https:\/\/cdn\.tailwindcss\.com" async><\/script>/, file);
+        assert.match(source, /script\.src = 'https:\/\/cdn\.tailwindcss\.com'/, file);
+        assert.match(source, /script\.async = true/, file);
+        assert.match(source, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/, file);
     }
 });
 
