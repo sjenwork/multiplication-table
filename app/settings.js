@@ -1,5 +1,5 @@
-import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260906-202435';
-import './components/settings-modal.js?v=20260906-202435';
+import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260906-202858';
+import './components/settings-modal.js?v=20260906-202858';
 
 export function ensureSettingsModal() {
     if (document.querySelector('app-settings-modal')) return;

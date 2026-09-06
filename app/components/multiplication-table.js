@@ -16,7 +16,7 @@ export class MultiplicationTable extends LitElement {
 
     render() {
         return html`
-            <div class="study-equation-sheet ds-surface rounded-2xl p-4 sm:p-5">
+            <div class="study-equation-sheet ds-surface border rounded-2xl p-4 sm:p-5">
                 <div class="study-equation-list" role="list" aria-label="${this.factor} 的乘法表">
                     ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((row) => html`
                         <div class="study-equation" role="listitem">
