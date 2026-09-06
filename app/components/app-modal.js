@@ -23,8 +23,11 @@ export class AppModal extends LitElement {
     }
 
     connectedCallback() {
-        this.contentNodes = Array.from(this.childNodes);
         super.connectedCallback();
+        setTimeout(() => {
+            this.contentNodes = Array.from(this.childNodes);
+            this.requestUpdate();
+        }, 0);
         this.addEventListener('click', (event) => {
             if (event.target.closest('[data-modal-close]') || event.target === this.querySelector('[data-modal-scrim]')) this.hide();
         });
@@ -40,6 +43,10 @@ export class AppModal extends LitElement {
         const content = this.querySelector('[data-modal-content]');
         if (content && this.contentNodes) content.replaceChildren(...this.contentNodes);
         if (this.open) this.focusInitialControl();
+    }
+
+    shouldUpdate() {
+        return this.contentNodes !== null;
     }
 
     updated(changed) {

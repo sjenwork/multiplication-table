@@ -11,6 +11,8 @@ test('app modal exposes a reusable dialog behavior contract', () => {
     assert.match(modalSource, /open: \{ type: Boolean/);
     assert.match(modalSource, /show\(\)/);
     assert.match(modalSource, /hide\(\)/);
+    assert.match(modalSource, /shouldUpdate\(\)/);
+    assert.match(modalSource, /setTimeout\(\(\) =>/);
     assert.match(modalSource, /data-modal-scrim/);
     assert.match(modalSource, /event\.key === ['"]Escape['"]/);
     assert.match(modalSource, /customElements\.define\(['"]app-modal['"]/);

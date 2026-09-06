@@ -1,5 +1,5 @@
 import { LitElement, html } from '../../vendor/lit-core.min.js';
-import './app-modal.js?v=20260906-112744';
+import './app-modal.js?v=20260906-112922';
 
 export class SettingsModal extends LitElement {
     static properties = {
