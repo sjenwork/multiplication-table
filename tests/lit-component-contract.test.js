@@ -5,6 +5,15 @@ import fs from 'node:fs';
 const source = fs.readFileSync('app/components/settings-modal.js', 'utf8');
 const completionSource = fs.readFileSync('app/components/completion-overlay.js', 'utf8');
 const modalSource = fs.readFileSync('app/components/app-modal.js', 'utf8');
+const buttonSource = fs.readFileSync('app/components/app-button.js', 'utf8');
+
+test('app button exposes a reusable native-button contract', () => {
+    assert.match(buttonSource, /class AppButton extends LitElement/);
+    assert.match(buttonSource, /variant: \{ type: String/);
+    assert.match(buttonSource, /disabled: \{ type: Boolean/);
+    assert.match(buttonSource, /<button/);
+    assert.match(buttonSource, /customElements\.define\(['"]app-button['"]/);
+});
 
 test('app modal exposes a reusable dialog behavior contract', () => {
     assert.match(modalSource, /class AppModal extends LitElement/);
@@ -24,6 +33,7 @@ test('settings modal is a Lit component with an explicit public contract', () =>
     assert.match(source, /createRenderRoot\(\)\s*\{\s*return this;/);
     assert.match(source, /customElements\.define\(['"]app-settings-modal['"]/);
     assert.match(source, /<app-modal \.open=\$\{this\.open\} size="md"/);
+    assert.match(source, /<app-button data-modal-close/);
     assert.match(source, /CustomEvent\(['"]theme-change['"]/);
 });
 

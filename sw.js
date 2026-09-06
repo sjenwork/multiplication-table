@@ -1,24 +1,25 @@
-const CACHE_NAME = 'multiplication-master-v20260906-112922';
+const CACHE_NAME = 'multiplication-master-v20260906-113710';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-112922',
-    '/app/state.js?v=20260906-112922',
-    '/app/keypad.js?v=20260906-112922',
-    '/app/settings.js?v=20260906-112922',
-    '/app/update.js?v=20260906-112922',
-    '/app/quiz-view.js?v=20260906-112922',
-    '/app/completion.js?v=20260906-112922',
-    '/app/home.js?v=20260906-112922',
-    '/app/quiz.js?v=20260906-112922',
-    '/app/components/settings-modal.js?v=20260906-112922',
-    '/app/components/completion-overlay.js?v=20260906-112922',
-    '/app/components/app-modal.js?v=20260906-112922',
-    '/vendor/lit-core.min.js?v=20260906-112922',
-    '/design-tokens.css?v=20260906-112922',
-    '/theme-init.js?v=20260906-112922',
-    '/pwa.css?v=20260906-112922',
+    '/app.js?v=20260906-113710',
+    '/app/state.js?v=20260906-113710',
+    '/app/keypad.js?v=20260906-113710',
+    '/app/settings.js?v=20260906-113710',
+    '/app/update.js?v=20260906-113710',
+    '/app/quiz-view.js?v=20260906-113710',
+    '/app/completion.js?v=20260906-113710',
+    '/app/home.js?v=20260906-113710',
+    '/app/quiz.js?v=20260906-113710',
+    '/app/components/settings-modal.js?v=20260906-113710',
+    '/app/components/completion-overlay.js?v=20260906-113710',
+    '/app/components/app-modal.js?v=20260906-113710',
+    '/app/components/app-button.js?v=20260906-113710',
+    '/vendor/lit-core.min.js?v=20260906-113710',
+    '/design-tokens.css?v=20260906-113710',
+    '/theme-init.js?v=20260906-113710',
+    '/pwa.css?v=20260906-113710',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -57,6 +58,7 @@ self.addEventListener('fetch', (event) => {
         || requestUrl.pathname.endsWith('/app/components/settings-modal.js')
         || requestUrl.pathname.endsWith('/app/components/completion-overlay.js')
         || requestUrl.pathname.endsWith('/app/components/app-modal.js')
+        || requestUrl.pathname.endsWith('/app/components/app-button.js')
         || requestUrl.pathname.endsWith('/vendor/lit-core.min.js');
     if (latestFirst) {
         event.respondWith(

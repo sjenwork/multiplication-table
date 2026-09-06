@@ -1,5 +1,6 @@
 import { LitElement, html } from '../../vendor/lit-core.min.js';
-import './app-modal.js?v=20260906-112922';
+import './app-modal.js?v=20260906-113710';
+import './app-button.js?v=20260906-113710';
 
 export class SettingsModal extends LitElement {
     static properties = {
@@ -35,7 +36,7 @@ export class SettingsModal extends LitElement {
             <app-modal .open=${this.open} size="md" labelledby="settings-title">
                     <div class="flex items-center justify-between gap-4">
                         <h2 id="settings-title" class="text-lg font-bold text-slate-800">設定</h2>
-                        <button data-modal-close type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full text-xl text-slate-500 hover:bg-slate-100" aria-label="關閉設定">×</button>
+                        <app-button data-modal-close size="sm" class="h-8 w-8 rounded-full px-0 text-xl text-slate-500 hover:bg-slate-100" aria-label="關閉設定">×</app-button>
                     </div>
                     <p class="mt-2 text-sm leading-6 text-slate-600">管理你的練習資料與成績統計。</p>
                     <div class="mt-5 space-y-3">
@@ -46,14 +47,14 @@ export class SettingsModal extends LitElement {
                                 ${this.themeButton('dark', '🌙 深色')}
                             </div>
                         </div>
-                        <button data-export type="button" class="ds-secondary w-full rounded-lg border px-4 py-3 text-left text-sm font-semibold transition">匯出成績統計紀錄（CSV）</button>
-                        <button data-clear type="button" class="ds-danger w-full rounded-lg border px-4 py-3 text-left text-sm font-semibold transition">清除所有練習紀錄</button>
+                        <app-button data-export variant="secondary" size="lg" full class="justify-start text-left">匯出成績統計紀錄（CSV）</app-button>
+                        <app-button data-clear variant="danger" size="lg" full class="justify-start text-left">清除所有練習紀錄</app-button>
                     </div>
             </app-modal>`;
     }
 
     themeButton(theme, label) {
-        return html`<button type="button" data-theme-choice="${theme}" aria-pressed="${this.theme === theme}" class="ds-theme-choice ds-secondary rounded-lg border px-4 py-3 text-sm font-semibold transition">${label}</button>`;
+        return html`<app-button data-theme-choice="${theme}" variant="secondary" aria-pressed="${this.theme === theme}" class="ds-theme-choice">${label}</app-button>`;
     }
 
     firstUpdated() {
