@@ -7,6 +7,7 @@ const completionSource = fs.readFileSync('app/components/completion-overlay.js',
 const modalSource = fs.readFileSync('app/components/app-modal.js', 'utf8');
 const buttonSource = fs.readFileSync('app/components/app-button.js', 'utf8');
 const selectorSource = fs.readFileSync('app/components/multiplication-selector.js', 'utf8');
+const keypadSource = fs.readFileSync('app/components/numeric-keypad.js', 'utf8');
 
 test('multiplication selector owns the table rendering contract', () => {
     assert.match(selectorSource, /class MultiplicationSelector extends LitElement/);
@@ -21,6 +22,13 @@ test('app button exposes a reusable native-button contract', () => {
     assert.match(buttonSource, /disabled: \{ type: Boolean/);
     assert.match(buttonSource, /<button/);
     assert.match(buttonSource, /customElements\.define\(['"]app-button['"]/);
+});
+
+test('numeric keypad owns the repeated quiz controls', () => {
+    assert.match(keypadSource, /class NumericKeypad extends LitElement/);
+    assert.match(keypadSource, /data-pad-value/);
+    assert.match(keypadSource, /backspace/);
+    assert.match(keypadSource, /customElements\.define\(['"]app-keypad['"]/);
 });
 
 test('app modal exposes a reusable dialog behavior contract', () => {

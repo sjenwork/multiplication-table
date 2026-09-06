@@ -27,6 +27,7 @@ test('home page keeps the interaction contract', () => {
         assert.match(indexHtml, new RegExp(`id="${id}"`));
     }
     assert.match(indexHtml, /<multiplication-selector id="multiplication-grid"><\/multiplication-selector>/);
+    assert.match(indexHtml, /<app-button id="start-quiz"/);
 });
 
 test('quiz page keeps the interaction contract', () => {
@@ -34,4 +35,5 @@ test('quiz page keeps the interaction contract', () => {
         assert.match(quizHtml, new RegExp(`id="${id}"`));
     }
     assert.match(quizHtml, /<app-modal id="leave-modal"/);
+    assert.match(quizHtml, /<app-button id="submit-answer"/);
 });
