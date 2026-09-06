@@ -1,11 +1,11 @@
-import { questionList, saveState } from './state.js?v=20260906-140849';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-140849';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-140849';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-140849';
-import { startQuizWithQuestions } from './home.js?v=20260906-140849';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-140849';
-import './components/app-modal.js?v=20260906-140849';
-import './components/numeric-keypad.js?v=20260906-140849';
+import { questionList, saveState } from './state.js?v=20260906-142216';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-142216';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-142216';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-142216';
+import { startQuizWithQuestions } from './home.js?v=20260906-142216';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-142216';
+import './components/app-modal.js?v=20260906-142216';
+import './components/numeric-keypad.js?v=20260906-142216';
 
 
 function scrollActiveQuestionIntoView(questionKey) {
@@ -154,7 +154,6 @@ function submitAnswer(state) {
     if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
     else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
     renderQuiz(state);
-    showCompletionOverlay(correctCount, state.quiz.questions.length);
     if (firstWrongKey) focusQuizQuestion(state, firstWrongKey, false);
 }
 
@@ -164,14 +163,19 @@ export function initQuiz(state) {
     initSettings(state);
     renderQuiz(state);
     applyKeypadPosition(state);
-    setupKeypadDrag(state);
-    setupKeypadClose();
     setupCompletionOverlay();
     updateQuizScrollReserve();
     window.addEventListener('resize', updateQuizScrollReserve);
     document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
-    document.querySelectorAll('[data-pad-value]').forEach((button) => {
-        button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
+    const keypad = document.getElementById('number-pad');
+    keypad?.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-pad-value]');
+        if (button) updateKeypadAnswer(state, button.dataset.padValue);
+    });
+    Promise.resolve(keypad?.updateComplete).then(() => {
+        setupKeypadDrag(state);
+        setupKeypadClose();
+        updateQuizScrollReserve();
     });
     const modal = document.getElementById('leave-modal');
     document.getElementById('back-home').addEventListener('click', () => {

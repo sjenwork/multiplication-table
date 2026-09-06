@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-140849">
-    <link rel="stylesheet" href="tailwind.css?v=20260906-140849">
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-140849">
-    <script src="app/theme-colors.js?v=20260906-140849" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260906-142216">
+    <link rel="stylesheet" href="tailwind.css?v=20260906-142216">
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-142216">
+    <script src="app/theme-colors.js?v=20260906-142216" async></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -172,6 +172,10 @@
             pointer-events: none;
             overflow: hidden;
             padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0;
+        }
+
+        .completion-overlay.hidden {
+            display: none;
         }
 
         .completion-card {
@@ -397,6 +401,6 @@
                 </div>
         </app-modal>
 
-    <script src="app.js?v=20260906-140849" type="module"></script>
+    <script src="app.js?v=20260906-142216" type="module"></script>
 </body>
 </html>

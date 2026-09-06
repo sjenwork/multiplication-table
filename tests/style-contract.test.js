@@ -29,3 +29,8 @@ test('migrated style sources do not reintroduce raw palette utilities', () => {
     const rawPalette = /\b(?:bg|text|border|ring)-(?:white|black|slate|gray|blue|red|green|emerald|amber|yellow|orange|pink|purple|indigo)-\d+\b|\b(?:bg|text|border|ring)-(?:white|black)\b/;
     for (const file of styleSources) assert.doesNotMatch(fs.readFileSync(file, 'utf8'), rawPalette, file);
 });
+
+test('quiz completion overlay keeps its hidden state', () => {
+    const quizHtml = fs.readFileSync('quiz.html', 'utf8');
+    assert.match(quizHtml, /\.completion-overlay\.hidden\s*\{\s*display:\s*none;/);
+});

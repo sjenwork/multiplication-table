@@ -138,6 +138,12 @@ evaluate("(async () => { document.querySelector('app-settings-modal [data-modal-
 time.sleep(2)
 if evaluate("document.querySelectorAll('#question-list article').length") == 0:
     raise SystemExit('browser smoke failed: quiz questions did not render')
+if evaluate("document.querySelectorAll('#question-list input[data-question]').length") == 0:
+    raise SystemExit('browser smoke failed: quiz answer inputs did not render')
+if evaluate("getComputedStyle(document.getElementById('completion-overlay')).display") != 'none':
+    raise SystemExit('browser smoke failed: completion overlay was visible before quiz completion')
+if evaluate("document.querySelector('#question-list input[data-question]').click(); document.querySelector('[data-pad-value=\"1\"]').click(); document.querySelector('#question-list input[data-question]').value") != '1':
+    raise SystemExit('browser smoke failed: keypad could not enter an answer')
 print('browser smoke passed')
 ws.close()
 PY

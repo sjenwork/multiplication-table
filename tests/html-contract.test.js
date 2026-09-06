@@ -4,6 +4,7 @@ import fs from 'node:fs';
 
 const indexHtml = fs.readFileSync('index.html', 'utf8');
 const quizHtml = fs.readFileSync('quiz.html', 'utf8');
+const quizSource = fs.readFileSync('app/quiz.js', 'utf8');
 assert.ok(fs.existsSync('tailwind.css'), 'local Tailwind stylesheet must exist');
 
 test('pages load the bootstrap as an ES module', () => {
@@ -36,4 +37,10 @@ test('quiz page keeps the interaction contract', () => {
     }
     assert.match(quizHtml, /<app-modal id="leave-modal"/);
     assert.match(quizHtml, /<app-button id="submit-answer"/);
+});
+
+test('completion feedback is only triggered after all answers resolve', () => {
+    assert.equal((quizSource.match(/showCompletionOverlay\(/g) || []).length, 1);
+    const unfinishedBranch = quizSource.slice(quizSource.indexOf('if (remaining === 0)'));
+    assert.doesNotMatch(unfinishedBranch.slice(unfinishedBranch.indexOf('renderQuiz(state);')), /showCompletionOverlay\(/);
 });
