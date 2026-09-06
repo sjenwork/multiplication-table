@@ -377,6 +377,15 @@ html {
     width: 100%;
 }
 
+.selection-status {
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.25rem;
+    overflow: hidden;
+}
+
 /* Visual styles belong to the native button inside the Light-DOM component. */
 app-button {
     display: inline-block;
