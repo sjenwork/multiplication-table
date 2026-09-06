@@ -5,6 +5,7 @@ project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$project_root"
 
 "$project_root/scripts/check-static.sh"
+"$project_root/scripts/test.sh"
 if [[ -n "${SMOKE_URL:-}" ]]; then
     "$project_root/scripts/browser-smoke.sh"
 else

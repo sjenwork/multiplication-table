@@ -2,6 +2,7 @@
 set -euo pipefail
 
 scripts/check-static.sh
+scripts/test.sh
 if [[ -n "${SMOKE_URL:-}" ]]; then
     scripts/browser-smoke.sh
 else

@@ -42,8 +42,14 @@
 Git hooks 位於 `.githooks/`，目前的 `core.hooksPath` 指向這個目錄：
 
 - `pre-commit`：同步前端資源版本，檢查所有 JavaScript 語法、相對 import、Service Worker app shell 與 whitespace diff。
-- `pre-push`：重跑靜態檢查；設定 `SMOKE_URL` 時，另外用 headless Chrome 驗證首頁選題、設定 modal 與 quiz 啟動。
+- `pre-push`：重跑靜態檢查與 Node 行為測試；設定 `SMOKE_URL` 時，另外用 headless Chrome 驗證首頁選題、設定 modal 與 quiz 啟動。
 - `deploy.sh`：部署前一定執行靜態檢查；部署後可用 `RUN_BROWSER_SMOKE=1 ./deploy.sh` 執行實際網址 smoke test。
+
+測試可單獨執行：
+
+```bash
+./scripts/test.sh
+```
 
 若 Git 沒有套用 hooks，可執行：
 
