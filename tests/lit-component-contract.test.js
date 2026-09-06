@@ -21,7 +21,7 @@ test('app button exposes a reusable native-button contract', () => {
     assert.match(buttonSource, /variant: \{ type: String/);
     assert.match(buttonSource, /disabled: \{ type: Boolean/);
     assert.match(buttonSource, /<button/);
-    assert.match(buttonSource, /rounded-xl/);
+    assert.match(buttonSource, /rounded-full/);
     assert.match(buttonSource, /customElements\.define\(['"]app-button['"]/);
 });
 
