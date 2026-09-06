@@ -59,6 +59,9 @@
     --ds-layer-dock: 40;
     --ds-layer-modal: 60;
     --ds-layer-completion: 80;
+    --ds-layer-header: 20;
+    --ds-layer-table-header: 20;
+    --ds-layer-table-row: 10;
     --ds-confetti-1: #f59e0b;
     --ds-confetti-2: #10b981;
     --ds-confetti-3: #3b82f6;
@@ -73,6 +76,9 @@
     --ds-blur-keypad: blur(24px) saturate(165%);
     --ds-blur-control: blur(14px);
     --ds-blur-table: blur(12px) saturate(125%);
+    --ds-blur-base: blur(16px) saturate(135%);
+    --ds-blur-strong: blur(20px) saturate(145%);
+    --ds-blur-modal: blur(8px);
     --ds-radius-sm: 0.625rem;
     --ds-radius-md: 0.875rem;
     --ds-radius-lg: 1.25rem;
@@ -160,22 +166,22 @@ html {
     border-color: var(--ds-border) !important;
     color: var(--ds-text) !important;
     box-shadow: var(--ds-shadow-sm);
-    backdrop-filter: blur(16px) saturate(135%);
-    -webkit-backdrop-filter: blur(16px) saturate(135%);
+    backdrop-filter: var(--ds-blur-base);
+    -webkit-backdrop-filter: var(--ds-blur-base);
 }
 
 .ds-surface-strong {
     background: var(--ds-surface-strong) !important;
     border-color: var(--ds-border) !important;
     color: var(--ds-text) !important;
-    backdrop-filter: blur(20px) saturate(145%);
-    -webkit-backdrop-filter: blur(20px) saturate(145%);
+    backdrop-filter: var(--ds-blur-strong);
+    -webkit-backdrop-filter: var(--ds-blur-strong);
 }
 
 .ds-modal-backdrop {
     background-color: var(--ds-scrim);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: var(--ds-blur-modal);
+    -webkit-backdrop-filter: var(--ds-blur-modal);
 }
 
 .ds-update-pill {
@@ -263,6 +269,9 @@ html {
 .ds-layer-dock { z-index: var(--ds-layer-dock); }
 .ds-layer-modal { z-index: var(--ds-layer-modal); }
 .ds-layer-completion { z-index: var(--ds-layer-completion); }
+.ds-layer-header { z-index: var(--ds-layer-header); }
+.ds-layer-table-header { z-index: var(--ds-layer-table-header); }
+.ds-layer-table-row { z-index: var(--ds-layer-table-row); }
 
 .ds-factor-one {
     color: var(--ds-factor-one) !important;
