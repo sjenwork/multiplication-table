@@ -1,4 +1,4 @@
-import { saveState } from './state.js?v=20260906-143337';
+import { saveState } from './state.js?v=20260906-143802';
 
 function applyKeypadPosition(state) {
     const keypad = document.getElementById('number-pad');

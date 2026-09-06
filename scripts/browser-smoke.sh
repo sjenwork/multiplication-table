@@ -126,10 +126,12 @@ def evaluate(expression):
 
 if exceptions:
     raise SystemExit('browser smoke failed: ' + ' | '.join(exceptions))
-print('smoke page state:', evaluate("JSON.stringify({url: location.href, readyState: document.readyState, scripts: [...document.scripts].map((script) => script.src), appButton: !!document.querySelector('#open-settings'), selector: !!customElements.get('multiplication-selector'), cells: document.querySelectorAll('#multiplication-grid td[data-question]').length})"), flush=True)
+print('smoke page state:', evaluate("JSON.stringify({url: location.href, readyState: document.readyState, scripts: [...document.scripts].map((script) => script.src), appButton: !!document.querySelector('#open-settings'), selector: !!customElements.get('multiplication-selector'), cells: document.querySelectorAll('#multiplication-grid td[data-question]').length, button: (() => { const host = document.querySelector('#start-quiz'); const button = host?.querySelector('button'); return { hostClass: host?.className, buttonClass: button?.className, radius: button ? getComputedStyle(button).borderRadius : null }; })()})"), flush=True)
 grid_cells = evaluate("document.querySelectorAll('#multiplication-grid td[data-question]').length")
 if grid_cells != 81:
     raise SystemExit(f'browser smoke failed: home grid did not render 81 cells (got {grid_cells})')
+if evaluate("getComputedStyle(document.querySelector('#start-quiz button')).borderRadius") != '9999px':
+    raise SystemExit('browser smoke failed: shared action button is not pill-shaped')
 if evaluate("document.querySelector('td[data-question]').click(); document.getElementById('selection-status').textContent") != '已選擇 1 題，準備好就開始挑戰！':
     raise SystemExit('browser smoke failed: selection interaction did not work')
 if not evaluate("(async () => { document.getElementById('open-settings').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return document.querySelector('app-settings-modal [data-modal-scrim]').classList.contains('flex'); })()"):

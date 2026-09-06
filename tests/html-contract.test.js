@@ -37,6 +37,8 @@ test('quiz page keeps the interaction contract', () => {
     }
     assert.match(quizHtml, /<app-modal id="leave-modal"/);
     assert.match(quizHtml, /<app-button id="submit-answer"/);
+    assert.match(quizHtml, /id="back-home"[^>]*rounded-full/);
+    assert.match(quizHtml, /id="open-settings"[^>]*rounded-full/);
 });
 
 test('completion feedback is only triggered after all answers resolve', () => {
