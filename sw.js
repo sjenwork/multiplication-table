@@ -1,13 +1,14 @@
-const CACHE_NAME = 'multiplication-master-v20260906-090533';
+const CACHE_NAME = 'multiplication-master-v20260906-090958';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-090533',
-    '/app/state.js?v=20260906-090533',
-    '/design-tokens.css?v=20260906-090533',
-    '/theme-init.js?v=20260906-090533',
-    '/pwa.css?v=20260906-090533',
+    '/app.js?v=20260906-090958',
+    '/app/state.js?v=20260906-090958',
+    '/app/keypad.js?v=20260906-090958',
+    '/design-tokens.css?v=20260906-090958',
+    '/theme-init.js?v=20260906-090958',
+    '/pwa.css?v=20260906-090958',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -35,7 +36,8 @@ self.addEventListener('fetch', (event) => {
     const latestFirst = event.request.mode === 'navigate'
         || requestUrl.pathname.endsWith('.html')
         || requestUrl.pathname.endsWith('/app.js')
-        || requestUrl.pathname.endsWith('/app/state.js');
+        || requestUrl.pathname.endsWith('/app/state.js')
+        || requestUrl.pathname.endsWith('/app/keypad.js');
     if (latestFirst) {
         event.respondWith(
             fetch(event.request).then((response) => {
