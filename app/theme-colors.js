@@ -1,4 +1,4 @@
-window.__APP_THEME_COLORS__ = Object.freeze({
+export const THEME_COLORS = Object.freeze({
     light: '#f4fbff',
     dark: '#091a30',
 });

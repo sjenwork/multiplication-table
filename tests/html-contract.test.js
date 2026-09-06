@@ -8,8 +8,8 @@ const quizHtml = fs.readFileSync('quiz.html', 'utf8');
 test('pages load the bootstrap as an ES module', () => {
     assert.match(indexHtml, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/);
     assert.match(quizHtml, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/);
-    assert.match(indexHtml, /<script src="app\/theme-colors\.js\?v=\d{8}-\d{6}" async><\/script>/);
-    assert.match(quizHtml, /<script src="app\/theme-colors\.js\?v=\d{8}-\d{6}" async><\/script>/);
+    assert.doesNotMatch(indexHtml, /<script src="(?:app\/theme-colors|theme-init)\.js/);
+    assert.doesNotMatch(quizHtml, /<script src="(?:app\/theme-colors|theme-init)\.js/);
 });
 
 test('optional Tailwind CDN loads after the application markup', () => {
