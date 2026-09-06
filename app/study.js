@@ -1,5 +1,5 @@
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-193456';
-import './components/multiplication-table.js?v=20260906-193456';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-194245';
+import './components/multiplication-table.js?v=20260906-194245';
 
 function updateFactor(table, selectedFactor) {
     table.factor = selectedFactor;

@@ -140,6 +140,8 @@ print('smoke page state:', evaluate("JSON.stringify({url: location.href, readySt
 grid_cells = evaluate("document.querySelectorAll('#multiplication-grid td[data-question]').length")
 if grid_cells != 81:
     raise SystemExit(f'browser smoke failed: home grid did not render 81 cells (got {grid_cells})')
+if evaluate("document.querySelector('factor-legend')?.textContent.includes('被乘數') && document.querySelector('factor-legend')?.textContent.includes('乘數')") is not True:
+    raise SystemExit('browser smoke failed: shared factor legend did not render')
 if evaluate("getComputedStyle(document.querySelector('#start-quiz button')).borderRadius") != '9999px':
     raise SystemExit('browser smoke failed: shared action button is not pill-shaped')
 if not evaluate("[...document.querySelectorAll('app-button')].every((host) => getComputedStyle(host).boxShadow === 'none' && [...host.querySelectorAll('button')].every((button) => getComputedStyle(button).borderRadius === '9999px'))"):
@@ -178,6 +180,8 @@ if evaluate("document.querySelectorAll('#study-factor-buttons button').length") 
     raise SystemExit('browser smoke failed: study factor buttons are not interactive')
 if evaluate("document.querySelectorAll('.study-equation').length") != 9:
     raise SystemExit('browser smoke failed: study multiplication table did not render')
+if evaluate("document.querySelector('factor-legend')?.textContent.includes('被乘數') && document.querySelector('factor-legend')?.textContent.includes('乘數')") is not True:
+    raise SystemExit('browser smoke failed: study page did not use the shared factor legend')
 if evaluate("document.querySelector('.study-equation-list').textContent.includes('2')") is not True:
     raise SystemExit('browser smoke failed: default study table did not render factor 2')
 if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return document.querySelector('.study-equation-list').textContent.includes('63'); })()") is not True:

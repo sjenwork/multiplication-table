@@ -9,6 +9,7 @@ const buttonSource = fs.readFileSync('app/components/app-button.js', 'utf8');
 const selectorSource = fs.readFileSync('app/components/multiplication-selector.js', 'utf8');
 const keypadSource = fs.readFileSync('app/components/numeric-keypad.js', 'utf8');
 const multiplicationTableSource = fs.readFileSync('app/components/multiplication-table.js', 'utf8');
+const factorLegendSource = fs.readFileSync('app/components/factor-legend.js', 'utf8');
 
 test('multiplication selector owns the table rendering contract', () => {
     assert.match(selectorSource, /class MultiplicationSelector extends LitElement/);
@@ -42,6 +43,15 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /\$\{this\.factor \* row\}/);
     assert.doesNotMatch(multiplicationTableSource, /study-table-card|<h2/);
     assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
+});
+
+test('factor legend owns the shared factor labels and semantic colors', () => {
+    assert.match(factorLegendSource, /class FactorLegend extends LitElement/);
+    assert.match(factorLegendSource, /被乘數/);
+    assert.match(factorLegendSource, /乘數/);
+    assert.match(factorLegendSource, /ds-factor-one/);
+    assert.match(factorLegendSource, /ds-factor-two/);
+    assert.match(factorLegendSource, /customElements\.define\(['"]factor-legend['"]/);
 });
 
 test('app modal exposes a reusable dialog behavior contract', () => {

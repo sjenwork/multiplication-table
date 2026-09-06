@@ -32,6 +32,7 @@ test('home page keeps the interaction contract', () => {
     assert.match(indexHtml, /<multiplication-selector id="multiplication-grid"><\/multiplication-selector>/);
     assert.match(indexHtml, /<app-button id="start-quiz"/);
     assert.match(indexHtml, /<div id="selection-status"[^>]*role="status"/);
+    assert.match(indexHtml, /<factor-legend><\/factor-legend>/);
     assert.doesNotMatch(indexHtml, /<p id="selection-status"/);
 });
 
@@ -40,6 +41,7 @@ test('study page keeps the learning table contract', () => {
         assert.match(studyHtml, new RegExp(`id="${id}"`));
     }
     assert.match(studyHtml, /<multiplication-table id="study-table"><\/multiplication-table>/);
+    assert.match(studyHtml, /<factor-legend><\/factor-legend>/);
     assert.match(studyHtml, /data-factor="2"/);
     assert.match(studyHtml, /data-factor="9"/);
     assert.doesNotMatch(studyHtml, /number-pad|submit-answer/);
@@ -55,6 +57,7 @@ test('quiz page keeps the interaction contract', () => {
     assert.match(quizHtml, /<app-button id="submit-answer"/);
     assert.match(quizHtml, /id="back-home"[^>]*rounded-full/);
     assert.match(quizHtml, /id="open-settings"[^>]*rounded-full/);
+    assert.match(quizHtml, /<factor-legend><\/factor-legend>/);
 });
 
 test('completion feedback is only triggered after all answers resolve', () => {

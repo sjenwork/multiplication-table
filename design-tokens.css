@@ -286,6 +286,13 @@ html {
     color: var(--ds-factor-two) !important;
 }
 
+.factor-legend {
+    color: var(--ds-text-muted);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
 .ds-table-header,
 .ds-table-cell {
     background-color: var(--ds-table-surface) !important;
