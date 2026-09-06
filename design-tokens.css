@@ -205,9 +205,29 @@ html {
     color: var(--ds-text) !important;
 }
 
+.ds-secondary:hover,
+.ds-secondary:active {
+    background: var(--ds-brand-soft) !important;
+}
+
+.ds-success {
+    background: var(--ds-success-soft) !important;
+    border-color: var(--ds-success) !important;
+    color: var(--ds-success) !important;
+}
+
+.ds-success:hover,
+.ds-success:active {
+    background: var(--ds-success-soft) !important;
+}
+
 .ds-danger {
     background: var(--ds-danger-soft) !important;
     border-color: var(--ds-danger) !important;
+    color: var(--ds-danger) !important;
+}
+
+.ds-danger-text {
     color: var(--ds-danger) !important;
 }
 

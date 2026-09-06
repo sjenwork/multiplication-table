@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-081112">
+    <link rel="stylesheet" href="pwa.css?v=20260906-084437">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-081112">
-    <script src="theme-init.js?v=20260906-081112"></script>
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-084437">
+    <script src="theme-init.js?v=20260906-084437"></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -272,10 +272,16 @@
 
         .quiz-question-card.quiz-card-success {
             background: var(--ds-success-soft);
+            border-color: var(--ds-success);
         }
 
         .quiz-question-card.quiz-card-error {
             background: var(--ds-danger-soft);
+            border-color: var(--ds-danger);
+        }
+
+        .quiz-question-card.quiz-card-idle {
+            border-color: var(--ds-border);
         }
 
         .completion-confetti {
@@ -388,18 +394,18 @@
             <span aria-hidden="true">⠿</span><span class="ml-2 text-xs font-semibold">拖曳鍵盤</span>
         </div>
         <div class="numeric-pad mx-auto max-w-2xl">
-            <button type="button" data-pad-value="1" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">1</button>
-            <button type="button" data-pad-value="2" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">2</button>
-            <button type="button" data-pad-value="3" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">3</button>
-            <button type="button" data-pad-value="4" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">4</button>
-            <button type="button" data-pad-value="5" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">5</button>
-            <button type="button" data-pad-value="6" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">6</button>
-            <button type="button" data-pad-value="7" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">7</button>
-            <button type="button" data-pad-value="8" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">8</button>
-            <button type="button" data-pad-value="9" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">9</button>
-            <button type="button" data-pad-value="backspace" class="rounded-lg border border-amber-200 bg-amber-50 py-1.5 text-base font-semibold text-amber-700 transition hover:bg-amber-100 active:scale-95" aria-label="刪除最後一個數字">⌫</button>
-            <button type="button" data-pad-value="0" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">0</button>
-            <button type="button" data-pad-value="next" class="rounded-lg border border-emerald-200 bg-emerald-50 py-1.5 text-base font-semibold text-emerald-700 transition hover:bg-emerald-100 active:scale-95 active:bg-emerald-200" aria-label="前往下一題">↵</button>
+            <button type="button" data-pad-value="1" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">1</button>
+            <button type="button" data-pad-value="2" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">2</button>
+            <button type="button" data-pad-value="3" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">3</button>
+            <button type="button" data-pad-value="4" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">4</button>
+            <button type="button" data-pad-value="5" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">5</button>
+            <button type="button" data-pad-value="6" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">6</button>
+            <button type="button" data-pad-value="7" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">7</button>
+            <button type="button" data-pad-value="8" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">8</button>
+            <button type="button" data-pad-value="9" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">9</button>
+            <button type="button" data-pad-value="backspace" class="ds-accent rounded-lg border py-1.5 text-base font-semibold transition active:scale-95" aria-label="刪除最後一個數字">⌫</button>
+            <button type="button" data-pad-value="0" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">0</button>
+            <button type="button" data-pad-value="next" class="ds-success rounded-lg border py-1.5 text-base font-semibold transition active:scale-95" aria-label="前往下一題">↵</button>
         </div>
     </div>
 
@@ -446,6 +452,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260906-081112" defer></script>
+    <script src="app.js?v=20260906-084437" defer></script>
 </body>
 </html>
