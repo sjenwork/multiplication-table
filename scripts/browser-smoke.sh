@@ -156,6 +156,8 @@ if evaluate("document.getElementById('selection-status').getBoundingClientRect()
     raise SystemExit('browser smoke failed: selection capsule height changed after selection')
 if not evaluate("(async () => { document.getElementById('open-settings').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return document.querySelector('app-settings-modal [data-modal-scrim]').classList.contains('flex'); })()"):
     raise SystemExit('browser smoke failed: settings modal did not open')
+if not evaluate("(() => { const scrim = document.querySelector('app-settings-modal [data-modal-scrim]'); const style = getComputedStyle(scrim); return style.backdropFilter === 'blur(16px)' && style.backgroundColor.includes('0.24'); })()"):
+    raise SystemExit('browser smoke failed: modal scrim is not translucent glass')
 evaluate("(async () => { document.querySelector('app-settings-modal [data-modal-close]').click(); await new Promise((resolve) => setTimeout(resolve, 50)); document.getElementById('start-quiz').click(); })()")
 time.sleep(2)
 if evaluate("document.querySelectorAll('#question-list article').length") == 0:

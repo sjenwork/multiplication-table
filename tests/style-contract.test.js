@@ -19,6 +19,8 @@ test('semantic theme contracts exist for migrated controls', () => {
     for (const token of ['--ds-scrim', '--ds-keypad-shadow', '--ds-confetti-1', '--ds-blur-surface', '--ds-layer-header', '--ds-layer-update', '--ds-layer-table-corner']) {
         assert.match(tokens, new RegExp(token));
     }
+    assert.match(tokens, /--ds-scrim:\s*rgb\(15 23 42 \/ 0\.24\)/);
+    assert.match(tokens, /--ds-blur-modal:\s*blur\(16px\)/);
     assert.match(tokens, /\.ds-layer-update\s*\{[\s\S]*?position:\s*fixed\s*!important/);
     assert.match(tokens, /\.ds-layer-update\s*\{[\s\S]*?z-index:\s*var\(--ds-layer-update\)\s*!important/);
     assert.match(tokens, /\.ds-theme-choice\s*\{[\s\S]*?width:\s*100%/);

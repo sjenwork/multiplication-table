@@ -47,7 +47,7 @@
     --ds-shadow-sm: 0 6px 18px rgb(28 77 116 / 0.09);
     --ds-shadow-md: 0 14px 34px rgb(28 77 116 / 0.14);
     --ds-shadow-color: rgb(28 77 116 / 0.14);
-    --ds-scrim: rgb(15 23 42 / 0.4);
+    --ds-scrim: rgb(15 23 42 / 0.24);
     --ds-keypad-shadow: 0 -12px 32px rgb(15 23 42 / 0.14);
     --ds-input-surface: #ffffff;
     --ds-input-border: rgb(148 163 184 / 0.7);
@@ -79,7 +79,7 @@
     --ds-blur-table: blur(12px) saturate(125%);
     --ds-blur-base: blur(16px) saturate(135%);
     --ds-blur-strong: blur(20px) saturate(145%);
-    --ds-blur-modal: blur(8px);
+    --ds-blur-modal: blur(16px);
     --ds-radius-sm: 0.625rem;
     --ds-radius-md: 0.875rem;
     --ds-radius-lg: 1.25rem;
@@ -138,7 +138,7 @@
     --ds-shadow-sm: 0 6px 18px rgb(0 0 0 / 0.2);
     --ds-shadow-md: 0 14px 34px rgb(0 0 0 / 0.3);
     --ds-shadow-color: rgb(0 0 0 / 0.3);
-    --ds-scrim: rgb(2 10 22 / 0.68);
+    --ds-scrim: rgb(2 10 22 / 0.42);
     --ds-keypad-shadow: 0 -12px 32px rgb(0 0 0 / 0.3);
     --ds-input-surface: var(--ds-surface-strong);
     --ds-input-border: var(--ds-border-strong);

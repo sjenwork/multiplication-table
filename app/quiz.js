@@ -1,11 +1,11 @@
-import { questionList, saveState } from './state.js?v=20260906-153008';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-153008';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-153008';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-153008';
-import { startQuizWithQuestions } from './home.js?v=20260906-153008';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-153008';
-import './components/app-modal.js?v=20260906-153008';
-import './components/numeric-keypad.js?v=20260906-153008';
+import { questionList, saveState } from './state.js?v=20260906-155356';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-155356';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-155356';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-155356';
+import { startQuizWithQuestions } from './home.js?v=20260906-155356';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-155356';
+import './components/app-modal.js?v=20260906-155356';
+import './components/numeric-keypad.js?v=20260906-155356';
 
 
 function scrollActiveQuestionIntoView(questionKey) {
