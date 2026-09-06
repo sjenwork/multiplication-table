@@ -12,6 +12,13 @@ test('pages load the bootstrap as an ES module', () => {
     assert.match(quizHtml, /<script src="app\/theme-colors\.js\?v=\d{8}-\d{6}"><\/script>/);
 });
 
+test('optional Tailwind CDN cannot block application startup', () => {
+    for (const file of ['index.html', 'quiz.html']) {
+        const source = fs.readFileSync(file, 'utf8');
+        assert.match(source, /<script src="https:\/\/cdn\.tailwindcss\.com" async><\/script>/, file);
+    }
+});
+
 test('home page keeps the interaction contract', () => {
     for (const id of ['multiplication-grid', 'selection-status', 'start-random-quiz', 'start-wrong-quiz', 'start-quiz', 'open-settings']) {
         assert.match(indexHtml, new RegExp(`id="${id}"`));
