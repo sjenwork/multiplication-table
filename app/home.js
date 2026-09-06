@@ -281,6 +281,7 @@ function startQuizWithQuestions(state, selected, alreadyLimited = false) {
     state.quiz.activeKey = state.quiz.questions[0]?.key || null;
     saveState(state);
     window.location.href = 'quiz.html';
+}
 
 export function initHome(state) {
     if (state.quiz && state.quiz.questions && state.quiz.questions.length) {
@@ -294,4 +295,3 @@ export function initHome(state) {
     document.getElementById('start-random-quiz').addEventListener('click', () => startRandomQuiz(state));
     document.getElementById('start-wrong-quiz').addEventListener('click', () => startWrongQuiz(state));
 }
-

@@ -1,10 +1,10 @@
-import { loadState, questionList, saveState } from './app/state.js?v=20260906-092520';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './app/keypad.js?v=20260906-092520';
-import { applyTheme, ensureSettingsModal, initSettings } from './app/settings.js?v=20260906-092520';
-import { initVersionUpdate } from './app/update.js?v=20260906-092520';
-import { message, renderQuiz, updateSubmitButton } from './app/quiz-view.js?v=20260906-092520';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './app/completion.js?v=20260906-092520';
-import { initHome } from './app/home.js?v=20260906-092520';
+import { loadState, questionList, saveState } from './app/state.js?v=20260906-092548';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './app/keypad.js?v=20260906-092548';
+import { applyTheme, ensureSettingsModal, initSettings } from './app/settings.js?v=20260906-092548';
+import { initVersionUpdate } from './app/update.js?v=20260906-092548';
+import { message, renderQuiz, updateSubmitButton } from './app/quiz-view.js?v=20260906-092548';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './app/completion.js?v=20260906-092548';
+import { initHome } from './app/home.js?v=20260906-092548';
 
 (function () {
     'use strict';
