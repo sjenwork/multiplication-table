@@ -167,6 +167,8 @@ if evaluate("document.querySelectorAll('#question-list article').length") == 0:
     raise SystemExit('browser smoke failed: quiz questions did not render')
 if evaluate("document.querySelectorAll('#question-list input[data-question]').length") == 0:
     raise SystemExit('browser smoke failed: quiz answer inputs did not render')
+if evaluate("getComputedStyle(document.querySelector('#question-list input[data-question]')).borderTopWidth") != '1px':
+    raise SystemExit('browser smoke failed: quiz answer input has no visible border')
 if evaluate("getComputedStyle(document.getElementById('completion-overlay')).display") != 'none':
     raise SystemExit('browser smoke failed: completion overlay was visible before quiz completion')
 if evaluate("document.querySelector('#question-list input[data-question]').click(); document.querySelector('[data-pad-value=\"1\"]').click(); document.querySelector('#question-list input[data-question]').value") != '1':

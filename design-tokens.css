@@ -242,6 +242,7 @@ html {
 
 .ds-input {
     background: var(--ds-input-surface) !important;
+    border: 1px solid var(--ds-input-border) !important;
     border-color: var(--ds-input-border) !important;
     color: var(--ds-text-strong) !important;
 }

@@ -26,6 +26,7 @@ test('semantic theme contracts exist for migrated controls', () => {
     assert.match(tokens, /\.ds-theme-choice\s*\{[\s\S]*?width:\s*100%/);
     assert.match(tokens, /\.ds-theme-choice\s*>\s*button\s*\{[\s\S]*?width:\s*100%/);
     assert.match(tokens, /app-button\s*\{[\s\S]*?box-shadow:\s*none\s*!important/);
+    assert.match(tokens, /\.ds-input\s*\{[\s\S]*?border:\s*1px solid var\(--ds-input-border\)/);
     assert.match(tokens, /\.selection-status\s*\{[\s\S]*?height:\s*4rem;[\s\S]*?align-items:\s*center;/);
 });
 
