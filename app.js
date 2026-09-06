@@ -1,8 +1,9 @@
-import { loadState } from './app/state.js?v=20260906-160835';
-import { applyTheme } from './app/settings.js?v=20260906-160835';
-import { initVersionUpdate } from './app/update.js?v=20260906-160835';
-import { initHome } from './app/home.js?v=20260906-160835';
-import { initQuiz } from './app/quiz.js?v=20260906-160835';
+import { loadState } from './app/state.js?v=20260906-190238';
+import { applyTheme } from './app/settings.js?v=20260906-190238';
+import { initVersionUpdate } from './app/update.js?v=20260906-190238';
+import { initHome } from './app/home.js?v=20260906-190238';
+import { initQuiz } from './app/quiz.js?v=20260906-190238';
+import { initStudy } from './app/study.js?v=20260906-190238';
 
 (() => {
     'use strict';
@@ -16,6 +17,7 @@ import { initQuiz } from './app/quiz.js?v=20260906-160835';
         applyTheme(state);
         if (document.getElementById('multiplication-grid')) initHome(state);
         if (document.getElementById('question-list')) initQuiz(state);
+        if (document.getElementById('study-table')) initStudy(state);
         initVersionUpdate();
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).catch(() => {});
     };

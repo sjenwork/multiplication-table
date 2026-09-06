@@ -8,6 +8,7 @@ const modalSource = fs.readFileSync('app/components/app-modal.js', 'utf8');
 const buttonSource = fs.readFileSync('app/components/app-button.js', 'utf8');
 const selectorSource = fs.readFileSync('app/components/multiplication-selector.js', 'utf8');
 const keypadSource = fs.readFileSync('app/components/numeric-keypad.js', 'utf8');
+const multiplicationTableSource = fs.readFileSync('app/components/multiplication-table.js', 'utf8');
 
 test('multiplication selector owns the table rendering contract', () => {
     assert.match(selectorSource, /class MultiplicationSelector extends LitElement/);
@@ -31,6 +32,15 @@ test('numeric keypad owns the repeated quiz controls', () => {
     assert.match(keypadSource, /data-pad-value/);
     assert.match(keypadSource, /backspace/);
     assert.match(keypadSource, /customElements\.define\(['"]app-keypad['"]/);
+});
+
+test('multiplication table owns the read-only learning table', () => {
+    assert.match(multiplicationTableSource, /class MultiplicationTable extends LitElement/);
+    assert.match(multiplicationTableSource, /factor: \{ type: Number/);
+    assert.match(multiplicationTableSource, /\$\{this\.factor\}/);
+    assert.match(multiplicationTableSource, /\$\{row\}/);
+    assert.match(multiplicationTableSource, /\$\{this\.factor \* row\}/);
+    assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
 });
 
 test('app modal exposes a reusable dialog behavior contract', () => {

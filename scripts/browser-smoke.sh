@@ -31,7 +31,7 @@ trap cleanup EXIT
 
 if [[ -z "$target_url" ]]; then
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
-    cp index.html quiz.html app.js sw.js design-tokens.css pwa.css tailwind.css theme-init.js manifest.webmanifest "$fixture_dir/"
+    cp index.html quiz.html study.html app.js sw.js design-tokens.css pwa.css tailwind.css theme-init.js manifest.webmanifest "$fixture_dir/"
     cp -R app icons vendor "$fixture_dir/"
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
@@ -47,6 +47,7 @@ else
     remote_root="${target_url%/index.html}"
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
+    curl -fsSL "$remote_root/study.html" >"$fixture_dir/study.html"
     for asset in pwa.css tailwind.css design-tokens.css theme-init.js manifest.webmanifest; do
         curl -fsSL "$remote_root/$asset" >"$fixture_dir/$asset"
     done
@@ -168,6 +169,18 @@ if evaluate("getComputedStyle(document.getElementById('completion-overlay')).dis
     raise SystemExit('browser smoke failed: completion overlay was visible before quiz completion')
 if evaluate("document.querySelector('#question-list input[data-question]').click(); document.querySelector('[data-pad-value=\"1\"]').click(); document.querySelector('#question-list input[data-question]').value") != '1':
     raise SystemExit('browser smoke failed: keypad could not enter an answer')
+evaluate("window.location.href = 'study.html'")
+time.sleep(2)
+if evaluate("document.querySelectorAll('#study-factor-buttons [data-factor]').length") != 8:
+    raise SystemExit('browser smoke failed: study factor buttons did not render')
+if evaluate("document.querySelectorAll('#study-factor-buttons button').length") != 8:
+    raise SystemExit('browser smoke failed: study factor buttons are not interactive')
+if evaluate("document.querySelectorAll('.study-equation').length") != 9:
+    raise SystemExit('browser smoke failed: study multiplication table did not render')
+if evaluate("document.querySelector('.study-equation-list').textContent.includes('2')") is not True:
+    raise SystemExit('browser smoke failed: default study table did not render factor 2')
+if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return document.querySelector('.study-equation-list').textContent.includes('63'); })()") is not True:
+    raise SystemExit('browser smoke failed: study factor selection did not update the table')
 print('browser smoke passed')
 ws.close()
 PY
