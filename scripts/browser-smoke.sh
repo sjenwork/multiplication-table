@@ -47,6 +47,15 @@ else
     remote_root="${target_url%/index.html}"
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
+    for asset in pwa.css tailwind.css design-tokens.css theme-init.js manifest.webmanifest; do
+        curl -fsSL "$remote_root/$asset" >"$fixture_dir/$asset"
+    done
+    mkdir -p "$fixture_dir/app"
+    curl -fsSL "$remote_root/app/theme-colors.js" >"$fixture_dir/app/theme-colors.js"
+    mkdir -p "$fixture_dir/icons"
+    for asset in icon.svg icon-192.png icon-512.png; do
+        curl -fsSL "$remote_root/icons/$asset" >"$fixture_dir/icons/$asset"
+    done
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e "s#src=\"app\\.js[^\"]*\"#src=\"${remote_root}/app.js\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html"
