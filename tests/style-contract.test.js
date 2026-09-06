@@ -19,6 +19,8 @@ test('semantic theme contracts exist for migrated controls', () => {
     for (const token of ['--ds-scrim', '--ds-keypad-shadow', '--ds-confetti-1', '--ds-blur-surface', '--ds-layer-header']) {
         assert.match(tokens, new RegExp(token));
     }
+    assert.match(tokens, /\.ds-theme-choice\s*\{[\s\S]*?width:\s*100%/);
+    assert.match(tokens, /\.ds-theme-choice\s*>\s*button\s*\{[\s\S]*?width:\s*100%/);
 });
 
 test('migrated style sources do not reintroduce raw palette utilities', () => {

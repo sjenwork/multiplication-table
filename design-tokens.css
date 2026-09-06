@@ -362,6 +362,16 @@ html {
     box-shadow: 0 0 0 2px rgb(97 183 255 / 0.2);
 }
 
+/* Light-DOM app-button hosts must carry the same width as their native button. */
+.ds-theme-choice {
+    display: block;
+    width: 100%;
+}
+
+.ds-theme-choice > button {
+    width: 100%;
+}
+
 [data-theme="dark"] .text-slate-800,
 [data-theme="dark"] .text-slate-700,
 [data-theme="dark"] .text-slate-600,
