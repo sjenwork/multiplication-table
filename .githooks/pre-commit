@@ -9,6 +9,8 @@ perl -0pi -e "s#(app/keypad\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#
 perl -0pi -e "s#(app/state\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app/keypad.js
 perl -0pi -e "s#(app/settings\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
 perl -0pi -e "s#(app/state\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app/settings.js
+perl -0pi -e "s#(app/update\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js
+perl -0pi -e "s#(\\n\\s+'/app/update\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
 perl -0pi -e "s#(\\n\\s+'/app/keypad\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
 perl -0pi -e "s#(\\n\\s+'/app/settings\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
 
@@ -16,5 +18,5 @@ perl -0pi -e "s#(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=
 perl -0pi -e "s#(\\n\\s+'/)(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1\$2?v=${version_stamp}'#g" sw.js
 perl -0pi -e "s/multiplication-master-v\\d{8}-\\d{6}/multiplication-master-v${version_stamp}/g" sw.js
 
-git add app.js app/keypad.js app/settings.js index.html quiz.html sw.js
+git add app.js app/keypad.js app/settings.js app/update.js index.html quiz.html sw.js
 echo "pre-commit: synchronized app version ${version_stamp}" >&2
