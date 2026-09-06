@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-110812">
+    <link rel="stylesheet" href="pwa.css?v=20260906-110950">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-110812">
-    <script src="theme-init.js?v=20260906-110812"></script>
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-110950">
+    <script src="theme-init.js?v=20260906-110950"></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -374,18 +374,7 @@
         <div id="quiz-message" class="mt-6 p-4 rounded-xl text-center font-medium hidden" role="alert"></div>
     </main>
 
-    <div id="completion-overlay" class="completion-overlay hidden" aria-live="polite" aria-atomic="true">
-        <div class="completion-confetti" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span>
-        </div>
-        <div class="completion-card">
-            <button id="close-completion" type="button" class="completion-close" aria-label="關閉完成提示">×</button>
-            <div data-completion-emoji class="completion-emoji" aria-hidden="true">🎉</div>
-            <h2 data-completion-title class="mt-2 text-xl font-black text-blue-700">你好棒！</h2>
-            <p data-completion-detail class="mt-1 text-sm font-semibold text-slate-600">全部答對，你做到了！</p>
-        </div>
-    </div>
+    <app-completion-overlay id="completion-overlay" class="completion-overlay hidden" aria-live="polite" aria-atomic="true"></app-completion-overlay>
 
     <div id="keypad-dock" class="keypad-dock" aria-hidden="true">放回底部</div>
     <div id="number-pad" class="safe-keypad fixed left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-2 py-2 shadow-lg backdrop-blur-md">
@@ -431,6 +420,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260906-110812" type="module"></script>
+    <script src="app.js?v=20260906-110950" type="module"></script>
 </body>
 </html>
