@@ -61,7 +61,7 @@ export class AppButton extends LitElement {
     render() {
         const hostClasses = this.getAttribute('class') || '';
         const classes = [
-            'inline-flex items-center justify-center gap-2 rounded-lg border font-semibold transition active:scale-95',
+            'inline-flex items-center justify-center gap-2 rounded-xl border font-semibold transition active:scale-95',
             VARIANT_CLASSES[this.variant] || VARIANT_CLASSES.secondary,
             SIZE_CLASSES[this.size] || SIZE_CLASSES.md,
             this.full ? 'w-full' : '',

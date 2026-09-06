@@ -1,6 +1,6 @@
 import { LitElement, html } from '../../vendor/lit-core.min.js';
-import './app-modal.js?v=20260906-142216';
-import './app-button.js?v=20260906-142216';
+import './app-modal.js?v=20260906-142952';
+import './app-button.js?v=20260906-142952';
 
 export class SettingsModal extends LitElement {
     static properties = {
@@ -47,14 +47,14 @@ export class SettingsModal extends LitElement {
                                 ${this.themeButton('dark', '🌙 深色')}
                             </div>
                         </div>
-                        <app-button data-export variant="secondary" size="lg" full class="justify-start text-left">匯出成績統計紀錄（CSV）</app-button>
-                        <app-button data-clear variant="danger" size="lg" full class="justify-start text-left">清除所有練習紀錄</app-button>
+                        <app-button data-export variant="secondary" size="lg" full class="rounded-xl justify-start text-left">匯出成績統計紀錄（CSV）</app-button>
+                        <app-button data-clear variant="danger" size="lg" full class="rounded-xl justify-start text-left">清除所有練習紀錄</app-button>
                     </div>
             </app-modal>`;
     }
 
     themeButton(theme, label) {
-        return html`<app-button data-theme-choice="${theme}" variant="secondary" full aria-pressed="${this.theme === theme}" class="ds-theme-choice">${label}</app-button>`;
+        return html`<app-button data-theme-choice="${theme}" variant="secondary" full aria-pressed="${this.theme === theme}" class="ds-theme-choice rounded-xl">${label}</app-button>`;
     }
 
     firstUpdated() {
