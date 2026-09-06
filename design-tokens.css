@@ -30,6 +30,7 @@
     --ds-danger-soft: #ffe5e3;
     --ds-disabled: #c6d3de;
     --ds-border: rgb(126 164 196 / 0.38);
+    --ds-divider: rgb(126 164 196 / 0.22);
     --ds-border-strong: rgb(73 128 177 / 0.62);
     --ds-focus: #5aa9ff;
     --ds-focus-border: rgb(59 130 246 / 0.58);
@@ -121,6 +122,7 @@
     --ds-danger-soft: rgb(133 54 64 / 0.52);
     --ds-disabled: #40556b;
     --ds-border: rgb(157 215 244 / 0.42);
+    --ds-divider: rgb(157 215 244 / 0.22);
     --ds-border-strong: rgb(134 207 246 / 0.78);
     --ds-focus: #8bd0ff;
     --ds-focus-border: rgb(139 208 255 / 0.78);

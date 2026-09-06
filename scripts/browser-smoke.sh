@@ -183,6 +183,10 @@ if evaluate("document.querySelectorAll('#study-factor-buttons button').length") 
     raise SystemExit('browser smoke failed: study factor buttons are not interactive')
 if evaluate("document.querySelectorAll('.study-equation').length") != 9:
     raise SystemExit('browser smoke failed: study multiplication table did not render')
+if evaluate("getComputedStyle(document.querySelector('.study-equation')).minHeight") != '48px':
+    raise SystemExit('browser smoke failed: study equations are too widely spaced')
+if evaluate("getComputedStyle(document.querySelector('.study-equation'), '::after').borderBottomWidth") != '1px':
+    raise SystemExit('browser smoke failed: study equation separators did not render')
 if evaluate("document.querySelector('factor-legend')?.textContent.includes('被乘數') && document.querySelector('factor-legend')?.textContent.includes('乘數')") is not True:
     raise SystemExit('browser smoke failed: study page did not use the shared factor legend')
 if evaluate("document.querySelector('.study-equation-list').textContent.includes('2')") is not True:

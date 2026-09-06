@@ -47,6 +47,8 @@ test('study page keeps the learning table contract', () => {
     assert.doesNotMatch(studyHtml, /number-pad|submit-answer/);
     assert.match(studyHtml, /\.study-equation-list\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\)/);
     assert.match(studyHtml, /\.study-equation\s*\{[\s\S]*?white-space:\s*nowrap/);
+    assert.match(studyHtml, /\.study-equation-list\s*\{[\s\S]*?gap:\s*0/);
+    assert.match(studyHtml, /\.study-equation:not\(:last-child\)::after\s*\{[\s\S]*?right:\s*16\.6667%;[\s\S]*?left:\s*16\.6667%;[\s\S]*?border-bottom:\s*1px solid var\(--ds-divider\)/);
 });
 
 test('quiz page keeps the interaction contract', () => {
