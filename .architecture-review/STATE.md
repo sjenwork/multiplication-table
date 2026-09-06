@@ -7,15 +7,17 @@
 | 範圍 | 狀態 | 最後執行 | 檔案數 | 產出 |
 | --- | --- | --- | --- | --- |
 | Static UI style consistency | completed | 2026-09-06 | 6 | `runs/20260906-static-ui-style-AUDIT.md` |
+| `app.js` module boundaries | completed | 2026-09-06 | 1 | `runs/20260906-app-js-boundary-AUDIT.md` |
 
 ## 下一步建議動作
 
 1. 在 dev 部署後做 light/dark、首頁／測驗頁的 smoke check。
 2. 若未來新增控制項，沿用 semantic class contract，避免重新引入 raw palette。
+3. 在下一個中型功能前，先依 `REV-20260906-05` 抽出 state／question helpers，再拆 keypad 與頁面功能。
 
 ## 還沒修復的高優先發現（open findings）
 
-- 無。
+- `REV-20260906-05`：`app.js` 應在下一個中型功能前分割；目前不要求立即重構。
 
 ## 已關閉（不需要動作）
 
