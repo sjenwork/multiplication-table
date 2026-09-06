@@ -1,0 +1,5 @@
+# Fixes Log
+
+| 日期 | Finding ID | Commit | 修復內容 |
+| --- | --- | --- | --- |
+| 2026-09-06 | REV-20260906-modal-scrim | `474cf2b` | 讓 `leave-modal` 與 settings modal 共用 `ds-modal-backdrop`、`ds-surface-strong`、`ds-modal-surface`。 |
