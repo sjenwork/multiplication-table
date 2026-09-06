@@ -14,6 +14,7 @@ test('home page keeps the interaction contract', () => {
     for (const id of ['multiplication-grid', 'selection-status', 'start-random-quiz', 'start-wrong-quiz', 'start-quiz', 'open-settings']) {
         assert.match(indexHtml, new RegExp(`id="${id}"`));
     }
+    assert.match(indexHtml, /<multiplication-selector id="multiplication-grid"><\/multiplication-selector>/);
 });
 
 test('quiz page keeps the interaction contract', () => {

@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-113710">
+    <link rel="stylesheet" href="pwa.css?v=20260906-114231">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-113710">
-    <script src="theme-init.js?v=20260906-113710"></script>
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-114231">
+    <script src="theme-init.js?v=20260906-114231"></script>
     <style>
         #multiplication-grid.selection-dragging {
             outline: 3px solid var(--ds-focus-ring);
@@ -51,7 +51,7 @@
         </div>
 
         <div data-selection-scroll class="flex-1 min-h-0 overflow-auto rounded-xl pb-2 isolate" tabindex="0" aria-label="九九乘法表，可上下左右捲動；長按格子後滑動可批次選題">
-            <table id="multiplication-grid" class="w-full min-w-[650px] table-fixed border-separate border-spacing-1 text-center"></table>
+            <multiplication-selector id="multiplication-grid"></multiplication-selector>
         </div>
     </main>
 
@@ -70,6 +70,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260906-113710" type="module"></script>
+    <script src="app.js?v=20260906-114231" type="module"></script>
 </body>
 </html>

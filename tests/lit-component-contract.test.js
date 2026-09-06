@@ -6,6 +6,14 @@ const source = fs.readFileSync('app/components/settings-modal.js', 'utf8');
 const completionSource = fs.readFileSync('app/components/completion-overlay.js', 'utf8');
 const modalSource = fs.readFileSync('app/components/app-modal.js', 'utf8');
 const buttonSource = fs.readFileSync('app/components/app-button.js', 'utf8');
+const selectorSource = fs.readFileSync('app/components/multiplication-selector.js', 'utf8');
+
+test('multiplication selector owns the table rendering contract', () => {
+    assert.match(selectorSource, /class MultiplicationSelector extends LitElement/);
+    assert.match(selectorSource, /questions: \{ type: Array \}/);
+    assert.match(selectorSource, /selection-change/);
+    assert.match(selectorSource, /customElements\.define\(['"]multiplication-selector['"]/);
+});
 
 test('app button exposes a reusable native-button contract', () => {
     assert.match(buttonSource, /class AppButton extends LitElement/);
