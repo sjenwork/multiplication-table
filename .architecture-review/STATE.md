@@ -10,15 +10,17 @@
 
 ## 下一步建議動作
 
-1. 優先補齊 dark mode 對 keypad、完成操作列與 modal 內 action controls 的 semantic token 覆蓋。
-2. 將測驗頁的主要 action buttons 改用 `.ds-primary`、`.ds-secondary`、`.ds-danger` 等既有語意 class。
-3. 再評估是否把 `quiz.html` 的 inline visual CSS 收斂到共用樣式檔，避免 token 與 raw RGB 分散。
+1. 在 dev 部署後做 light/dark、首頁／測驗頁的 smoke check。
+2. 若未來新增控制項，沿用 semantic class contract，避免重新引入 raw palette。
 
 ## 還沒修復的高優先發現（open findings）
 
-- `REV-20260906-01`：dark mode 對 raw Tailwind status colors 覆蓋不完整。
-- `REV-20260906-02`：跨頁 action bar／action button 沒有完全使用同一套 semantic styles。
+- 無。
 
 ## 已關閉（不需要動作）
 
 - modal scrim 與 modal surface：已由 `474cf2b` 統一。
+- `REV-20260906-01`：由 `cb4a82b` 修正 semantic status classes 與 theme tokens。
+- `REV-20260906-02`：由 `3813ed4` 修正跨頁 action hierarchy 與 action bar visual duplication。
+- `REV-20260906-03`：由 `adf2b7c` 抽出 interactive visual tokens。
+- `REV-20260906-04`：由 `56f1f01` 將 settings modal markup 集中到 `app.js` template。

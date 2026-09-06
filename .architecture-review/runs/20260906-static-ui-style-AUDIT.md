@@ -59,4 +59,8 @@
 
 ## 7. 下一輪排程備註
 
-下一輪建議以 `REV-20260906-01` 為第一個 vertical slice：先處理 quiz keypad/action row 的 dark mode 與 semantic classes，再用 dev 部署做 light/dark smoke check。
+下一輪建議以 dev 的 light/dark runtime smoke check 為第一個驗證 slice，確認 semantic colors、action hierarchy 與動態注入的 settings modal 在實際瀏覽器中一致。
+
+## 8. 本輪修復結果
+
+本輪已依序修復 `REV-20260906-01` 至 `REV-20260906-04`，對應 commits 為 `cb4a82b`、`3813ed4`、`adf2b7c`、`56f1f01`。部署前仍需做 dev 的 light/dark runtime smoke check。
