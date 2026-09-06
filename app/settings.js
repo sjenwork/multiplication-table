@@ -1,6 +1,6 @@
-import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260906-130439';
-import { THEME_COLORS } from './theme-colors.js?v=20260906-130439';
-import './components/settings-modal.js?v=20260906-130439';
+import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260906-130733';
+import { THEME_COLORS } from './theme-colors.js?v=20260906-130733';
+import './components/settings-modal.js?v=20260906-130733';
 
 export function ensureSettingsModal() {
     if (document.querySelector('app-settings-modal')) return;

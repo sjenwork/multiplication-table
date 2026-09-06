@@ -3,8 +3,4 @@ set -euo pipefail
 
 scripts/check-static.sh
 scripts/test.sh
-if [[ -n "${SMOKE_URL:-}" ]]; then
-    scripts/browser-smoke.sh
-else
-    echo "pre-push: browser smoke skipped; set SMOKE_URL to enable it" >&2
-fi
+scripts/browser-smoke.sh

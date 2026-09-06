@@ -27,8 +27,4 @@ npx --yes wrangler pages deploy . \
 
 curl -fsSI "$target_url" | head -5
 
-if [[ "${RUN_BROWSER_SMOKE:-0}" == "1" ]]; then
-    SMOKE_URL="${target_url}/index.html" scripts/browser-smoke.sh
-else
-    echo "dev deployment browser smoke skipped: set RUN_BROWSER_SMOKE=1 to enable it" >&2
-fi
+SMOKE_URL="${target_url}/index.html" scripts/browser-smoke.sh
