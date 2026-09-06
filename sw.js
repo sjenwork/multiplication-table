@@ -1,27 +1,27 @@
-const CACHE_NAME = 'multiplication-master-v20260906-124042';
+const CACHE_NAME = 'multiplication-master-v20260906-124347';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-124042',
-    '/app/state.js?v=20260906-124042',
-    '/app/keypad.js?v=20260906-124042',
-    '/app/settings.js?v=20260906-124042',
-    '/app/update.js?v=20260906-124042',
-    '/app/quiz-view.js?v=20260906-124042',
-    '/app/completion.js?v=20260906-124042',
-    '/app/home.js?v=20260906-124042',
-    '/app/quiz.js?v=20260906-124042',
-    '/app/components/settings-modal.js?v=20260906-124042',
-    '/app/components/completion-overlay.js?v=20260906-124042',
-    '/app/components/app-modal.js?v=20260906-124042',
-    '/app/components/app-button.js?v=20260906-124042',
-    '/app/theme-colors.js?v=20260906-124042',
-    '/app/components/multiplication-selector.js?v=20260906-124042',
-    '/vendor/lit-core.min.js?v=20260906-124042',
-    '/design-tokens.css?v=20260906-124042',
-    '/theme-init.js?v=20260906-124042',
-    '/pwa.css?v=20260906-124042',
+    '/app.js?v=20260906-124347',
+    '/app/state.js?v=20260906-124347',
+    '/app/keypad.js?v=20260906-124347',
+    '/app/settings.js?v=20260906-124347',
+    '/app/update.js?v=20260906-124347',
+    '/app/quiz-view.js?v=20260906-124347',
+    '/app/completion.js?v=20260906-124347',
+    '/app/home.js?v=20260906-124347',
+    '/app/quiz.js?v=20260906-124347',
+    '/app/components/settings-modal.js?v=20260906-124347',
+    '/app/components/completion-overlay.js?v=20260906-124347',
+    '/app/components/app-modal.js?v=20260906-124347',
+    '/app/components/app-button.js?v=20260906-124347',
+    '/app/theme-colors.js?v=20260906-124347',
+    '/app/components/multiplication-selector.js?v=20260906-124347',
+    '/vendor/lit-core.min.js?v=20260906-124347',
+    '/design-tokens.css?v=20260906-124347',
+    '/theme-init.js?v=20260906-124347',
+    '/pwa.css?v=20260906-124347',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -48,6 +48,7 @@ self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
     const latestFirst = event.request.mode === 'navigate'
         || requestUrl.pathname.endsWith('.html')
+        || requestUrl.searchParams.has('v')
         || requestUrl.pathname.endsWith('/app.js')
         || requestUrl.pathname.endsWith('/app/state.js')
         || requestUrl.pathname.endsWith('/app/keypad.js')
