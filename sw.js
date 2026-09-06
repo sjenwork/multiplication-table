@@ -1,23 +1,24 @@
-const CACHE_NAME = 'multiplication-master-v20260906-111103';
+const CACHE_NAME = 'multiplication-master-v20260906-112744';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-111103',
-    '/app/state.js?v=20260906-111103',
-    '/app/keypad.js?v=20260906-111103',
-    '/app/settings.js?v=20260906-111103',
-    '/app/update.js?v=20260906-111103',
-    '/app/quiz-view.js?v=20260906-111103',
-    '/app/completion.js?v=20260906-111103',
-    '/app/home.js?v=20260906-111103',
-    '/app/quiz.js?v=20260906-111103',
-    '/app/components/settings-modal.js?v=20260906-111103',
-    '/app/components/completion-overlay.js?v=20260906-111103',
-    '/vendor/lit-core.min.js?v=20260906-111103',
-    '/design-tokens.css?v=20260906-111103',
-    '/theme-init.js?v=20260906-111103',
-    '/pwa.css?v=20260906-111103',
+    '/app.js?v=20260906-112744',
+    '/app/state.js?v=20260906-112744',
+    '/app/keypad.js?v=20260906-112744',
+    '/app/settings.js?v=20260906-112744',
+    '/app/update.js?v=20260906-112744',
+    '/app/quiz-view.js?v=20260906-112744',
+    '/app/completion.js?v=20260906-112744',
+    '/app/home.js?v=20260906-112744',
+    '/app/quiz.js?v=20260906-112744',
+    '/app/components/settings-modal.js?v=20260906-112744',
+    '/app/components/completion-overlay.js?v=20260906-112744',
+    '/app/components/app-modal.js?v=20260906-112744',
+    '/vendor/lit-core.min.js?v=20260906-112744',
+    '/design-tokens.css?v=20260906-112744',
+    '/theme-init.js?v=20260906-112744',
+    '/pwa.css?v=20260906-112744',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -55,6 +56,7 @@ self.addEventListener('fetch', (event) => {
         || requestUrl.pathname.endsWith('/app/quiz.js')
         || requestUrl.pathname.endsWith('/app/components/settings-modal.js')
         || requestUrl.pathname.endsWith('/app/components/completion-overlay.js')
+        || requestUrl.pathname.endsWith('/app/components/app-modal.js')
         || requestUrl.pathname.endsWith('/vendor/lit-core.min.js');
     if (latestFirst) {
         event.respondWith(

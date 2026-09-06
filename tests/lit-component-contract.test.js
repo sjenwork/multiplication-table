@@ -4,12 +4,24 @@ import fs from 'node:fs';
 
 const source = fs.readFileSync('app/components/settings-modal.js', 'utf8');
 const completionSource = fs.readFileSync('app/components/completion-overlay.js', 'utf8');
+const modalSource = fs.readFileSync('app/components/app-modal.js', 'utf8');
+
+test('app modal exposes a reusable dialog behavior contract', () => {
+    assert.match(modalSource, /class AppModal extends LitElement/);
+    assert.match(modalSource, /open: \{ type: Boolean/);
+    assert.match(modalSource, /show\(\)/);
+    assert.match(modalSource, /hide\(\)/);
+    assert.match(modalSource, /data-modal-scrim/);
+    assert.match(modalSource, /event\.key === ['"]Escape['"]/);
+    assert.match(modalSource, /customElements\.define\(['"]app-modal['"]/);
+});
 
 test('settings modal is a Lit component with an explicit public contract', () => {
     assert.match(source, /from ['"]\.\.\/\.\.\/vendor\/lit-core\.min\.js['"]/);
     assert.match(source, /class SettingsModal extends LitElement/);
     assert.match(source, /createRenderRoot\(\)\s*\{\s*return this;/);
     assert.match(source, /customElements\.define\(['"]app-settings-modal['"]/);
+    assert.match(source, /<app-modal \.open=\$\{this\.open\} size="md"/);
     assert.match(source, /CustomEvent\(['"]theme-change['"]/);
 });
 

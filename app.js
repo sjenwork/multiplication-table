@@ -1,8 +1,8 @@
-import { loadState } from './app/state.js?v=20260906-111103';
-import { applyTheme } from './app/settings.js?v=20260906-111103';
-import { initVersionUpdate } from './app/update.js?v=20260906-111103';
-import { initHome } from './app/home.js?v=20260906-111103';
-import { initQuiz } from './app/quiz.js?v=20260906-111103';
+import { loadState } from './app/state.js?v=20260906-112744';
+import { applyTheme } from './app/settings.js?v=20260906-112744';
+import { initVersionUpdate } from './app/update.js?v=20260906-112744';
+import { initHome } from './app/home.js?v=20260906-112744';
+import { initQuiz } from './app/quiz.js?v=20260906-112744';
 
 (function () {
     'use strict';

@@ -1,9 +1,10 @@
-import { questionList, saveState } from './state.js?v=20260906-111103';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-111103';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-111103';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-111103';
-import { startQuizWithQuestions } from './home.js?v=20260906-111103';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-111103';
+import { questionList, saveState } from './state.js?v=20260906-112744';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-112744';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-112744';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-112744';
+import { startQuizWithQuestions } from './home.js?v=20260906-112744';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-112744';
+import './components/app-modal.js?v=20260906-112744';
 
 
 function scrollActiveQuestionIntoView(questionKey) {
@@ -174,18 +175,13 @@ export function initQuiz(state) {
         button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
     });
     const modal = document.getElementById('leave-modal');
-    const closeModal = () => modal.classList.add('hidden');
     document.getElementById('back-home').addEventListener('click', () => {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.getElementById('cancel-leave').focus();
+        modal.show();
     });
-    document.getElementById('cancel-leave').addEventListener('click', closeModal);
+    document.getElementById('cancel-leave').addEventListener('click', () => modal.hide());
     document.getElementById('confirm-leave').addEventListener('click', () => returnToHomeAfterQuiz(state));
     document.getElementById('return-home-after-quiz').addEventListener('click', () => returnToHomeAfterQuiz(state));
     document.getElementById('another-quiz').addEventListener('click', () => startAnotherQuiz(state));
     document.getElementById('retry-quiz').addEventListener('click', () => restartQuiz(state));
-    modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
     document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
 }
-

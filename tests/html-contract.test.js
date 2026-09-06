@@ -20,4 +20,5 @@ test('quiz page keeps the interaction contract', () => {
     for (const id of ['question-list', 'number-pad', 'submit-answer', 'completion-overlay', 'leave-modal', 'back-home']) {
         assert.match(quizHtml, new RegExp(`id="${id}"`));
     }
+    assert.match(quizHtml, /<app-modal id="leave-modal"/);
 });

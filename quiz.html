@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-111103">
+    <link rel="stylesheet" href="pwa.css?v=20260906-112744">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-111103">
-    <script src="theme-init.js?v=20260906-111103"></script>
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-112744">
+    <script src="theme-init.js?v=20260906-112744"></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -409,17 +409,15 @@
         </button>
     </div>
 
-    <div id="leave-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
-        <div class="ds-surface-strong ds-modal-surface w-full max-w-sm rounded-2xl p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="leave-title">
+        <app-modal id="leave-modal" size="sm" labelledby="leave-title">
             <h2 id="leave-title" class="text-lg font-bold text-slate-800">要離開這次挑戰嗎？</h2>
             <p class="mt-2 text-sm leading-6 text-slate-600">目前的作答進度會被清除，確定要返回選題嗎？</p>
-            <div class="mt-5 flex justify-end gap-3">
-                <button id="cancel-leave" type="button" class="ds-secondary px-4 py-2.5 text-sm font-medium rounded-lg border transition">繼續作答</button>
-                <button id="confirm-leave" type="button" class="ds-primary px-4 py-2.5 text-sm font-bold rounded-lg transition">返回選題</button>
-            </div>
-        </div>
-    </div>
+                <div class="mt-5 flex justify-end gap-3">
+                    <button id="cancel-leave" data-modal-close type="button" class="ds-secondary px-4 py-2.5 text-sm font-medium rounded-lg border transition">繼續作答</button>
+                    <button id="confirm-leave" type="button" class="ds-primary px-4 py-2.5 text-sm font-bold rounded-lg transition">返回選題</button>
+                </div>
+        </app-modal>
 
-    <script src="app.js?v=20260906-111103" type="module"></script>
+    <script src="app.js?v=20260906-112744" type="module"></script>
 </body>
 </html>
