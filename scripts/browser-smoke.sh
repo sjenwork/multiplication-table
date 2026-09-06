@@ -48,11 +48,12 @@ else
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
     curl -fsSL "$remote_root/study.html" >"$fixture_dir/study.html"
+    asset_version="$(sed -n 's/.*app\.js?v=\([^" ]*\).*/\1/p' "$fixture_dir/index.html" | head -1)"
     for asset in pwa.css tailwind.css design-tokens.css theme-init.js manifest.webmanifest; do
-        curl -fsSL "$remote_root/$asset" >"$fixture_dir/$asset"
+        curl -fsSL "$remote_root/$asset?v=$asset_version" >"$fixture_dir/$asset"
     done
     mkdir -p "$fixture_dir/app"
-    curl -fsSL "$remote_root/app/theme-colors.js" >"$fixture_dir/app/theme-colors.js"
+    curl -fsSL "$remote_root/app/theme-colors.js?v=$asset_version" >"$fixture_dir/app/theme-colors.js"
     mkdir -p "$fixture_dir/icons"
     for asset in icon.svg icon-192.png icon-512.png; do
         curl -fsSL "$remote_root/icons/$asset" >"$fixture_dir/icons/$asset"
