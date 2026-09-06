@@ -14,6 +14,8 @@ for file in "${javascript_files[@]}"; do
     node --check "$file"
 done
 
+bash -n .githooks/pre-commit .githooks/pre-push scripts/*.sh deploy.sh
+
 node --input-type=module <<'NODE'
 import fs from 'node:fs';
 import path from 'node:path';

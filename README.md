@@ -21,6 +21,18 @@
 
 其他分支禁止部署。正式分支名稱是 `main`，不是 `master`。
 
+Feature branch 或 subagent 若需要直接部署目前已提交內容到測試環境，可使用：
+
+```bash
+./scripts/deploy-dev.sh
+```
+
+此腳本固定使用 Cloudflare Pages 的 `dev` branch alias，不會切換 Git 分支；部署前會要求工作樹乾淨並執行靜態檢查與測試。若要加跑部署後瀏覽器 smoke test：
+
+```bash
+RUN_BROWSER_SMOKE=1 ./scripts/deploy-dev.sh
+```
+
 ## DNS
 
 測試版使用 Cloudflare Pages branch alias，不需要新增 DNS、CNAME 或自訂網域設定。正式版目前使用既有的 `multiplication-table.maderaojen.me`。
