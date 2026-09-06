@@ -1,9 +1,9 @@
-import { loadState } from './app/state.js?v=20260906-192804';
-import { applyTheme } from './app/settings.js?v=20260906-192804';
-import { initVersionUpdate } from './app/update.js?v=20260906-192804';
-import { initHome } from './app/home.js?v=20260906-192804';
-import { initQuiz } from './app/quiz.js?v=20260906-192804';
-import { initStudy } from './app/study.js?v=20260906-192804';
+import { loadState } from './app/state.js?v=20260906-193456';
+import { applyTheme } from './app/settings.js?v=20260906-193456';
+import { initVersionUpdate } from './app/update.js?v=20260906-193456';
+import { initHome } from './app/home.js?v=20260906-193456';
+import { initQuiz } from './app/quiz.js?v=20260906-193456';
+import { initStudy } from './app/study.js?v=20260906-193456';
 
 (() => {
     'use strict';

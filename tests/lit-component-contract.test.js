@@ -40,6 +40,7 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /\$\{this\.factor\}/);
     assert.match(multiplicationTableSource, /\$\{row\}/);
     assert.match(multiplicationTableSource, /\$\{this\.factor \* row\}/);
+    assert.doesNotMatch(multiplicationTableSource, /study-table-card|<h2/);
     assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
 });
 
