@@ -13,6 +13,7 @@ test('multiplication selector owns the table rendering contract', () => {
     assert.match(selectorSource, /class MultiplicationSelector extends LitElement/);
     assert.match(selectorSource, /questions: \{ type: Array \}/);
     assert.match(selectorSource, /selection-change/);
+    assert.match(selectorSource, /ds-layer-table-corner left-0 top-0/);
     assert.match(selectorSource, /customElements\.define\(['"]multiplication-selector['"]/);
 });
 

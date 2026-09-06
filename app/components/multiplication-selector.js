@@ -26,7 +26,7 @@ export class MultiplicationSelector extends LitElement {
             : keys.filter((key) => key.endsWith(`x${value}`));
         const headerTone = (groupKeys) => groupKeys.some((key) => selected.has(key)) ? 'ds-table-header is-selected' : 'ds-table-header';
         const selector = (type, value, label, tone, content) => html`
-            <th class="ds-text-strong sticky ${type === 'row' ? 'ds-layer-table-row left-0' : 'ds-layer-table-header top-0'} p-2 font-bold border ${tone} rounded-lg text-sm md:text-base" scope="${type === 'row' ? 'row' : 'col'}">
+            <th class="ds-text-strong sticky ${type === 'all' ? 'ds-layer-table-corner left-0 top-0' : type === 'row' ? 'ds-layer-table-row left-0' : 'ds-layer-table-header top-0'} p-2 font-bold border ${tone} rounded-lg text-sm md:text-base" scope="${type === 'row' ? 'row' : 'col'}">
                 <label class="ds-focusable flex flex-col items-center justify-center gap-1 cursor-pointer rounded">
                     <span>${content}</span>
                     <input type="checkbox" class="sr-only" data-select-all="${type}" data-${type === 'all' ? 'all' : type}="${value || ''}" aria-label="${label}">

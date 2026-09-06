@@ -62,6 +62,7 @@
     --ds-layer-header: 20;
     --ds-layer-table-header: 20;
     --ds-layer-table-row: 10;
+    --ds-layer-table-corner: 30;
     --ds-confetti-1: #f59e0b;
     --ds-confetti-2: #10b981;
     --ds-confetti-3: #3b82f6;
@@ -275,6 +276,7 @@ html {
 .ds-layer-header { z-index: var(--ds-layer-header); }
 .ds-layer-table-header { z-index: var(--ds-layer-table-header); }
 .ds-layer-table-row { z-index: var(--ds-layer-table-row); }
+.ds-layer-table-corner { z-index: var(--ds-layer-table-corner); }
 
 .ds-factor-one {
     color: var(--ds-factor-one) !important;
