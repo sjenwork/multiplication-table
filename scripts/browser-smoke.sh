@@ -132,7 +132,7 @@ if grid_cells != 81:
     raise SystemExit(f'browser smoke failed: home grid did not render 81 cells (got {grid_cells})')
 if evaluate("document.querySelector('td[data-question]').click(); document.getElementById('selection-status').textContent") != '已選擇 1 題，準備好就開始挑戰！':
     raise SystemExit('browser smoke failed: selection interaction did not work')
-if not evaluate("document.getElementById('open-settings').click(); document.getElementById('settings-modal').classList.contains('flex')"):
+if not evaluate("document.getElementById('open-settings').click(); document.querySelector('app-settings-modal [data-modal-scrim]').classList.contains('flex')"):
     raise SystemExit('browser smoke failed: settings modal did not open')
 evaluate("document.querySelector('app-settings-modal [data-modal-close]').click(); document.getElementById('start-quiz').click()")
 time.sleep(2)
