@@ -43,6 +43,8 @@ test('study page keeps the learning table contract', () => {
     assert.match(studyHtml, /data-factor="2"/);
     assert.match(studyHtml, /data-factor="9"/);
     assert.doesNotMatch(studyHtml, /number-pad|submit-answer/);
+    assert.match(studyHtml, /\.study-equation-list\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\)/);
+    assert.match(studyHtml, /\.study-equation\s*\{[\s\S]*?white-space:\s*nowrap/);
 });
 
 test('quiz page keeps the interaction contract', () => {

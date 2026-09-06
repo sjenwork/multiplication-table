@@ -1,6 +1,6 @@
-import { questionList, saveState, shuffled } from './state.js?v=20260906-191232';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-191232';
-import './components/multiplication-selector.js?v=20260906-191232';
+import { questionList, saveState, shuffled } from './state.js?v=20260906-192804';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-192804';
+import './components/multiplication-selector.js?v=20260906-192804';
 
 function updateSelectionStatus(state) {
     const status = document.getElementById('selection-status');

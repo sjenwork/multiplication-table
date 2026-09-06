@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-191232">
-    <link rel="stylesheet" href="tailwind.css?v=20260906-191232">
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-191232">
-    <script src="app/theme-colors.js?v=20260906-191232" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260906-192804">
+    <link rel="stylesheet" href="tailwind.css?v=20260906-192804">
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-192804">
+    <script src="app/theme-colors.js?v=20260906-192804" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -50,7 +50,7 @@
 
         .study-equation-list {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: minmax(0, 1fr);
             gap: 0.5rem;
         }
 
@@ -60,6 +60,8 @@
             justify-content: center;
             gap: 0.25rem;
             min-height: 3.5rem;
+            white-space: nowrap;
+            flex-wrap: nowrap;
             border: 1px solid var(--ds-border);
             border-radius: var(--ds-radius-md);
             color: var(--ds-text);
@@ -91,8 +93,6 @@
         }
 
         @media (min-width: 640px) {
-            .study-equation-list { grid-template-columns: repeat(9, minmax(0, 1fr)); }
-            .study-equation { min-height: 4rem; flex-direction: column; gap: 0.1rem; }
             .study-factor-button { width: 3.5rem; height: 3.5rem; }
             .study-factor-grid { max-width: 34rem; }
         }
@@ -133,6 +133,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260906-191232" type="module"></script>
+    <script src="app.js?v=20260906-192804" type="module"></script>
 </body>
 </html>
