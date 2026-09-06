@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-084725">
+    <link rel="stylesheet" href="pwa.css?v=20260906-084908">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-084725">
-    <script src="theme-init.js?v=20260906-084725"></script>
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-084908">
+    <script src="theme-init.js?v=20260906-084908"></script>
     <style>
         #multiplication-grid.selection-dragging {
             outline: 3px solid var(--ds-focus-ring);
@@ -70,27 +70,6 @@
         </div>
     </div>
 
-    <div id="settings-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
-        <div class="ds-surface-strong ds-modal-surface w-full max-w-sm rounded-2xl p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="settings-title">
-            <div class="flex items-center justify-between gap-4">
-                <h2 id="settings-title" class="text-lg font-bold text-slate-800">設定</h2>
-                <button id="close-settings" type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full text-xl text-slate-500 hover:bg-slate-100" aria-label="關閉設定">×</button>
-            </div>
-            <p class="mt-2 text-sm leading-6 text-slate-600">管理你的練習資料與成績統計。</p>
-            <div class="mt-5 space-y-3">
-                <div>
-                    <p class="mb-2 text-sm font-semibold text-slate-700">顯示主題</p>
-                    <div class="grid grid-cols-2 gap-2" role="group" aria-label="選擇顯示主題">
-                        <button type="button" data-theme-choice="light" aria-pressed="false" class="ds-theme-choice ds-secondary rounded-lg border px-4 py-3 text-sm font-semibold transition">☀️ 明亮</button>
-                        <button type="button" data-theme-choice="dark" aria-pressed="false" class="ds-theme-choice ds-secondary rounded-lg border px-4 py-3 text-sm font-semibold transition">🌙 深色</button>
-                    </div>
-                </div>
-                <button id="export-records" type="button" class="ds-secondary w-full rounded-lg border px-4 py-3 text-left text-sm font-semibold transition">匯出成績統計紀錄（CSV）</button>
-                <button id="clear-storage" type="button" class="ds-danger w-full rounded-lg border px-4 py-3 text-left text-sm font-semibold transition">清除所有練習紀錄</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js?v=20260906-084725" defer></script>
+    <script src="app.js?v=20260906-084908" defer></script>
 </body>
 </html>
