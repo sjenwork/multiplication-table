@@ -4,6 +4,7 @@ import fs from 'node:fs';
 
 const indexHtml = fs.readFileSync('index.html', 'utf8');
 const quizHtml = fs.readFileSync('quiz.html', 'utf8');
+assert.ok(fs.existsSync('tailwind.css'), 'local Tailwind stylesheet must exist');
 
 test('pages load the bootstrap as an ES module', () => {
     assert.match(indexHtml, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/);
@@ -12,12 +13,11 @@ test('pages load the bootstrap as an ES module', () => {
     assert.doesNotMatch(quizHtml, /<script src="(?:app\/theme-colors|theme-init)\.js/);
 });
 
-test('optional Tailwind CDN loads after the application markup', () => {
+test('Tailwind utilities are served locally and cannot block startup', () => {
     for (const file of ['index.html', 'quiz.html']) {
         const source = fs.readFileSync(file, 'utf8');
-        assert.match(source, /script\.src = 'https:\/\/cdn\.tailwindcss\.com'/, file);
-        assert.match(source, /script\.async = true/, file);
-        assert.match(source, /window\.addEventListener\('load'/, file);
+        assert.match(source, /<link rel="stylesheet" href="tailwind\.css\?v=\d{8}-\d{6}">/, file);
+        assert.doesNotMatch(source, /cdn\.tailwindcss\.com/, file);
         assert.match(source, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/, file);
     }
 });

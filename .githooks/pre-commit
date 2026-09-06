@@ -17,6 +17,8 @@ perl -0pi -e "s#(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=
 perl -0pi -e "s#(\\n\\s+'/)(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1\$2?v=${version_stamp}'#g" sw.js
 perl -0pi -e "s#(app/theme-colors\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" index.html quiz.html
 perl -0pi -e "s#(\\n\\s+'/app/theme-colors\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
+perl -0pi -e "s#(tailwind\\.css)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" index.html quiz.html
+perl -0pi -e "s#(\\n\\s+'/tailwind\\.css)(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
 perl -0pi -e "s/multiplication-master-v\\d{8}-\\d{6}/multiplication-master-v${version_stamp}/g" sw.js
 
 git add app.js app/*.js app/components/*.js vendor/*.js index.html quiz.html sw.js
