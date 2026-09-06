@@ -17,6 +17,7 @@ test('optional Tailwind CDN loads after the application markup', () => {
         const source = fs.readFileSync(file, 'utf8');
         assert.match(source, /script\.src = 'https:\/\/cdn\.tailwindcss\.com'/, file);
         assert.match(source, /script\.async = true/, file);
+        assert.match(source, /window\.addEventListener\('load'/, file);
         assert.match(source, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/, file);
     }
 });
