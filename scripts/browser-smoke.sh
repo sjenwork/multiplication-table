@@ -31,8 +31,8 @@ trap cleanup EXIT
 
 if [[ -z "$target_url" ]]; then
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
-    cp index.html quiz.html app.js sw.js design-tokens.css pwa.css theme-init.js manifest.webmanifest "$fixture_dir/"
-    cp -R app icons "$fixture_dir/"
+    cp index.html quiz.html app.js sw.js design-tokens.css pwa.css tailwind.css theme-init.js manifest.webmanifest "$fixture_dir/"
+    cp -R app icons vendor "$fixture_dir/"
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     (cd "$fixture_dir" && python3 -m http.server 8766 --bind 127.0.0.1) >"$server_log" 2>&1 &
@@ -126,7 +126,7 @@ def evaluate(expression):
 
 if exceptions:
     raise SystemExit('browser smoke failed: ' + ' | '.join(exceptions))
-print('smoke page state:', evaluate("JSON.stringify({readyState: document.readyState, scripts: [...document.scripts].map((script) => script.src), cells: document.querySelectorAll('#multiplication-grid td[data-question]').length})"), flush=True)
+print('smoke page state:', evaluate("JSON.stringify({url: location.href, readyState: document.readyState, scripts: [...document.scripts].map((script) => script.src), appButton: !!document.querySelector('#open-settings'), selector: !!customElements.get('multiplication-selector'), cells: document.querySelectorAll('#multiplication-grid td[data-question]').length})"), flush=True)
 grid_cells = evaluate("document.querySelectorAll('#multiplication-grid td[data-question]').length")
 if grid_cells != 81:
     raise SystemExit(f'browser smoke failed: home grid did not render 81 cells (got {grid_cells})')
