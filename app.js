@@ -1,10 +1,10 @@
-import { loadState } from './app/state.js?v=20260906-200104';
-import { applyTheme } from './app/settings.js?v=20260906-200104';
-import { initVersionUpdate } from './app/update.js?v=20260906-200104';
-import { initHome } from './app/home.js?v=20260906-200104';
-import { initQuiz } from './app/quiz.js?v=20260906-200104';
-import { initStudy } from './app/study.js?v=20260906-200104';
-import './app/components/factor-legend.js?v=20260906-200104';
+import { loadState } from './app/state.js?v=20260906-202435';
+import { applyTheme } from './app/settings.js?v=20260906-202435';
+import { initVersionUpdate } from './app/update.js?v=20260906-202435';
+import { initHome } from './app/home.js?v=20260906-202435';
+import { initQuiz } from './app/quiz.js?v=20260906-202435';
+import { initStudy } from './app/study.js?v=20260906-202435';
+import './app/components/factor-legend.js?v=20260906-202435';
 
 (() => {
     'use strict';
