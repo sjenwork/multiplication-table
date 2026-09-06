@@ -171,6 +171,7 @@ if evaluate("document.querySelector('#question-list input[data-question]').click
     raise SystemExit('browser smoke failed: keypad could not enter an answer')
 evaluate("window.location.href = 'study.html'")
 time.sleep(2)
+evaluate("(async () => { await customElements.whenDefined('app-button'); await Promise.all([...document.querySelectorAll('#study-factor-buttons app-button')].map((button) => button.updateComplete)); return true; })()")
 if evaluate("document.querySelectorAll('#study-factor-buttons [data-factor]').length") != 8:
     raise SystemExit('browser smoke failed: study factor buttons did not render')
 if evaluate("document.querySelectorAll('#study-factor-buttons button').length") != 8:
