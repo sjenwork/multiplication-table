@@ -26,8 +26,8 @@ export class MultiplicationSelector extends LitElement {
             : keys.filter((key) => key.endsWith(`x${value}`));
         const headerTone = (groupKeys) => groupKeys.some((key) => selected.has(key)) ? 'ds-table-header is-selected' : 'ds-table-header';
         const selector = (type, value, label, tone, content) => html`
-            <th class="sticky ${type === 'row' ? 'left-0 z-10' : 'top-0 z-20'} p-2 font-bold text-slate-700 border ${tone} rounded-lg text-sm md:text-base" scope="${type === 'row' ? 'row' : 'col'}">
-                <label class="flex flex-col items-center justify-center gap-1 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded">
+            <th class="ds-text-strong sticky ${type === 'row' ? 'left-0 z-10' : 'top-0 z-20'} p-2 font-bold border ${tone} rounded-lg text-sm md:text-base" scope="${type === 'row' ? 'row' : 'col'}">
+                <label class="ds-focusable flex flex-col items-center justify-center gap-1 cursor-pointer rounded">
                     <span>${content}</span>
                     <input type="checkbox" class="sr-only" data-select-all="${type}" data-${type === 'all' ? 'all' : type}="${value || ''}" aria-label="${label}">
                 </label>
@@ -46,9 +46,9 @@ export class MultiplicationSelector extends LitElement {
                                 const key = `${row}x${col}`;
                                 const record = this.records[key];
                                 return html`<td data-question="${key}" class="p-2 rounded-lg transition border ${selected.has(key) ? 'ds-table-cell is-selected' : 'ds-table-cell'} relative text-xs md:text-sm">
-                                    <label class="flex flex-col items-center justify-center cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 rounded">
+                                    <label class="ds-focusable flex flex-col items-center justify-center cursor-pointer rounded">
                                         <input type="checkbox" class="sr-only" data-question="${key}" .checked=${selected.has(key)} aria-label="選擇 ${row} 乘 ${col}">
-                                        <span class="mt-1 min-h-4 text-xs font-semibold text-slate-500">${record?.errors || 0}/${record?.attempts || 0}</span>
+                                        <span class="ds-text-muted mt-1 min-h-4 text-xs font-semibold">${record?.errors || 0}/${record?.attempts || 0}</span>
                                     </label>
                                 </td>`;
                             })}

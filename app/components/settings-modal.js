@@ -1,6 +1,6 @@
 import { LitElement, html } from '../../vendor/lit-core.min.js';
-import './app-modal.js?v=20260906-114511';
-import './app-button.js?v=20260906-114511';
+import './app-modal.js?v=20260906-115538';
+import './app-button.js?v=20260906-115538';
 
 export class SettingsModal extends LitElement {
     static properties = {
@@ -35,13 +35,13 @@ export class SettingsModal extends LitElement {
         return html`
             <app-modal .open=${this.open} size="md" labelledby="settings-title">
                     <div class="flex items-center justify-between gap-4">
-                        <h2 id="settings-title" class="text-lg font-bold text-slate-800">設定</h2>
-                        <app-button data-modal-close size="sm" class="h-8 w-8 rounded-full px-0 text-xl text-slate-500 hover:bg-slate-100" aria-label="關閉設定">×</app-button>
+                        <h2 id="settings-title" class="ds-text-strong text-lg font-bold">設定</h2>
+                        <app-button data-modal-close size="sm" class="ds-text-muted h-8 w-8 rounded-full px-0 text-xl" aria-label="關閉設定">×</app-button>
                     </div>
-                    <p class="mt-2 text-sm leading-6 text-slate-600">管理你的練習資料與成績統計。</p>
+                    <p class="ds-text-muted mt-2 text-sm leading-6">管理你的練習資料與成績統計。</p>
                     <div class="mt-5 space-y-3">
                         <div>
-                            <p class="mb-2 text-sm font-semibold text-slate-700">顯示主題</p>
+                            <p class="ds-text mb-2 text-sm font-semibold">顯示主題</p>
                             <div class="grid grid-cols-2 gap-2" role="group" aria-label="選擇顯示主題">
                                 ${this.themeButton('light', '☀️ 明亮')}
                                 ${this.themeButton('dark', '🌙 深色')}

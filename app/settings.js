@@ -1,5 +1,5 @@
-import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260906-114511';
-import './components/settings-modal.js?v=20260906-114511';
+import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260906-115538';
+import './components/settings-modal.js?v=20260906-115538';
 
 export function ensureSettingsModal() {
     if (document.querySelector('app-settings-modal')) return;
@@ -9,7 +9,8 @@ export function ensureSettingsModal() {
 export function applyTheme(state) {
     document.documentElement.dataset.theme = state.theme === 'dark' ? 'dark' : 'light';
     const themeColor = document.querySelector('meta[name="theme-color"]');
-    if (themeColor) themeColor.content = state.theme === 'dark' ? '#091a30' : '#f4fbff';
+    const color = window.__APP_THEME_COLORS__?.[state.theme === 'dark' ? 'dark' : 'light'];
+    if (themeColor && color) themeColor.content = color;
 }
 
 function exportRecords(state) {

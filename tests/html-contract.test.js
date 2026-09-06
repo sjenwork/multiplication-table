@@ -8,6 +8,8 @@ const quizHtml = fs.readFileSync('quiz.html', 'utf8');
 test('pages load the bootstrap as an ES module', () => {
     assert.match(indexHtml, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/);
     assert.match(quizHtml, /<script src="app\.js\?v=\d{8}-\d{6}" type="module"><\/script>/);
+    assert.match(indexHtml, /<script src="app\/theme-colors\.js\?v=\d{8}-\d{6}"><\/script>/);
+    assert.match(quizHtml, /<script src="app\/theme-colors\.js\?v=\d{8}-\d{6}"><\/script>/);
 });
 
 test('home page keeps the interaction contract', () => {

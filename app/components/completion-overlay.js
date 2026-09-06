@@ -12,7 +12,7 @@ export class CompletionOverlay extends LitElement {
         this.visible = false;
         this.correctCount = 0;
         this.total = 0;
-        this.classList.add('completion-overlay', 'hidden');
+        this.classList.add('completion-overlay', 'ds-layer-completion', 'hidden');
     }
 
     createRenderRoot() {
@@ -48,8 +48,8 @@ export class CompletionOverlay extends LitElement {
             <div class="completion-card ${result.tone}">
                 <button data-close type="button" class="completion-close" aria-label="關閉完成提示">×</button>
                 <div class="completion-emoji" aria-hidden="true">${result.emoji}</div>
-                <h2 class="mt-2 text-xl font-black text-blue-700">${result.title}</h2>
-                <p class="mt-1 text-sm font-semibold text-slate-600">${result.detail}</p>
+                <h2 class="ds-text-strong mt-2 text-xl font-black">${result.title}</h2>
+                <p class="ds-text-muted mt-1 text-sm font-semibold">${result.detail}</p>
             </div>`;
     }
 

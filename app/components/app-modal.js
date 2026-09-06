@@ -81,7 +81,7 @@ export class AppModal extends LitElement {
     render() {
         const sizeClass = SIZE_CLASSES[this.size] || SIZE_CLASSES.md;
         return html`
-            <div data-modal-scrim class="ds-modal-backdrop fixed inset-0 z-[60] ${this.open ? 'flex' : 'hidden'} items-center justify-center bg-slate-900/40 p-4" role="presentation">
+            <div data-modal-scrim class="ds-modal-backdrop ds-layer-modal fixed inset-0 ${this.open ? 'flex' : 'hidden'} items-center justify-center p-4" role="presentation">
                 <div class="ds-surface-strong ds-modal-surface w-full ${sizeClass} rounded-2xl p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby=${this.labelledby || nothing}>
                     <div data-modal-content></div>
                 </div>

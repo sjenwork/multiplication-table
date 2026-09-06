@@ -6,10 +6,9 @@
         const theme = saved?.theme === 'dark' ? 'dark' : 'light';
         document.documentElement.dataset.theme = theme;
         const themeColor = document.querySelector('meta[name="theme-color"]');
-        if (themeColor) themeColor.content = theme === 'dark' ? '#091a30' : '#f4fbff';
+        const color = window.__APP_THEME_COLORS__?.[theme];
+        if (themeColor && color) themeColor.content = color;
     } catch (error) {
         document.documentElement.dataset.theme = 'light';
-        const themeColor = document.querySelector('meta[name="theme-color"]');
-        if (themeColor) themeColor.content = '#f4fbff';
     }
 }());

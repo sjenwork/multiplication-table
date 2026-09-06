@@ -1,10 +1,10 @@
-import { questionList, saveState } from './state.js?v=20260906-114511';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-114511';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-114511';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-114511';
-import { startQuizWithQuestions } from './home.js?v=20260906-114511';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-114511';
-import './components/app-modal.js?v=20260906-114511';
+import { questionList, saveState } from './state.js?v=20260906-115538';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-115538';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-115538';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-115538';
+import { startQuizWithQuestions } from './home.js?v=20260906-115538';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-115538';
+import './components/app-modal.js?v=20260906-115538';
 
 
 function scrollActiveQuestionIntoView(questionKey) {
@@ -40,8 +40,7 @@ function focusQuizQuestion(state, questionKey, openKeypad = true) {
     state.quiz.activeKey = questionKey;
     document.querySelectorAll('input[data-question]').forEach((answerInput) => {
         const active = answerInput.dataset.question === questionKey;
-        answerInput.classList.toggle('ring-2', active);
-        answerInput.classList.toggle('ring-blue-300', active);
+        answerInput.classList.toggle('ds-question-active', active);
     });
     saveState(state);
     if (openKeypad) showKeypad();
@@ -65,8 +64,7 @@ function updateKeypadAnswer(state, value) {
     else active.input += value;
     const input = document.getElementById(`answer-${active.key}`);
     if (input) input.value = active.input;
-    document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-2', answerInput === input));
-    document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-blue-300', answerInput === input));
+    document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ds-question-active', answerInput === input));
     saveState(state);
     updateSubmitButton(state);
     showKeypad();
