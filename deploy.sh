@@ -5,6 +5,8 @@ project_name="multiplication-table"
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$repo_root"
 
+scripts/verify.sh
+
 branch="$(git branch --show-current)"
 
 if [[ -z "$branch" ]]; then
@@ -33,6 +35,12 @@ esac
 echo "部署分支：$branch" >&2
 echo "部署網址：$target_url" >&2
 
-exec npx --yes wrangler pages deploy . \
+npx --yes wrangler pages deploy . \
   --project-name "$project_name" \
   --branch "$branch"
+
+if [[ "${RUN_BROWSER_SMOKE:-0}" == "1" ]]; then
+  SMOKE_URL="${target_url}/index.html" scripts/browser-smoke.sh
+else
+  echo "部署後 browser smoke skipped: set RUN_BROWSER_SMOKE=1 to enable it" >&2
+fi

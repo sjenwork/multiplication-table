@@ -1,0 +1,9 @@
+# Fixes Log
+
+| 日期 | Finding ID | Commit | 修復內容 |
+| --- | --- | --- | --- |
+| 2026-09-06 | REV-20260906-modal-scrim | `474cf2b` | 讓 `leave-modal` 與 settings modal 共用 `ds-modal-backdrop`、`ds-surface-strong`、`ds-modal-surface`。 |
+| 2026-09-06 | REV-20260906-01 | `cb4a82b` | 將 quiz message、quiz card、keypad status colors 改為 semantic classes，補齊 theme-aware status styles。 |
+| 2026-09-06 | REV-20260906-02 | `3813ed4` | 統一跨頁 action hierarchy，移除測驗 action bar 重複的 shadow/backdrop utilities。 |
+| 2026-09-06 | REV-20260906-03 | `adf2b7c` | 抽出 focus、drag/dock、keypad control 的 light/dark visual tokens。 |
+| 2026-09-06 | REV-20260906-04 | `56f1f01` | 將 settings modal markup 改為 app.js 單一 template，兩頁初始化時共用。 |

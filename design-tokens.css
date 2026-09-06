@@ -32,6 +32,18 @@
     --ds-border: rgb(126 164 196 / 0.38);
     --ds-border-strong: rgb(73 128 177 / 0.62);
     --ds-focus: #5aa9ff;
+    --ds-focus-border: rgb(59 130 246 / 0.58);
+    --ds-focus-ring: rgb(59 130 246 / 0.22);
+    --ds-focus-shadow: 0 0 0 4px rgb(147 197 253 / 0.3);
+    --ds-drag-border: rgb(59 130 246 / 0.48);
+    --ds-drag-surface: rgb(219 234 254 / 0.42);
+    --ds-drag-border-active: rgb(37 99 235 / 0.9);
+    --ds-drag-surface-active: rgb(191 219 254 / 0.7);
+    --ds-drag-shadow: 0 10px 24px rgb(37 99 235 / 0.2), 0 0 0 2px rgb(147 197 253 / 0.28);
+    --ds-control-border: rgb(148 163 184 / 0.45);
+    --ds-control-surface: rgb(255 255 255 / 0.78);
+    --ds-control-text: rgb(71 85 105);
+    --ds-control-shadow: 0 8px 18px rgb(15 23 42 / 0.16);
     --ds-shadow-sm: 0 6px 18px rgb(28 77 116 / 0.09);
     --ds-shadow-md: 0 14px 34px rgb(28 77 116 / 0.14);
     --ds-shadow-color: rgb(28 77 116 / 0.14);
@@ -78,6 +90,18 @@
     --ds-border: rgb(157 215 244 / 0.42);
     --ds-border-strong: rgb(134 207 246 / 0.78);
     --ds-focus: #8bd0ff;
+    --ds-focus-border: rgb(139 208 255 / 0.78);
+    --ds-focus-ring: rgb(139 208 255 / 0.32);
+    --ds-focus-shadow: 0 0 0 4px rgb(139 208 255 / 0.28);
+    --ds-drag-border: rgb(139 208 255 / 0.68);
+    --ds-drag-surface: rgb(38 108 164 / 0.34);
+    --ds-drag-border-active: rgb(139 208 255 / 0.92);
+    --ds-drag-surface-active: rgb(38 108 164 / 0.56);
+    --ds-drag-shadow: 0 10px 24px rgb(0 0 0 / 0.28), 0 0 0 2px rgb(139 208 255 / 0.28);
+    --ds-control-border: rgb(157 215 244 / 0.5);
+    --ds-control-surface: rgb(31 78 111 / 0.94);
+    --ds-control-text: #e5f4ff;
+    --ds-control-shadow: 0 8px 18px rgb(0 0 0 / 0.28);
     --ds-shadow-sm: 0 6px 18px rgb(0 0 0 / 0.2);
     --ds-shadow-md: 0 14px 34px rgb(0 0 0 / 0.3);
     --ds-shadow-color: rgb(0 0 0 / 0.3);
@@ -205,9 +229,29 @@ html {
     color: var(--ds-text) !important;
 }
 
+.ds-secondary:hover,
+.ds-secondary:active {
+    background: var(--ds-brand-soft) !important;
+}
+
+.ds-success {
+    background: var(--ds-success-soft) !important;
+    border-color: var(--ds-success) !important;
+    color: var(--ds-success) !important;
+}
+
+.ds-success:hover,
+.ds-success:active {
+    background: var(--ds-success-soft) !important;
+}
+
 .ds-danger {
     background: var(--ds-danger-soft) !important;
     border-color: var(--ds-danger) !important;
+    color: var(--ds-danger) !important;
+}
+
+.ds-danger-text {
     color: var(--ds-danger) !important;
 }
 

@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-081112">
+    <link rel="stylesheet" href="pwa.css?v=20260906-104354">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-081112">
-    <script src="theme-init.js?v=20260906-081112"></script>
+    <link rel="stylesheet" href="design-tokens.css?v=20260906-104354">
+    <script src="theme-init.js?v=20260906-104354"></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -81,8 +81,8 @@
         .floating-keypad.keypad-snap-preview {
             transform: scale(0.985);
             opacity: 0.96;
-            border-color: rgb(59 130 246 / 0.58);
-            box-shadow: 0 10px 24px rgb(37 99 235 / 0.2), 0 0 0 2px rgb(147 197 253 / 0.28);
+            border-color: var(--ds-focus-border);
+            box-shadow: var(--ds-drag-shadow);
         }
 
         .floating-keypad.is-dragging {
@@ -95,10 +95,10 @@
             z-index: 40;
             align-items: center;
             justify-content: center;
-            border: 2px dashed rgb(59 130 246 / 0.48);
+            border: 2px dashed var(--ds-drag-border);
             border-radius: 1rem;
-            background: rgb(219 234 254 / 0.42);
-            color: rgb(37 99 235);
+            background: var(--ds-drag-surface);
+            color: var(--ds-brand-strong);
             font-size: 0.75rem;
             font-weight: 700;
             pointer-events: none;
@@ -110,9 +110,9 @@
         }
 
         .keypad-dock.is-hovered {
-            border-color: rgb(37 99 235 / 0.9);
-            background: rgb(191 219 254 / 0.7);
-            box-shadow: 0 0 0 4px rgb(147 197 253 / 0.3);
+            border-color: var(--ds-drag-border-active);
+            background: var(--ds-drag-surface-active);
+            box-shadow: var(--ds-focus-shadow);
         }
 
         .floating-keypad-handle {
@@ -120,7 +120,7 @@
             align-items: center;
             justify-content: center;
             min-height: 1.75rem;
-            color: rgb(100 116 139);
+            color: var(--ds-text-muted);
             cursor: grab;
             touch-action: none;
             -webkit-user-select: none;
@@ -141,13 +141,13 @@
             justify-content: center;
             width: 2rem;
             height: 2rem;
-            border: 1px solid rgb(148 163 184 / 0.45);
+            border: 1px solid var(--ds-control-border);
             border-radius: 9999px;
-            background: rgb(255 255 255 / 0.78);
-            color: rgb(71 85 105);
+            background: var(--ds-control-surface);
+            color: var(--ds-control-text);
             font-size: 1.25rem;
             line-height: 1;
-            box-shadow: 0 8px 18px rgb(15 23 42 / 0.16);
+            box-shadow: var(--ds-control-shadow);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
         }
@@ -272,10 +272,16 @@
 
         .quiz-question-card.quiz-card-success {
             background: var(--ds-success-soft);
+            border-color: var(--ds-success);
         }
 
         .quiz-question-card.quiz-card-error {
             background: var(--ds-danger-soft);
+            border-color: var(--ds-danger);
+        }
+
+        .quiz-question-card.quiz-card-idle {
+            border-color: var(--ds-border);
         }
 
         .completion-confetti {
@@ -388,28 +394,28 @@
             <span aria-hidden="true">⠿</span><span class="ml-2 text-xs font-semibold">拖曳鍵盤</span>
         </div>
         <div class="numeric-pad mx-auto max-w-2xl">
-            <button type="button" data-pad-value="1" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">1</button>
-            <button type="button" data-pad-value="2" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">2</button>
-            <button type="button" data-pad-value="3" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">3</button>
-            <button type="button" data-pad-value="4" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">4</button>
-            <button type="button" data-pad-value="5" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">5</button>
-            <button type="button" data-pad-value="6" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">6</button>
-            <button type="button" data-pad-value="7" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">7</button>
-            <button type="button" data-pad-value="8" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">8</button>
-            <button type="button" data-pad-value="9" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">9</button>
-            <button type="button" data-pad-value="backspace" class="rounded-lg border border-amber-200 bg-amber-50 py-1.5 text-base font-semibold text-amber-700 transition hover:bg-amber-100 active:scale-95" aria-label="刪除最後一個數字">⌫</button>
-            <button type="button" data-pad-value="0" class="rounded-lg border border-blue-200 bg-blue-50 py-1.5 text-base font-semibold text-blue-700 transition hover:bg-blue-100 active:scale-95 active:bg-blue-200">0</button>
-            <button type="button" data-pad-value="next" class="rounded-lg border border-emerald-200 bg-emerald-50 py-1.5 text-base font-semibold text-emerald-700 transition hover:bg-emerald-100 active:scale-95 active:bg-emerald-200" aria-label="前往下一題">↵</button>
+            <button type="button" data-pad-value="1" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">1</button>
+            <button type="button" data-pad-value="2" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">2</button>
+            <button type="button" data-pad-value="3" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">3</button>
+            <button type="button" data-pad-value="4" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">4</button>
+            <button type="button" data-pad-value="5" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">5</button>
+            <button type="button" data-pad-value="6" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">6</button>
+            <button type="button" data-pad-value="7" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">7</button>
+            <button type="button" data-pad-value="8" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">8</button>
+            <button type="button" data-pad-value="9" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">9</button>
+            <button type="button" data-pad-value="backspace" class="ds-accent rounded-lg border py-1.5 text-base font-semibold transition active:scale-95" aria-label="刪除最後一個數字">⌫</button>
+            <button type="button" data-pad-value="0" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">0</button>
+            <button type="button" data-pad-value="next" class="ds-success rounded-lg border py-1.5 text-base font-semibold transition active:scale-95" aria-label="前往下一題">↵</button>
         </div>
     </div>
 
-    <div class="safe-action-bar ds-surface-strong fixed bottom-0 left-0 right-0 z-50 flex min-h-[3.75rem] flex-nowrap items-center gap-1 border-t px-2 shadow-lg backdrop-blur-md sm:gap-2 sm:px-4 md:px-6">
+    <div class="safe-action-bar ds-surface-strong fixed bottom-0 left-0 right-0 z-50 flex min-h-[3.75rem] flex-nowrap items-center gap-1 border-t px-2 sm:gap-2 sm:px-4 md:px-6">
         <div id="completion-actions" class="hidden min-w-0 shrink overflow-x-auto items-center justify-center gap-1 sm:gap-2">
-            <button id="return-home-after-quiz" type="button" class="whitespace-nowrap rounded-lg border border-slate-300 bg-slate-100 px-2 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 sm:px-3 sm:text-sm" aria-label="返回上一頁">← 上一頁</button>
-            <button id="another-quiz" type="button" class="whitespace-nowrap rounded-lg border border-blue-200 bg-blue-50 px-2 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-100 sm:px-3 sm:text-sm" aria-label="依目前題庫再次出題">↻ 再次出題</button>
-            <button id="retry-quiz" type="button" class="whitespace-nowrap rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100 sm:px-3 sm:text-sm" aria-label="重新測驗目前題目">↺ 重新測驗</button>
+            <button id="return-home-after-quiz" type="button" class="ds-secondary whitespace-nowrap rounded-lg border px-2 py-2 text-xs font-semibold transition sm:px-3 sm:text-sm" aria-label="返回上一頁">← 上一頁</button>
+            <button id="another-quiz" type="button" class="ds-primary whitespace-nowrap rounded-lg border px-2 py-2 text-xs font-semibold transition sm:px-3 sm:text-sm" aria-label="依目前題庫再次出題">↻ 再次出題</button>
+            <button id="retry-quiz" type="button" class="ds-success whitespace-nowrap rounded-lg border px-2 py-2 text-xs font-semibold transition sm:px-3 sm:text-sm" aria-label="重新測驗目前題目">↺ 重新測驗</button>
         </div>
-            <button id="submit-answer" type="button" class="ml-auto whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition cursor-pointer">
+            <button id="submit-answer" type="button" class="ds-primary ml-auto whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-md transition cursor-pointer">
             對答案
         </button>
     </div>
@@ -419,33 +425,12 @@
             <h2 id="leave-title" class="text-lg font-bold text-slate-800">要離開這次挑戰嗎？</h2>
             <p class="mt-2 text-sm leading-6 text-slate-600">目前的作答進度會被清除，確定要返回選題嗎？</p>
             <div class="mt-5 flex justify-end gap-3">
-                <button id="cancel-leave" type="button" class="px-4 py-2.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition">繼續作答</button>
-                <button id="confirm-leave" type="button" class="px-4 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition">返回選題</button>
+                <button id="cancel-leave" type="button" class="ds-secondary px-4 py-2.5 text-sm font-medium rounded-lg border transition">繼續作答</button>
+                <button id="confirm-leave" type="button" class="ds-primary px-4 py-2.5 text-sm font-bold rounded-lg transition">返回選題</button>
             </div>
         </div>
     </div>
 
-    <div id="settings-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
-        <div class="ds-surface-strong ds-modal-surface w-full max-w-sm rounded-2xl p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="settings-title">
-            <div class="flex items-center justify-between gap-4">
-                <h2 id="settings-title" class="text-lg font-bold text-slate-800">設定</h2>
-                <button id="close-settings" type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full text-xl text-slate-500 hover:bg-slate-100" aria-label="關閉設定">×</button>
-            </div>
-            <p class="mt-2 text-sm leading-6 text-slate-600">管理你的練習資料與成績統計。</p>
-            <div class="mt-5 space-y-3">
-                <div>
-                    <p class="mb-2 text-sm font-semibold text-slate-700">顯示主題</p>
-                    <div class="grid grid-cols-2 gap-2" role="group" aria-label="選擇顯示主題">
-                        <button type="button" data-theme-choice="light" aria-pressed="false" class="ds-theme-choice rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition">☀️ 明亮</button>
-                        <button type="button" data-theme-choice="dark" aria-pressed="false" class="ds-theme-choice rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition">🌙 深色</button>
-                    </div>
-                </div>
-                <button id="export-records" type="button" class="w-full rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-left text-sm font-semibold text-blue-700 hover:bg-blue-100 transition">匯出成績統計紀錄（CSV）</button>
-                <button id="clear-storage" type="button" class="w-full rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-left text-sm font-semibold text-red-700 hover:bg-red-100 transition">清除所有練習紀錄</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js?v=20260906-081112" defer></script>
+    <script src="app.js?v=20260906-104354" type="module"></script>
 </body>
 </html>
