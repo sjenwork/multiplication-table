@@ -1,20 +1,22 @@
-const CACHE_NAME = 'multiplication-master-v20260906-104504';
+const CACHE_NAME = 'multiplication-master-v20260906-110812';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-104504',
-    '/app/state.js?v=20260906-104504',
-    '/app/keypad.js?v=20260906-104504',
-    '/app/settings.js?v=20260906-104504',
-    '/app/update.js?v=20260906-104504',
-    '/app/quiz-view.js?v=20260906-104504',
-    '/app/completion.js?v=20260906-104504',
-    '/app/home.js?v=20260906-104504',
-    '/app/quiz.js?v=20260906-104504',
-    '/design-tokens.css?v=20260906-104504',
-    '/theme-init.js?v=20260906-104504',
-    '/pwa.css?v=20260906-104504',
+    '/app.js?v=20260906-110812',
+    '/app/state.js?v=20260906-110812',
+    '/app/keypad.js?v=20260906-110812',
+    '/app/settings.js?v=20260906-110812',
+    '/app/update.js?v=20260906-110812',
+    '/app/quiz-view.js?v=20260906-110812',
+    '/app/completion.js?v=20260906-110812',
+    '/app/home.js?v=20260906-110812',
+    '/app/quiz.js?v=20260906-110812',
+    '/app/components/settings-modal.js?v=20260906-110812',
+    '/vendor/lit-core.min.js?v=20260906-110812',
+    '/design-tokens.css?v=20260906-110812',
+    '/theme-init.js?v=20260906-110812',
+    '/pwa.css?v=20260906-110812',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -49,7 +51,9 @@ self.addEventListener('fetch', (event) => {
         || requestUrl.pathname.endsWith('/app/quiz-view.js')
         || requestUrl.pathname.endsWith('/app/completion.js')
         || requestUrl.pathname.endsWith('/app/home.js')
-        || requestUrl.pathname.endsWith('/app/quiz.js');
+        || requestUrl.pathname.endsWith('/app/quiz.js')
+        || requestUrl.pathname.endsWith('/app/components/settings-modal.js')
+        || requestUrl.pathname.endsWith('/vendor/lit-core.min.js');
     if (latestFirst) {
         event.respondWith(
             fetch(event.request).then((response) => {

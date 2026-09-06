@@ -3,16 +3,21 @@ set -euo pipefail
 
 version_stamp="$(date +%Y%m%d-%H%M%S)"
 
-for module_path in app/*.js; do
+while IFS= read -r -d '' module_path; do
     module_name="$(basename "$module_path")"
-    perl -0pi -e "s#((?:\\./|/app/)?${module_name})(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js app/*.js
-    perl -0pi -e "s#(\\n\\s+'/app/${module_name})(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
-done
+    relative_module="${module_path#app/}"
+    perl -0pi -e "s#((?:\\./|/app/)?${module_name})(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" app.js app/*.js app/components/*.js 2>/dev/null || true
+    perl -0pi -e "s#(\\n\\s+'/app/${relative_module})(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
+done < <(find app -type f -name '*.js' -print0)
+while IFS= read -r -d '' module_path; do
+    module_name="$(basename "$module_path")"
+    perl -0pi -e "s#(\\n\\s+'/vendor/${module_name})(?:\\?v=\\d{8}-\\d{6})?'#\$1?v=${version_stamp}'#g" sw.js
+done < <(find vendor -type f -name '*.js' -print0 2>/dev/null || true)
 perl -0pi -e "s#(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=\\d{8}-\\d{6})?#\$1?v=${version_stamp}#g" index.html quiz.html
 perl -0pi -e "s#(\\n\\s+'/)(app\\.js|pwa\\.css|design-tokens\\.css|theme-init\\.js)(?:\\?v=\\d{8}-\\d{6})?'#\$1\$2?v=${version_stamp}'#g" sw.js
 perl -0pi -e "s/multiplication-master-v\\d{8}-\\d{6}/multiplication-master-v${version_stamp}/g" sw.js
 
-git add app.js app/*.js index.html quiz.html sw.js
+git add app.js app/*.js app/components/*.js vendor/*.js index.html quiz.html sw.js
 echo "pre-commit: synchronized app version ${version_stamp}" >&2
 scripts/check-static.sh
 scripts/test.sh
