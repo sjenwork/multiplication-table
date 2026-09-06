@@ -29,6 +29,8 @@ test('home page keeps the interaction contract', () => {
     }
     assert.match(indexHtml, /<multiplication-selector id="multiplication-grid"><\/multiplication-selector>/);
     assert.match(indexHtml, /<app-button id="start-quiz"/);
+    assert.match(indexHtml, /<div id="selection-status"[^>]*role="status"/);
+    assert.doesNotMatch(indexHtml, /<p id="selection-status"/);
 });
 
 test('quiz page keeps the interaction contract', () => {

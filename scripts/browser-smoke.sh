@@ -145,6 +145,8 @@ if not evaluate("[...document.querySelectorAll('app-button')].every((host) => ge
     raise SystemExit('browser smoke failed: app-button host leaked a non-rounded visual style')
 if not evaluate("(() => { const corner = document.querySelector('#multiplication-grid th'); return corner?.classList.contains('sticky') && corner.classList.contains('left-0') && corner.classList.contains('top-0') && getComputedStyle(corner).zIndex === '30'; })()"):
     raise SystemExit('browser smoke failed: multiplication table corner is not fixed on both axes')
+if evaluate("document.getElementById('selection-status').textContent") != '點選或長按滑動選題；每次隨機 10 題，不足則全部出題。':
+    raise SystemExit('browser smoke failed: empty selection did not show the instruction text')
 if evaluate("document.querySelector('td[data-question]').click(); document.getElementById('selection-status').textContent") != '已選擇 1 題，準備好就開始挑戰！':
     raise SystemExit('browser smoke failed: selection interaction did not work')
 if not evaluate("(async () => { document.getElementById('open-settings').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return document.querySelector('app-settings-modal [data-modal-scrim]').classList.contains('flex'); })()"):

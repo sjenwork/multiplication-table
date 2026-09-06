@@ -1,13 +1,15 @@
-import { questionList, saveState, shuffled } from './state.js?v=20260906-150300';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-150300';
-import './components/multiplication-selector.js?v=20260906-150300';
+import { questionList, saveState, shuffled } from './state.js?v=20260906-152540';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-152540';
+import './components/multiplication-selector.js?v=20260906-152540';
 
 function updateSelectionStatus(state) {
     const status = document.getElementById('selection-status');
     const start = document.getElementById('start-quiz');
     const startWrong = document.getElementById('start-wrong-quiz');
     if (!status || !start) return;
-    status.textContent = state.selected.length ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！` : '尚未選擇題目，請先點擊表格中的格子。';
+    status.textContent = state.selected.length
+        ? `已選擇 ${state.selected.length} 題，準備好就開始挑戰！`
+        : '點選或長按滑動選題；每次隨機 10 題，不足則全部出題。';
     start.disabled = state.selected.length === 0;
     if (startWrong) startWrong.disabled = !questionList().some((question) => (state.records[question.key]?.errors || 0) > 0);
 }
