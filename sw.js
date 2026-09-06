@@ -1,18 +1,19 @@
-const CACHE_NAME = 'multiplication-master-v20260906-092338';
+const CACHE_NAME = 'multiplication-master-v20260906-092520';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-092338',
-    '/app/state.js?v=20260906-092338',
-    '/app/keypad.js?v=20260906-092338',
-    '/app/settings.js?v=20260906-092338',
-    '/app/update.js?v=20260906-092338',
-    '/app/quiz-view.js?v=20260906-092338',
-    '/app/completion.js?v=20260906-092338',
-    '/design-tokens.css?v=20260906-092338',
-    '/theme-init.js?v=20260906-092338',
-    '/pwa.css?v=20260906-092338',
+    '/app.js?v=20260906-092520',
+    '/app/state.js?v=20260906-092520',
+    '/app/keypad.js?v=20260906-092520',
+    '/app/settings.js?v=20260906-092520',
+    '/app/update.js?v=20260906-092520',
+    '/app/quiz-view.js?v=20260906-092520',
+    '/app/completion.js?v=20260906-092520',
+    '/app/home.js?v=20260906-092520',
+    '/design-tokens.css?v=20260906-092520',
+    '/theme-init.js?v=20260906-092520',
+    '/pwa.css?v=20260906-092520',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -45,7 +46,8 @@ self.addEventListener('fetch', (event) => {
         || requestUrl.pathname.endsWith('/app/settings.js')
         || requestUrl.pathname.endsWith('/app/update.js')
         || requestUrl.pathname.endsWith('/app/quiz-view.js')
-        || requestUrl.pathname.endsWith('/app/completion.js');
+        || requestUrl.pathname.endsWith('/app/completion.js')
+        || requestUrl.pathname.endsWith('/app/home.js');
     if (latestFirst) {
         event.respondWith(
             fetch(event.request).then((response) => {
