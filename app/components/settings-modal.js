@@ -1,6 +1,6 @@
 import { LitElement, html } from '../../vendor/lit-core.min.js';
-import './app-modal.js?v=20260906-125611';
-import './app-button.js?v=20260906-125611';
+import './app-modal.js?v=20260906-125756';
+import './app-button.js?v=20260906-125756';
 
 export class SettingsModal extends LitElement {
     static properties = {
