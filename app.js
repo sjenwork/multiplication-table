@@ -1,7 +1,8 @@
+import { historyText, loadState, questionKey, questionList, saveState, shuffled, STORAGE_KEY } from './app/state.js?v=20260906-084908';
+
 (function () {
     'use strict';
 
-    const STORAGE_KEY = 'multiplication-practice-state';
     const SETTINGS_MODAL_MARKUP = `
         <div id="settings-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
             <div class="ds-surface-strong ds-modal-surface w-full max-w-sm rounded-2xl p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="settings-title">
@@ -29,54 +30,10 @@
         document.body.insertAdjacentHTML('beforeend', SETTINGS_MODAL_MARKUP);
     }
 
-    function newState() {
-        return { selected: [], records: {}, quiz: null, theme: 'light', keypadPosition: { detached: false, left: null, top: null } };
-    }
-
-    function loadState() {
-        try {
-            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-            if (!saved || typeof saved !== 'object') return newState();
-            const state = { ...newState(), ...saved };
-            if (state.theme !== 'light' && state.theme !== 'dark') state.theme = 'light';
-            if (!state.keypadPosition || typeof state.keypadPosition !== 'object') state.keypadPosition = newState().keypadPosition;
-            state.keypadPosition = { ...newState().keypadPosition, ...state.keypadPosition };
-            return state;
-        } catch (error) {
-            return newState();
-        }
-    }
-
-    function saveState(state) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
     function applyTheme(state) {
         document.documentElement.dataset.theme = state.theme === 'dark' ? 'dark' : 'light';
         const themeColor = document.querySelector('meta[name="theme-color"]');
         if (themeColor) themeColor.content = state.theme === 'dark' ? '#091a30' : '#f4fbff';
-    }
-
-    function questionKey(row, col) {
-        return `${row}x${col}`;
-    }
-
-    function questionList() {
-        const questions = [];
-        for (let row = 1; row <= 9; row += 1) {
-            for (let col = 1; col <= 9; col += 1) {
-                questions.push({ row, col, answer: row * col, key: questionKey(row, col) });
-            }
-        }
-        return questions;
-    }
-
-    function shuffled(items) {
-        return [...items].sort(() => Math.random() - 0.5);
-    }
-
-    function historyText(record) {
-        return `${record?.errors || 0}/${record?.attempts || 0}`;
     }
 
     function updateSelectionStatus(state) {
