@@ -59,7 +59,7 @@ else
     done
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
-    perl -0pi -e "s#src=\"app\\.js[^\"]*\"#src=\"${remote_root}/app.js\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html"
+    perl -0pi -e "s#src=\"app\\.js\\?v=([^\"]*)\"#src=\"${remote_root}/app.js?v=\$1\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html" "$fixture_dir/study.html"
     (cd "$fixture_dir" && python3 -m http.server 8766 --bind 127.0.0.1) >"$server_log" 2>&1 &
     server_pid=$!
     target_url="http://127.0.0.1:8766/index.html"
