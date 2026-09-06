@@ -1,9 +1,9 @@
-import { questionList, saveState } from './state.js?v=20260906-095355';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-095355';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-095355';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-095355';
-import { startQuizWithQuestions } from './home.js?v=20260906-095355';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-095355';
+import { questionList, saveState } from './state.js?v=20260906-095416';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-095416';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-095416';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-095416';
+import { startQuizWithQuestions } from './home.js?v=20260906-095416';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-095416';
 
 
 function scrollActiveQuestionIntoView(questionKey) {

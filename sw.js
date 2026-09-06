@@ -1,20 +1,20 @@
-const CACHE_NAME = 'multiplication-master-v20260906-095355';
+const CACHE_NAME = 'multiplication-master-v20260906-095416';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260906-095355',
-    '/app/state.js?v=20260906-095355',
-    '/app/keypad.js?v=20260906-095355',
-    '/app/settings.js?v=20260906-095355',
-    '/app/update.js?v=20260906-095355',
-    '/app/quiz-view.js?v=20260906-095355',
-    '/app/completion.js?v=20260906-095355',
-    '/app/home.js?v=20260906-095355',
-    '/app/quiz.js?v=20260906-095355',
-    '/design-tokens.css?v=20260906-095355',
-    '/theme-init.js?v=20260906-095355',
-    '/pwa.css?v=20260906-095355',
+    '/app.js?v=20260906-095416',
+    '/app/state.js?v=20260906-095416',
+    '/app/keypad.js?v=20260906-095416',
+    '/app/settings.js?v=20260906-095416',
+    '/app/update.js?v=20260906-095416',
+    '/app/quiz-view.js?v=20260906-095416',
+    '/app/completion.js?v=20260906-095416',
+    '/app/home.js?v=20260906-095416',
+    '/app/quiz.js?v=20260906-095416',
+    '/design-tokens.css?v=20260906-095416',
+    '/theme-init.js?v=20260906-095416',
+    '/pwa.css?v=20260906-095416',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -41,7 +41,7 @@ self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
     const latestFirst = event.request.mode === 'navigate'
         || requestUrl.pathname.endsWith('.html')
-        || requestUrl.pathname.endsWith('/app.js?v=20260906-095355')
+        || requestUrl.pathname.endsWith('/app.js')
         || requestUrl.pathname.endsWith('/app/state.js')
         || requestUrl.pathname.endsWith('/app/keypad.js')
         || requestUrl.pathname.endsWith('/app/settings.js')
