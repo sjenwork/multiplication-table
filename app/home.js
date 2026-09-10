@@ -1,5 +1,5 @@
-import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-173614';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-173614';
+import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-173923';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-173923';
 
 function updateSelectionStatus(state) {
     const status = document.getElementById('selection-status');

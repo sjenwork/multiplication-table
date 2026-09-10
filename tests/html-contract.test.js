@@ -35,4 +35,7 @@ test('study page keeps the playback interaction contract', () => {
     }
     assert.match(studyHtml, /id="open-settings"[\s\S]*?<svg[^>]*viewBox="0 0 24 24"/);
     assert.doesNotMatch(studyHtml, /id="open-settings"[^>]*>⚙/);
+    assert.match(studyHtml, /id="back-home"[^>]*shadow-sm/);
+    assert.match(studyHtml, /id="open-settings"[^>]*shadow-sm/);
+    assert.doesNotMatch(studyHtml, /id="(?:back-home|open-settings)"[^>]*ds-icon-button/);
 });

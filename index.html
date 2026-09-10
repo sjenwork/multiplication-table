@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-173614">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-173614">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-173614">
-    <script src="theme-init.js?v=20260910-173614"></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-173923">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-173923">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-173923">
+    <script src="theme-init.js?v=20260910-173923"></script>
     <style>
         #multiplication-grid.selection-dragging {
             outline: 3px solid var(--ds-focus-ring);
@@ -58,21 +58,21 @@
     <div class="safe-action-bar ds-surface-strong fixed bottom-0 left-0 right-0 border-t py-2.5 px-2 sm:px-4 md:px-6 flex flex-nowrap items-center gap-2 z-50">
         <span class="flex-1 min-w-0" aria-hidden="true"></span>
         <div class="flex items-center gap-2 shrink-0">
-            <button id="start-study" type="button" class="ds-secondary whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-md transition cursor-pointer">
+            <button id="start-study" type="button" class="inline-flex items-center justify-center gap-2 rounded-full border ds-secondary whitespace-nowrap px-4 py-2.5 text-sm font-semibold shadow-md transition active:scale-95 cursor-pointer">
                 乘法表
             </button>
-            <button id="start-random-quiz" type="button" class="ds-primary whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-md transition cursor-pointer">
+            <button id="start-random-quiz" type="button" class="inline-flex items-center justify-center gap-2 rounded-full border ds-primary whitespace-nowrap px-4 py-2.5 text-sm font-semibold shadow-md transition active:scale-95 cursor-pointer">
                 隨機出題
             </button>
-            <button id="start-wrong-quiz" type="button" class="ds-accent whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-md transition cursor-pointer" disabled>
+            <button id="start-wrong-quiz" type="button" class="inline-flex items-center justify-center gap-2 rounded-full border ds-accent whitespace-nowrap px-4 py-2.5 text-sm font-semibold shadow-md transition active:scale-95 cursor-pointer" disabled>
                 錯題優先
             </button>
-            <button id="start-quiz" type="button" class="ds-primary whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base disabled:bg-slate-300 disabled:cursor-not-allowed font-bold rounded-xl shadow-md transition cursor-pointer">
+            <button id="start-quiz" type="button" class="inline-flex items-center justify-center gap-2 rounded-full border ds-primary whitespace-nowrap px-4 py-2.5 text-sm font-semibold disabled:bg-slate-300 disabled:cursor-not-allowed shadow-md transition active:scale-95 cursor-pointer">
                 開始挑戰
             </button>
         </div>
     </div>
 
-    <script src="app.js?v=20260910-173614" type="module"></script>
+    <script src="app.js?v=20260910-173923" type="module"></script>
 </body>
 </html>
