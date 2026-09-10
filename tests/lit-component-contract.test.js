@@ -66,7 +66,9 @@ test('audio playback exposes pause and stop controls with the study table', () =
     assert.match(studySource, /getBoundingClientRect/);
     assert.match(studySource, /safe-action-bar/);
     assert.match(studySource, /actionBarTop/);
-    assert.match(studySource, /scrollArea\.scrollBy/);
+    assert.match(studySource, /targetRowTop/);
+    assert.match(studySource, /scrollArea\.scrollTop\s*=/);
+    assert.doesNotMatch(studySource, /behavior:\s*['"]smooth['"]/);
 });
 
 test('factor legend owns the shared factor labels and semantic colors', () => {

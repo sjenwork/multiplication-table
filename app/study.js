@@ -1,7 +1,7 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-145824';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-145824';
-import { saveState } from './state.js?v=20260910-145824';
-import './components/multiplication-table.js?v=20260910-145824';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-150745';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-150745';
+import { saveState } from './state.js?v=20260910-150745';
+import './components/multiplication-table.js?v=20260910-150745';
 
 function updateFactor(table, selectedFactor, isPlaying = false) {
     table.factor = selectedFactor;
@@ -123,10 +123,14 @@ export function initStudy(state) {
         const actionBarTop = actionBar?.getBoundingClientRect().top ?? scrollRect.bottom;
         const visibleTop = Math.max(scrollRect.top + 12, headerBottom + 12);
         const visibleBottom = Math.min(scrollRect.bottom - 12, actionBarTop - 12);
-        let offset = 0;
-        if (rowRect.top < visibleTop) offset = rowRect.top - visibleTop;
-        if (rowRect.bottom > visibleBottom) offset = rowRect.bottom - visibleBottom;
-        if (offset !== 0) scrollArea.scrollBy({ top: offset, behavior: 'smooth' });
+        const isOutsideViewport = rowRect.top < visibleTop || rowRect.bottom > visibleBottom;
+        if (!isOutsideViewport) return;
+
+        const visibleHeight = visibleBottom - visibleTop;
+        const targetRowTop = visibleTop + Math.max(0, (visibleHeight - rowRect.height) / 2);
+        const targetScrollTop = scrollArea.scrollTop + rowRect.top - targetRowTop;
+        const maxScrollTop = Math.max(0, scrollArea.scrollHeight - scrollArea.clientHeight);
+        scrollArea.scrollTop = Math.min(maxScrollTop, Math.max(0, targetScrollTop));
     };
 
     const playClip = async (factor, multiplier, token) => {
