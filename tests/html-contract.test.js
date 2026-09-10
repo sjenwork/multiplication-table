@@ -51,6 +51,16 @@ test('study page keeps the learning table contract', () => {
     assert.match(studyHtml, /\.study-equation:not\(:last-child\)::after\s*\{[\s\S]*?right:\s*16\.6667%;[\s\S]*?left:\s*16\.6667%;[\s\S]*?border-bottom:\s*1px solid var\(--ds-divider\)/);
 });
 
+test('audio assets keep the gender and voice directory contract', () => {
+    for (const gender of ['female', 'male']) {
+        for (const factor of [2, 9]) {
+            for (const multiplier of [1, 9]) {
+                assert.ok(fs.existsSync(`${gender}/${gender === 'female' ? 'aoede' : 'puck'}/audio/${factor}x${multiplier}.m4a`));
+            }
+        }
+    }
+});
+
 test('quiz page keeps the interaction contract', () => {
     for (const id of ['question-list', 'number-pad', 'submit-answer', 'completion-overlay', 'leave-modal', 'back-home']) {
         assert.match(quizHtml, new RegExp(`id="${id}"`));

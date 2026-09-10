@@ -45,6 +45,10 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /\$\{this\.factor \* row\}/);
     assert.match(multiplicationTableSource, /study-equation-sheet/);
     assert.match(multiplicationTableSource, /study-equation-sheet ds-surface border rounded-2xl/);
+    assert.match(multiplicationTableSource, /play-factor/);
+    assert.match(multiplicationTableSource, /play-question/);
+    assert.match(multiplicationTableSource, /play-all/);
+    assert.match(multiplicationTableSource, /activeRow/);
     assert.doesNotMatch(multiplicationTableSource, /study-table-card|study-equation ds-surface-muted|<h2/);
     assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
 });
@@ -79,6 +83,8 @@ test('settings modal is a Lit component with an explicit public contract', () =>
     assert.match(source, /<app-button data-modal-close/);
     assert.match(source, /<app-button data-theme-choice="\$\{theme\}" variant="secondary" full/);
     assert.match(source, /CustomEvent\(['"]theme-change['"]/);
+    assert.match(source, /voiceGender/);
+    assert.match(source, /voice-change/);
 });
 
 test('completion overlay is a Lit component with reactive score inputs', () => {

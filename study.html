@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260906-203920">
-    <link rel="stylesheet" href="tailwind.css?v=20260906-203920">
-    <link rel="stylesheet" href="design-tokens.css?v=20260906-203920">
-    <script src="app/theme-colors.js?v=20260906-203920" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-115724">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-115724">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-115724">
+    <script src="app/theme-colors.js?v=20260910-115724" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -39,6 +39,51 @@
             display: grid;
             grid-template-columns: minmax(0, 1fr);
             gap: 0;
+        }
+
+        .study-table-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .study-table-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .study-play-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            flex: 0 0 auto;
+            color: var(--ds-brand-strong);
+            border: 1px solid var(--ds-border);
+            border-radius: 9999px;
+            background: var(--ds-surface-strong);
+            transition: color 0.15s ease, background-color 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+        }
+
+        .study-play-button:hover,
+        .study-play-button:focus-visible {
+            color: var(--ds-brand);
+            border-color: var(--ds-brand);
+            background: var(--ds-surface-muted);
+        }
+
+        .study-play-button:active {
+            transform: scale(0.95);
+        }
+
+        .study-question-play {
+            width: 2rem;
+            height: 2rem;
+            margin-left: 0.5rem;
         }
 
         .study-equation {
@@ -68,6 +113,20 @@
             border-bottom: 1px solid var(--ds-divider);
         }
 
+        .study-equation-active {
+            z-index: 1;
+            color: var(--ds-brand-strong);
+            border-radius: var(--ds-radius-md);
+            background: var(--ds-surface-muted);
+            box-shadow: var(--ds-shadow-sm);
+            transform: scale(1.025);
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .study-equation-active::after {
+            display: none;
+        }
+
         .study-answer {
             color: var(--ds-brand-strong);
         }
@@ -77,6 +136,11 @@
             height: 3.25rem;
             padding: 0;
             aspect-ratio: 1;
+        }
+
+        .study-factor-button[data-playing="true"] {
+            transform: scale(1.08);
+            box-shadow: var(--ds-shadow-md);
         }
 
         .study-factor-grid {
@@ -128,6 +192,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260906-203920" type="module"></script>
+    <script src="app.js?v=20260910-115724" type="module"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
-import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260906-203920';
-import './components/settings-modal.js?v=20260906-203920';
+import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260910-115724';
+import './components/settings-modal.js?v=20260910-115724';
 
 export function ensureSettingsModal() {
     if (document.querySelector('app-settings-modal')) return;
@@ -30,12 +30,17 @@ function exportRecords(state) {
 export function initSettings(state) {
     const settingsModal = document.querySelector('app-settings-modal');
     settingsModal.theme = state.theme;
+    settingsModal.voiceGender = state.voiceGender;
     document.getElementById('open-settings').addEventListener('click', () => {
         settingsModal.show();
     });
     settingsModal.addEventListener('theme-change', (event) => {
         state.theme = event.detail.theme;
         applyTheme(state);
+        saveState(state);
+    });
+    settingsModal.addEventListener('voice-change', (event) => {
+        state.voiceGender = event.detail.voiceGender;
         saveState(state);
     });
     settingsModal.addEventListener('export-records', () => { exportRecords(state); settingsModal.hide(); });

@@ -191,6 +191,13 @@ if evaluate("document.querySelector('factor-legend')?.textContent.includes('è¢«ä
     raise SystemExit('browser smoke failed: study page did not use the shared factor legend')
 if evaluate("document.querySelector('.study-equation-list').textContent.includes('2')") is not True:
     raise SystemExit('browser smoke failed: default study table did not render factor 2')
+if evaluate("document.querySelectorAll('#study-table [data-play-question]').length") != 9:
+    raise SystemExit('browser smoke failed: study question play buttons did not render')
+if evaluate("!!document.querySelector('#study-table [data-play-factor]') && !!document.querySelector('#study-table [data-play-all]')") is not True:
+    raise SystemExit('browser smoke failed: study playback controls did not render')
+if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('app-settings-modal [data-voice-choice]').length") != 2:
+    raise SystemExit('browser smoke failed: voice gender choices did not render')
+evaluate("document.querySelector('app-settings-modal [data-modal-close]').click()")
 if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return document.querySelector('.study-equation-list').textContent.includes('63'); })()") is not True:
     raise SystemExit('browser smoke failed: study factor selection did not update the table')
 print('browser smoke passed')
