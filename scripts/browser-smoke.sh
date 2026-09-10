@@ -136,10 +136,26 @@ if evaluate("document.querySelector('td[data-question]').click(); document.getEl
     raise SystemExit('browser smoke failed: selection interaction did not work')
 if not evaluate("document.getElementById('open-settings').click(); document.getElementById('settings-modal').classList.contains('flex')"):
     raise SystemExit('browser smoke failed: settings modal did not open')
-evaluate("document.getElementById('close-settings').click(); document.getElementById('start-quiz').click()")
+evaluate("document.getElementById('close-settings').click(); document.getElementById('start-study').click()")
+time.sleep(2)
+if evaluate("document.querySelectorAll('#study-table .study-equation').length") != 9:
+    raise SystemExit('browser smoke failed: home study entry did not open the study page')
+evaluate("document.getElementById('back-home').click()")
+time.sleep(1)
+evaluate("document.getElementById('start-quiz').click()")
 time.sleep(2)
 if evaluate("document.querySelectorAll('#question-list article').length") == 0:
     raise SystemExit('browser smoke failed: quiz questions did not render')
+if evaluate("document.getElementById('number-pad').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: numeric keypad was hidden on quiz start')
+if evaluate("document.querySelectorAll('input[data-question]').length < 2"):
+    raise SystemExit('browser smoke failed: quiz did not render multiple answer inputs')
+evaluate("document.querySelectorAll('input[data-question]')[1].click(); document.getElementById('close-keypad').click()")
+if not evaluate("document.getElementById('number-pad').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: numeric keypad close action did not hide it')
+evaluate("document.querySelectorAll('input[data-question]')[1].click()")
+if evaluate("document.getElementById('number-pad').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: clicking a non-first answer did not reopen the keypad')
 evaluate("window.location.href = 'study.html'")
 time.sleep(2)
 if evaluate("document.querySelectorAll('#study-table .study-equation').length") != 9:

@@ -1,9 +1,9 @@
-import { questionList, saveState } from './state.js?v=20260910-170628';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260910-170628';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-170628';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260910-170628';
-import { startQuizWithQuestions } from './home.js?v=20260910-170628';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260910-170628';
+import { questionList, saveState } from './state.js?v=20260910-172228';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260910-172228';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-172228';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260910-172228';
+import { startQuizWithQuestions } from './home.js?v=20260910-172228';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260910-172228';
 
 
 function scrollActiveQuestionIntoView(questionKey) {
@@ -153,8 +153,7 @@ function submitAnswer(state) {
     }
     if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
     else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
-        renderQuiz(state, focusQuizQuestion);
-    showCompletionOverlay(correctCount, state.quiz.questions.length);
+    renderQuiz(state, focusQuizQuestion);
     if (firstWrongKey) focusQuizQuestion(state, firstWrongKey, false);
 }
 
@@ -174,8 +173,13 @@ export function initQuiz(state) {
         button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
     });
     const modal = document.getElementById('leave-modal');
-    const closeModal = () => modal.classList.add('hidden');
+    let previousModalFocus = null;
+    const closeModal = () => {
+        modal.classList.add('hidden');
+        previousModalFocus?.focus?.();
+    };
     document.getElementById('back-home').addEventListener('click', () => {
+        previousModalFocus = document.activeElement;
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.getElementById('cancel-leave').focus();
@@ -186,5 +190,11 @@ export function initQuiz(state) {
     document.getElementById('another-quiz').addEventListener('click', () => startAnotherQuiz(state));
     document.getElementById('retry-quiz').addEventListener('click', () => restartQuiz(state));
     modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
+    modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+            event.stopPropagation();
+            closeModal();
+        }
+    });
     document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
 }

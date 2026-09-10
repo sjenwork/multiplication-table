@@ -1,5 +1,5 @@
-import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-170628';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-170628';
+import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-172228';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-172228';
 
 function updateSelectionStatus(state) {
     const status = document.getElementById('selection-status');
@@ -306,6 +306,7 @@ export function initHome(state) {
     ensureSettingsModal();
     initSettings(state);
     document.getElementById('start-quiz').addEventListener('click', () => startQuiz(state));
+    document.getElementById('start-study').addEventListener('click', () => { window.location.href = 'study.html'; });
     document.getElementById('start-random-quiz').addEventListener('click', () => startRandomQuiz(state));
     document.getElementById('start-wrong-quiz').addEventListener('click', () => startWrongQuiz(state));
 }

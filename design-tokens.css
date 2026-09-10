@@ -30,6 +30,7 @@
     --ds-danger-soft: #ffe5e3;
     --ds-disabled: #c6d3de;
     --ds-border: rgb(126 164 196 / 0.38);
+    --ds-divider: rgb(126 164 196 / 0.22);
     --ds-border-strong: rgb(73 128 177 / 0.62);
     --ds-focus: #5aa9ff;
     --ds-focus-border: rgb(59 130 246 / 0.58);
@@ -47,6 +48,39 @@
     --ds-shadow-sm: 0 6px 18px rgb(28 77 116 / 0.09);
     --ds-shadow-md: 0 14px 34px rgb(28 77 116 / 0.14);
     --ds-shadow-color: rgb(28 77 116 / 0.14);
+    --ds-scrim: rgb(15 23 42 / 0.14);
+    --ds-keypad-shadow: 0 -12px 32px rgb(15 23 42 / 0.14);
+    --ds-input-surface: #ffffff;
+    --ds-input-border: rgb(148 163 184 / 0.7);
+    --ds-input-focus: rgb(59 130 246 / 0.5);
+    --ds-index-surface: #dbeafe;
+    --ds-index-text: #1d4ed8;
+    --ds-layer-update: 100;
+    --ds-layer-keypad: 50;
+    --ds-layer-dock: 40;
+    --ds-layer-modal: 60;
+    --ds-layer-completion: 80;
+    --ds-layer-header: 20;
+    --ds-layer-table-header: 20;
+    --ds-layer-table-row: 10;
+    --ds-layer-table-corner: 30;
+    --ds-confetti-1: #f59e0b;
+    --ds-confetti-2: #10b981;
+    --ds-confetti-3: #3b82f6;
+    --ds-confetti-4: #ec4899;
+    --ds-confetti-5: #8b5cf6;
+    --ds-confetti-6: #f97316;
+    --ds-confetti-7: #14b8a6;
+    --ds-confetti-8: #eab308;
+    --ds-confetti-9: #ef4444;
+    --ds-confetti-10: #6366f1;
+    --ds-blur-surface: blur(18px) saturate(135%);
+    --ds-blur-keypad: blur(24px) saturate(165%);
+    --ds-blur-control: blur(14px);
+    --ds-blur-table: blur(12px) saturate(125%);
+    --ds-blur-base: blur(16px) saturate(135%);
+    --ds-blur-strong: blur(20px) saturate(145%);
+    --ds-blur-modal: blur(16px);
     --ds-radius-sm: 0.625rem;
     --ds-radius-md: 0.875rem;
     --ds-radius-lg: 1.25rem;
@@ -88,6 +122,7 @@
     --ds-danger-soft: rgb(133 54 64 / 0.52);
     --ds-disabled: #40556b;
     --ds-border: rgb(157 215 244 / 0.42);
+    --ds-divider: rgb(157 215 244 / 0.22);
     --ds-border-strong: rgb(134 207 246 / 0.78);
     --ds-focus: #8bd0ff;
     --ds-focus-border: rgb(139 208 255 / 0.78);
@@ -105,6 +140,13 @@
     --ds-shadow-sm: 0 6px 18px rgb(0 0 0 / 0.2);
     --ds-shadow-md: 0 14px 34px rgb(0 0 0 / 0.3);
     --ds-shadow-color: rgb(0 0 0 / 0.3);
+    --ds-scrim: rgb(2 10 22 / 0.28);
+    --ds-keypad-shadow: 0 -12px 32px rgb(0 0 0 / 0.3);
+    --ds-input-surface: var(--ds-surface-strong);
+    --ds-input-border: var(--ds-border-strong);
+    --ds-input-focus: var(--ds-focus-border);
+    --ds-index-surface: rgb(38 108 164 / 0.46);
+    --ds-index-text: var(--ds-brand-strong);
 }
 
 html,
@@ -140,8 +182,9 @@ html {
 }
 
 .ds-modal-backdrop {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: var(--ds-scrim);
+    backdrop-filter: var(--ds-blur-modal);
+    -webkit-backdrop-filter: var(--ds-blur-modal);
 }
 
 .ds-update-pill {
@@ -164,6 +207,72 @@ html {
     border: 1px solid var(--ds-modal-border) !important;
     box-shadow: var(--ds-shadow-md), 0 0 0 3px rgb(97 183 255 / 0.12);
 }
+
+.ds-text {
+    color: var(--ds-text) !important;
+}
+
+.ds-text-strong {
+    color: var(--ds-text-strong) !important;
+}
+
+.ds-brand-text {
+    color: var(--ds-brand-strong) !important;
+}
+
+.ds-focusable:focus-within,
+.ds-focusable:focus-visible {
+    outline: 2px solid var(--ds-focus);
+    outline-offset: 2px;
+}
+
+.ds-icon-button {
+    border: 1px solid var(--ds-control-border) !important;
+    background: var(--ds-control-surface) !important;
+    color: var(--ds-control-text) !important;
+    box-shadow: var(--ds-control-shadow);
+}
+
+.ds-icon-button:hover {
+    background: var(--ds-surface-strong) !important;
+    color: var(--ds-brand-strong) !important;
+}
+
+.ds-input {
+    background: var(--ds-input-surface) !important;
+    border: 1px solid var(--ds-input-border) !important;
+    border-color: var(--ds-input-border) !important;
+    color: var(--ds-text-strong) !important;
+}
+
+.ds-input:focus {
+    outline: 2px solid var(--ds-input-focus) !important;
+    outline-offset: 1px;
+}
+
+.ds-input:disabled {
+    background: var(--ds-disabled) !important;
+    color: var(--ds-text-muted) !important;
+}
+
+.ds-question-index {
+    background: var(--ds-index-surface) !important;
+    color: var(--ds-index-text) !important;
+}
+
+.ds-question-active {
+    box-shadow: var(--ds-focus-shadow) !important;
+}
+
+.ds-layer-update { position: fixed !important; z-index: var(--ds-layer-update) !important; }
+.ds-layer-keypad { z-index: var(--ds-layer-keypad); }
+.ds-layer-dock { z-index: var(--ds-layer-dock); }
+.ds-layer-modal { z-index: var(--ds-layer-modal); }
+.ds-layer-completion { z-index: var(--ds-layer-completion); }
+.ds-layer-header { z-index: var(--ds-layer-header); }
+.ds-layer-table-header { z-index: var(--ds-layer-table-header); }
+.ds-layer-table-row { z-index: var(--ds-layer-table-row); }
+.ds-layer-table-corner { z-index: var(--ds-layer-table-corner); }
 
 [data-theme="dark"] .ds-modal-backdrop {
     background-color: rgb(2 10 22 / 0.68) !important;

@@ -1,24 +1,24 @@
-const CACHE_NAME = 'multiplication-master-v20260910-170628';
+const CACHE_NAME = 'multiplication-master-v20260910-172228';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
     '/study.html',
-    '/app.js?v=20260910-170628',
-    '/app/state.js?v=20260910-170628',
-    '/app/keypad.js?v=20260910-170628',
-    '/app/settings.js?v=20260910-170628',
-    '/app/update.js?v=20260910-170628',
-    '/app/quiz-view.js?v=20260910-170628',
-    '/app/completion.js?v=20260910-170628',
-    '/app/home.js?v=20260910-170628',
-    '/app/quiz.js?v=20260910-170628',
-    '/app/audio.js?v=20260910-170628',
-    '/app/study.js?v=20260910-170628',
-    '/design-tokens.css?v=20260910-170628',
-    '/theme-init.js?v=20260910-170628',
-    '/pwa.css?v=20260910-170628',
-    '/tailwind.css?v=20260910-170628',
+    '/app.js?v=20260910-172228',
+    '/app/state.js?v=20260910-172228',
+    '/app/keypad.js?v=20260910-172228',
+    '/app/settings.js?v=20260910-172228',
+    '/app/update.js?v=20260910-172228',
+    '/app/quiz-view.js?v=20260910-172228',
+    '/app/completion.js?v=20260910-172228',
+    '/app/home.js?v=20260910-172228',
+    '/app/quiz.js?v=20260910-172228',
+    '/app/audio.js?v=20260910-172228',
+    '/app/study.js?v=20260910-172228',
+    '/design-tokens.css?v=20260910-172228',
+    '/theme-init.js?v=20260910-172228',
+    '/pwa.css?v=20260910-172228',
+    '/tailwind.css?v=20260910-172228',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -45,6 +45,7 @@ self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
     const latestFirst = event.request.mode === 'navigate'
         || requestUrl.pathname.endsWith('.html')
+        || requestUrl.searchParams.has('v')
         || requestUrl.pathname.endsWith('/app.js')
         || requestUrl.pathname.endsWith('/app/state.js')
         || requestUrl.pathname.endsWith('/app/keypad.js')

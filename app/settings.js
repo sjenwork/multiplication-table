@@ -1,4 +1,4 @@
-import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260910-170628';
+import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260910-172228';
 
 const SETTINGS_MODAL_MARKUP = `
     <div id="settings-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
@@ -68,13 +68,18 @@ function updateVoiceChoices(state) {
 
 export function initSettings(state) {
     const settingsModal = document.getElementById('settings-modal');
+    let previousFocus = null;
     const closeSettings = () => settingsModal.classList.add('hidden');
     document.getElementById('open-settings').addEventListener('click', () => {
+        previousFocus = document.activeElement;
         settingsModal.classList.remove('hidden');
         settingsModal.classList.add('flex');
         document.getElementById('close-settings').focus();
     });
-    document.getElementById('close-settings').addEventListener('click', closeSettings);
+    document.getElementById('close-settings').addEventListener('click', () => {
+        closeSettings();
+        previousFocus?.focus?.();
+    });
     document.querySelectorAll('[data-theme-choice]').forEach((button) => {
         button.addEventListener('click', () => {
             state.theme = button.dataset.themeChoice;
@@ -100,5 +105,17 @@ export function initSettings(state) {
             window.location.href = 'index.html';
         }
     });
-    settingsModal.addEventListener('click', (event) => { if (event.target === settingsModal) closeSettings(); });
+    settingsModal.addEventListener('click', (event) => {
+        if (event.target === settingsModal) {
+            closeSettings();
+            previousFocus?.focus?.();
+        }
+    });
+    settingsModal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !settingsModal.classList.contains('hidden')) {
+            event.stopPropagation();
+            closeSettings();
+            previousFocus?.focus?.();
+        }
+    });
 }
