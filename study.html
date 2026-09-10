@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-150745">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-150745">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-150745">
-    <script src="app/theme-colors.js?v=20260910-150745" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-152113">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-152113">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-152113">
+    <script src="app/theme-colors.js?v=20260910-152113" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -30,9 +30,12 @@
 
         .study-content {
             overflow-y: auto;
+            scrollbar-gutter: stable;
+        }
+
+        .study-scroll-track {
             padding-top: 7.5rem;
             padding-bottom: 10.5rem;
-            scrollbar-gutter: stable;
         }
 
         .study-equation-list {
@@ -208,7 +211,9 @@
         </header>
 
         <section class="study-content min-h-0 flex-1" aria-label="乘法表內容">
-            <multiplication-table id="study-table"></multiplication-table>
+            <div class="study-scroll-track">
+                <multiplication-table id="study-table"></multiplication-table>
+            </div>
         </section>
     </main>
 
@@ -225,6 +230,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260910-150745" type="module"></script>
+    <script src="app.js?v=20260910-152113" type="module"></script>
 </body>
 </html>

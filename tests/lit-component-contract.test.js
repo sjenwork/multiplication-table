@@ -10,6 +10,7 @@ const selectorSource = fs.readFileSync('app/components/multiplication-selector.j
 const keypadSource = fs.readFileSync('app/components/numeric-keypad.js', 'utf8');
 const multiplicationTableSource = fs.readFileSync('app/components/multiplication-table.js', 'utf8');
 const studySource = fs.readFileSync('app/study.js', 'utf8');
+const studyHtmlSource = fs.readFileSync('study.html', 'utf8');
 const factorLegendSource = fs.readFileSync('app/components/factor-legend.js', 'utf8');
 
 test('multiplication selector owns the table rendering contract', () => {
@@ -69,6 +70,12 @@ test('audio playback exposes pause and stop controls with the study table', () =
     assert.match(studySource, /targetRowTop/);
     assert.match(studySource, /scrollArea\.scrollTop\s*=/);
     assert.doesNotMatch(studySource, /behavior:\s*['"]smooth['"]/);
+});
+
+test('study scrolling keeps vertical spacing out of the overflow container for WebKit', () => {
+    assert.doesNotMatch(studyHtmlSource, /\.study-content\s*\{[^}]*padding-(?:top|bottom)/s);
+    assert.match(studyHtmlSource, /\.study-scroll-track\s*\{[^}]*padding-top:\s*7\.5rem;[^}]*padding-bottom:\s*10\.5rem;/s);
+    assert.match(studyHtmlSource, /<section class="study-content[^>]*>\s*<div class="study-scroll-track">\s*<multiplication-table/s);
 });
 
 test('factor legend owns the shared factor labels and semantic colors', () => {
