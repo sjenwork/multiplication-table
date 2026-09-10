@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-143454">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-143454">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-143454">
-    <script src="app/theme-colors.js?v=20260910-143454" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-144409">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-144409">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-144409">
+    <script src="app/theme-colors.js?v=20260910-144409" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -39,102 +39,6 @@
             display: grid;
             grid-template-columns: minmax(0, 1fr);
             gap: 0;
-        }
-
-        .study-equation-stage {
-            position: relative;
-            overflow: hidden;
-            border-radius: var(--ds-radius-md);
-            perspective: 900px;
-        }
-
-        .study-equation-stack {
-            position: relative;
-            display: grid;
-            overflow: visible;
-        }
-
-        .study-stack-card {
-            grid-area: 1 / 1;
-            position: relative;
-            z-index: calc(100 - var(--stack-factor));
-            transform-origin: center left;
-            backface-visibility: hidden;
-            background: var(--ds-canvas);
-            border-radius: var(--ds-radius-md);
-            overflow: hidden;
-            transition: transform 0.38s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.38s ease, box-shadow 0.38s ease;
-        }
-
-        .study-stack-card-extracted {
-            pointer-events: none;
-            opacity: 1;
-            transform: translate3d(-112%, 0, 0) rotateY(5deg);
-            box-shadow: -22px 0 28px -20px var(--ds-brand-strong);
-        }
-
-        .study-stack-card-moving {
-            visibility: hidden !important;
-            transition: none !important;
-        }
-
-        .study-stack-card-current {
-            opacity: 1;
-            transform: translate3d(0, 0, 0) rotateY(0);
-            box-shadow: none;
-        }
-
-        .study-stack-card:not(.study-stack-card-extracted):not(.study-stack-card-current) {
-            opacity: 1;
-            transform: translate3d(0, 0, 0) rotateY(0);
-            pointer-events: none;
-        }
-
-        .study-moving-stack {
-            position: absolute;
-            inset: 0;
-            z-index: 200;
-            display: grid;
-            pointer-events: none;
-            transform-origin: center left;
-        }
-
-        .study-moving-card {
-            grid-area: 1 / 1;
-            position: relative;
-            z-index: calc(100 - var(--stack-factor));
-            background: var(--ds-canvas);
-            border-radius: var(--ds-radius-md);
-            overflow: hidden;
-        }
-
-        .study-moving-stack-forward {
-            animation: study-moving-stack-forward 0.38s cubic-bezier(0.22, 0.8, 0.24, 1) both;
-        }
-
-        .study-moving-stack-backward {
-            animation: study-moving-stack-backward 0.38s cubic-bezier(0.22, 0.8, 0.24, 1) both;
-        }
-
-        @keyframes study-moving-stack-forward {
-            from { transform: translate3d(0, 0, 0) rotateY(0); box-shadow: none; }
-            to { transform: translate3d(-112%, 0, 0) rotateY(5deg); box-shadow: -22px 0 28px -20px var(--ds-brand-strong); }
-        }
-
-        @keyframes study-moving-stack-backward {
-            from { transform: translate3d(-112%, 0, 0) rotateY(5deg); box-shadow: -22px 0 28px -20px var(--ds-brand-strong); }
-            to { transform: translate3d(0, 0, 0) rotateY(0); box-shadow: none; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .study-stack-card {
-                transition: none;
-            }
-
-            .study-moving-stack-forward,
-            .study-moving-stack-backward {
-                animation: none;
-            }
         }
 
         .study-table-heading {
@@ -321,6 +225,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260910-143454" type="module"></script>
+    <script src="app.js?v=20260910-144409" type="module"></script>
 </body>
 </html>

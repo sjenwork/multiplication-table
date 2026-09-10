@@ -181,8 +181,8 @@ if evaluate("document.querySelectorAll('#study-factor-buttons [data-factor]').le
     raise SystemExit('browser smoke failed: study factor buttons did not render')
 if evaluate("document.querySelectorAll('#study-factor-buttons button').length") != 8:
     raise SystemExit('browser smoke failed: study factor buttons are not interactive')
-if evaluate("document.querySelectorAll('.study-equation').length") != 72:
-    raise SystemExit('browser smoke failed: stacked study multiplication tables did not render')
+if evaluate("document.querySelectorAll('.study-equation').length") != 9:
+    raise SystemExit('browser smoke failed: study multiplication table did not render')
 if evaluate("getComputedStyle(document.querySelector('.study-equation')).minHeight") != '48px':
     raise SystemExit('browser smoke failed: study equations are too widely spaced')
 if evaluate("getComputedStyle(document.querySelector('.study-equation'), '::after').borderBottomWidth") != '1px':
@@ -191,15 +191,13 @@ if evaluate("document.querySelector('factor-legend')?.textContent.includes('è¢«ä
     raise SystemExit('browser smoke failed: study page did not use the shared factor legend')
 if evaluate("document.querySelector('.study-equation-list').textContent.includes('2')") is not True:
     raise SystemExit('browser smoke failed: default study table did not render factor 2')
-if evaluate("document.querySelectorAll('#study-table .study-stack-card-current [data-play-question]').length") != 9:
-    raise SystemExit('browser smoke failed: current study question play buttons did not render')
+if evaluate("document.querySelectorAll('#study-table [data-play-question]').length") != 9:
+    raise SystemExit('browser smoke failed: study question play buttons did not render')
 if evaluate("document.querySelector('#study-table [data-auto-play]')?.getAttribute('aria-pressed')") != 'true':
     raise SystemExit('browser smoke failed: auto-play did not default to enabled')
 if evaluate("!!document.querySelector('#study-table [data-play-factor]') || !!document.querySelector('#study-table [data-toggle-playback]')") is not True:
     raise SystemExit('browser smoke failed: study playback controls did not render')
 evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("document.querySelector('[data-current-factor=\"7\"]') && document.querySelector('.study-moving-stack-forward') && document.querySelectorAll('.study-moving-card').length === 5") is not True:
-    raise SystemExit('browser smoke failed: forward study page animation did not start')
 if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]:not(:disabled)')") is not True:
     raise SystemExit('browser smoke failed: active playback did not expose pause and stop controls')
 evaluate("document.querySelector('#study-table [data-toggle-playback]').click()")
@@ -211,11 +209,8 @@ if evaluate("document.querySelector('#study-table [data-stop-playback]')?.disabl
 if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('app-settings-modal [data-voice-choice]').length") != 2:
     raise SystemExit('browser smoke failed: voice gender choices did not render')
 evaluate("document.querySelector('app-settings-modal [data-modal-close]').click()")
-if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return [...document.querySelectorAll('.study-equation-list')].some((page) => page.textContent.includes('63')); })()") is not True:
+if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return document.querySelector('.study-equation-list').textContent.includes('63'); })()") is not True:
     raise SystemExit('browser smoke failed: study factor selection did not update the table')
-evaluate("(async () => { document.querySelector('[data-factor=\"3\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("document.querySelector('[data-current-factor=\"3\"]') && document.querySelector('.study-moving-stack-backward') && document.querySelectorAll('.study-moving-card').length === 4") is not True:
-    raise SystemExit('browser smoke failed: backward study page animation did not start')
 print('browser smoke passed')
 ws.close()
 PY

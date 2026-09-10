@@ -40,9 +40,9 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /factor: \{ type: Number/);
     assert.match(multiplicationTableSource, /\$\{this\.factor\}/);
     assert.match(multiplicationTableSource, /\$\{row\}/);
-    assert.match(multiplicationTableSource, /<span class="ds-factor-one">\$\{factor\}<\/span>/);
+    assert.match(multiplicationTableSource, /<span class="ds-factor-one">\$\{this\.factor\}<\/span>/);
     assert.match(multiplicationTableSource, /<span class="ds-factor-two">\$\{row\}<\/span>/);
-    assert.match(multiplicationTableSource, /\$\{factor \* row\}/);
+    assert.match(multiplicationTableSource, /\$\{this\.factor \* row\}/);
     assert.match(multiplicationTableSource, /study-equation-sheet/);
     assert.match(multiplicationTableSource, /study-equation-sheet ds-surface border rounded-2xl/);
     assert.match(multiplicationTableSource, /play-factor/);
@@ -54,10 +54,6 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /disabled/);
     assert.match(multiplicationTableSource, /isPaused/);
     assert.match(multiplicationTableSource, /activeRow/);
-    assert.match(multiplicationTableSource, /study-equation-stack/);
-    assert.match(multiplicationTableSource, /study-stack-card/);
-    assert.match(multiplicationTableSource, /stackAnimation/);
-    assert.match(multiplicationTableSource, /study-moving-stack-\$\{this\.stackAnimation\.direction\}/);
     assert.doesNotMatch(multiplicationTableSource, /study-table-card|study-equation ds-surface-muted|<h2/);
     assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
 });

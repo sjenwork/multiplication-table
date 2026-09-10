@@ -20,33 +20,6 @@ export class MultiplicationTable extends LitElement {
         this.playbackMode = 'idle';
         this.isPaused = false;
         this.autoPlay = true;
-        this.stackAnimation = null;
-        this.stackAnimationTimer = null;
-        this.stackAnimationToken = 0;
-    }
-
-    willUpdate(changedProperties) {
-        if (!changedProperties.has('factor')) return;
-        const previousFactor = changedProperties.get('factor');
-        if (previousFactor === undefined || previousFactor === this.factor) return;
-        this.startStackAnimation(previousFactor, this.factor);
-    }
-
-    startStackAnimation(previousFactor, nextFactor) {
-        if (this.stackAnimationTimer) window.clearTimeout(this.stackAnimationTimer);
-        const direction = nextFactor > previousFactor ? 'forward' : 'backward';
-        const factors = direction === 'forward'
-            ? Array.from({ length: nextFactor - previousFactor }, (_, index) => previousFactor + index)
-            : Array.from({ length: previousFactor - nextFactor }, (_, index) => nextFactor + index);
-        const token = ++this.stackAnimationToken;
-        this.stackAnimation = { direction, factors };
-        this.requestUpdate();
-        this.stackAnimationTimer = window.setTimeout(() => {
-            if (token !== this.stackAnimationToken) return;
-            this.stackAnimation = null;
-            this.stackAnimationTimer = null;
-            this.requestUpdate();
-        }, 390);
     }
 
     createRenderRoot() {
@@ -85,21 +58,6 @@ export class MultiplicationTable extends LitElement {
         });
     }
 
-    renderEquationPage(factor, interactive) {
-        return html`
-            <div class="study-equation-page study-equation-list" role="list" aria-label="${factor} 的乘法表" ?aria-hidden=${!interactive}>
-                ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((row) => html`
-                    <div class="study-equation ${interactive && this.activeRow === row ? 'study-equation-active' : ''}" role="listitem">
-                        <span class="ds-factor-one">${factor}</span>
-                        <span aria-hidden="true">×</span>
-                        <span class="ds-factor-two">${row}</span>
-                        <span aria-hidden="true">=</span>
-                        <strong class="study-answer">${factor * row}</strong>
-                        <button type="button" class="study-play-button study-question-play" data-play-question="${row}" aria-label="${interactive && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${factor}乘${row}`}" title="${interactive && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${factor}乘${row}`}" ?disabled=${!interactive} tabindex=${interactive ? '0' : '-1'}>${interactive && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? playIcon() : pauseIcon()) : playIcon()}</button>
-                    </div>`)}
-            </div>`;
-    }
-
     render() {
         return html`
             <div class="study-equation-sheet ds-surface border rounded-2xl p-4 sm:p-5">
@@ -112,20 +70,16 @@ export class MultiplicationTable extends LitElement {
                         <button type="button" class="study-auto-play-button ${this.autoPlay ? 'study-auto-play-active' : ''}" data-auto-play aria-label="自動播放${this.autoPlay ? '已開啟' : '已關閉'}" title="自動播放${this.autoPlay ? '已開啟' : '已關閉'}" aria-pressed="${this.autoPlay}"><span aria-hidden="true">↻</span><span>自動</span></button>
                     </div>
                 </div>
-                <div class="study-equation-stage">
-                    <div class="study-equation-stack" data-current-factor="${this.factor}">
-                        ${[2, 3, 4, 5, 6, 7, 8, 9].map((factor) => html`
-                            <div class="study-stack-card ${factor === this.factor ? 'study-stack-card-current' : ''} ${factor < this.factor ? 'study-stack-card-extracted' : ''} ${this.stackAnimation?.factors.includes(factor) ? 'study-stack-card-moving' : ''}" data-stack-factor="${factor}" style="--stack-factor: ${factor};">
-                                ${this.renderEquationPage(factor, factor === this.factor)}
-                            </div>`)}
-                    </div>
-                    ${this.stackAnimation ? html`
-                        <div class="study-moving-stack study-moving-stack-${this.stackAnimation.direction}" aria-hidden="true">
-                            ${this.stackAnimation.factors.map((factor) => html`
-                                <div class="study-moving-card" data-moving-factor="${factor}" style="--stack-factor: ${factor};">
-                                    ${this.renderEquationPage(factor, false)}
-                                </div>`)}
-                        </div>` : ''}
+                <div class="study-equation-list" role="list" aria-label="${this.factor} 的乘法表">
+                    ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((row) => html`
+                        <div class="study-equation ${this.activeRow === row ? 'study-equation-active' : ''}" role="listitem">
+                            <span class="ds-factor-one">${this.factor}</span>
+                            <span aria-hidden="true">×</span>
+                            <span class="ds-factor-two">${row}</span>
+                            <span aria-hidden="true">=</span>
+                            <strong class="study-answer">${this.factor * row}</strong>
+                            <button type="button" class="study-play-button study-question-play" data-play-question="${row}" aria-label="${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${this.factor}乘${row}`}" title="${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${this.factor}乘${row}`}" >${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? playIcon() : pauseIcon()) : playIcon()}</button>
+                        </div>`)}
                 </div>
             </div>`;
     }
