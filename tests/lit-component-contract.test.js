@@ -69,6 +69,9 @@ test('audio playback exposes pause and stop controls with the study table', () =
     assert.match(studySource, /actionBarTop/);
     assert.match(studySource, /targetRowTop/);
     assert.match(studySource, /scrollArea\.scrollTop\s*=/);
+    assert.match(studySource, /requestAnimationFrame/);
+    assert.match(studySource, /cancelAnimationFrame/);
+    assert.match(studySource, /scrollAnimationFrame/);
     assert.doesNotMatch(studySource, /behavior:\s*['"]smooth['"]/);
 });
 

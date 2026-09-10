@@ -1,7 +1,7 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-152113';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-152113';
-import { saveState } from './state.js?v=20260910-152113';
-import './components/multiplication-table.js?v=20260910-152113';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-153224';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-153224';
+import { saveState } from './state.js?v=20260910-153224';
+import './components/multiplication-table.js?v=20260910-153224';
 
 function updateFactor(table, selectedFactor, isPlaying = false) {
     table.factor = selectedFactor;
@@ -29,6 +29,7 @@ export function initStudy(state) {
     let pendingGap = null;
     let resumePlaybackTask = null;
     let playbackStartFactor = 2;
+    let scrollAnimationFrame = 0;
 
     const syncPlaybackState = () => {
         table.playbackMode = playbackMode;
@@ -59,8 +60,36 @@ export function initStudy(state) {
         if (!isPaused) scheduleGap();
     });
 
+    const cancelScrollAnimation = () => {
+        if (!scrollAnimationFrame) return;
+        cancelAnimationFrame(scrollAnimationFrame);
+        scrollAnimationFrame = 0;
+    };
+
+    const animateScrollTop = (scrollArea, targetScrollTop) => {
+        cancelScrollAnimation();
+        const startScrollTop = scrollArea.scrollTop;
+        const distance = targetScrollTop - startScrollTop;
+        if (Math.abs(distance) < 1) {
+            scrollArea.scrollTop = targetScrollTop;
+            return;
+        }
+
+        const duration = Math.min(220, Math.max(140, Math.abs(distance) * 1.5));
+        const startedAt = performance.now();
+        const step = (now) => {
+            const progress = Math.min(1, (now - startedAt) / duration);
+            const easedProgress = 1 - Math.pow(1 - progress, 3);
+            scrollArea.scrollTop = startScrollTop + distance * easedProgress;
+            if (progress < 1) scrollAnimationFrame = requestAnimationFrame(step);
+            else scrollAnimationFrame = 0;
+        };
+        scrollAnimationFrame = requestAnimationFrame(step);
+    };
+
     const stopPlayback = () => {
         playbackToken += 1;
+        cancelScrollAnimation();
         clearGap(true);
         audio.pause();
         audio.removeAttribute('src');
@@ -130,7 +159,7 @@ export function initStudy(state) {
         const targetRowTop = visibleTop + Math.max(0, (visibleHeight - rowRect.height) / 2);
         const targetScrollTop = scrollArea.scrollTop + rowRect.top - targetRowTop;
         const maxScrollTop = Math.max(0, scrollArea.scrollHeight - scrollArea.clientHeight);
-        scrollArea.scrollTop = Math.min(maxScrollTop, Math.max(0, targetScrollTop));
+        animateScrollTop(scrollArea, Math.min(maxScrollTop, Math.max(0, targetScrollTop)));
     };
 
     const playClip = async (factor, multiplier, token) => {
@@ -183,6 +212,7 @@ export function initStudy(state) {
 
     const finishPlayback = (token, factor) => {
         if (!isCurrentPlayback(token)) return;
+        cancelScrollAnimation();
         playbackMode = 'idle';
         isPaused = false;
         table.activeRow = null;
