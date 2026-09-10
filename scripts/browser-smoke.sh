@@ -44,7 +44,9 @@ if [[ -z "$target_url" ]]; then
     done
 else
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
-    remote_root="${target_url%%/index.html*}"
+    remote_root="${target_url%%\?*}"
+    remote_root="${remote_root%/index.html}"
+    remote_root="${remote_root%/}"
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
     curl -fsSL "$remote_root/study.html" >"$fixture_dir/study.html"
