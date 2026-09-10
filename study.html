@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1">
+    <title>乘法小達人｜乘法表</title>
+    <meta name="theme-color" content="#f4fbff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="pwa.css?v=20260910-162450">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-162450">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-162450">
+    <script src="theme-init.js?v=20260910-162450" async></script>
+    <style>
+        .quiz-header { width: 100%; padding: .75rem 3.25rem; border: 1px solid var(--ds-border); border-radius: var(--ds-radius-lg); background: var(--ds-surface); box-shadow: var(--ds-shadow-sm); }
+        .study-content { overflow-y: auto; scrollbar-gutter: stable; }
+        .study-scroll-track { padding-top: 7.5rem; padding-bottom: 10.5rem; }
+        .study-equation-list { display: grid; grid-template-columns: minmax(0, 1fr); }
+        .study-table-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+        .study-table-actions { display: inline-flex; align-items: center; gap: .35rem; }
+        .study-play-button, .study-auto-play-button { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; color: var(--ds-brand-strong); border: 1px solid var(--ds-border); background: var(--ds-surface-strong); transition: color .15s ease, background-color .15s ease, transform .15s ease, border-color .15s ease; }
+        .study-play-button { width: 2.25rem; height: 2.25rem; border-radius: 9999px; }
+        .study-play-button:hover, .study-play-button:focus-visible, .study-auto-play-button:hover, .study-auto-play-button:focus-visible { color: var(--ds-brand); border-color: var(--ds-brand); background: var(--ds-surface-muted); }
+        .study-play-button:active { transform: scale(.95); }
+        .study-play-button:disabled { cursor: not-allowed; opacity: .42; }
+        .study-stop-button { color: var(--ds-danger); border-color: var(--ds-danger-soft); }
+        .study-auto-play-button { gap: .2rem; min-width: 4rem; height: 2.25rem; padding: 0 .65rem; color: var(--ds-text-muted); border-radius: 9999px; font-size: .75rem; font-weight: 700; }
+        .study-auto-play-active { color: var(--ds-brand-strong); border-color: var(--ds-brand-strong); background: var(--ds-brand-soft); }
+        .study-question-play { width: 2rem; height: 2rem; margin-left: .5rem; }
+        .study-equation { position: relative; display: flex; align-items: center; justify-content: center; gap: .25rem; min-height: 3rem; white-space: nowrap; color: var(--ds-text); font-size: 1rem; font-weight: 700; }
+        .study-equation:not(:last-child)::after { content: ""; position: absolute; right: 16.6667%; bottom: 0; left: 16.6667%; border-bottom: 1px solid var(--ds-divider); }
+        .study-equation-active { z-index: 1; color: var(--ds-brand-strong); border-radius: var(--ds-radius-md); background: var(--ds-surface-muted); box-shadow: var(--ds-shadow-sm); transform: scale(1.025); transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease; }
+        .study-equation-active::after { display: none; }
+        .study-answer { color: var(--ds-brand-strong); }
+        .study-factor-button { width: 3.25rem; height: 3.25rem; padding: 0; aspect-ratio: 1; }
+        .study-factor-button[data-playing] { transform: scale(1.08); box-shadow: var(--ds-shadow-md); }
+        .study-factor-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; max-width: 18rem; margin: 0 auto; }
+        @media (min-width: 640px) { .study-factor-button { width: 3.5rem; height: 3.5rem; } .study-factor-grid { max-width: 34rem; } }
+    </style>
+</head>
+<body class="app-shell quiz-shell h-[100svh] overflow-hidden flex flex-col items-center p-4">
+    <button id="force-update" type="button" class="ds-update-pill ds-layer-update hidden fixed left-1/2 top-3 -translate-x-1/2 rounded-full border px-4 py-2 text-xs font-bold shadow-lg transition" aria-label="更新網站版本">更新版本</button>
+    <main class="max-w-3xl w-full h-full min-h-0 flex flex-col relative">
+        <header class="quiz-header ds-layer-header absolute left-0 right-0 top-0 text-center">
+            <button id="back-home" type="button" class="ds-icon-button absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-2xl leading-none transition" aria-label="返回選題"><span aria-hidden="true">←</span></button>
+            <button id="open-settings" type="button" class="ds-icon-button absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-lg leading-none transition" aria-label="開啟設定">⚙</button>
+            <p class="ds-brand-text text-sm font-semibold tracking-[0.2em] mb-2">LEARNING TABLE</p>
+            <h1 class="ds-text-strong text-2xl md:text-3xl font-bold mb-1">乘法表</h1>
+            <p class="ds-text-muted text-sm">選擇一個乘法表開始朗讀</p>
+        </header>
+        <section class="study-content min-h-0 flex-1" aria-label="乘法表內容">
+            <div class="study-scroll-track"><div id="study-table"></div></div>
+        </section>
+    </main>
+    <div class="safe-action-bar ds-surface-strong ds-layer-keypad fixed bottom-0 left-0 right-0 border-t px-2 py-2.5 sm:px-4">
+        <div id="study-factor-buttons" class="study-factor-grid" role="group" aria-label="選擇乘法表">
+            <button type="button" data-factor="2" class="study-factor-button ds-primary rounded-full border font-semibold" aria-pressed="true">2</button>
+            <button type="button" data-factor="3" class="study-factor-button ds-secondary rounded-full border font-semibold" aria-pressed="false">3</button>
+            <button type="button" data-factor="4" class="study-factor-button ds-secondary rounded-full border font-semibold" aria-pressed="false">4</button>
+            <button type="button" data-factor="5" class="study-factor-button ds-secondary rounded-full border font-semibold" aria-pressed="false">5</button>
+            <button type="button" data-factor="6" class="study-factor-button ds-secondary rounded-full border font-semibold" aria-pressed="false">6</button>
+            <button type="button" data-factor="7" class="study-factor-button ds-secondary rounded-full border font-semibold" aria-pressed="false">7</button>
+            <button type="button" data-factor="8" class="study-factor-button ds-secondary rounded-full border font-semibold" aria-pressed="false">8</button>
+            <button type="button" data-factor="9" class="study-factor-button ds-secondary rounded-full border font-semibold" aria-pressed="false">9</button>
+        </div>
+    </div>
+    <script src="app.js?v=20260910-162450" type="module"></script>
+</body>
+</html>

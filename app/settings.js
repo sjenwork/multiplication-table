@@ -1,4 +1,4 @@
-import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260910-162450';
+import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260910-162759';
 
 const SETTINGS_MODAL_MARKUP = `
     <div id="settings-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
@@ -14,6 +14,13 @@ const SETTINGS_MODAL_MARKUP = `
                     <div class="grid grid-cols-2 gap-2" role="group" aria-label="選擇顯示主題">
                         <button type="button" data-theme-choice="light" aria-pressed="false" class="ds-theme-choice ds-secondary rounded-lg border px-4 py-3 text-sm font-semibold transition">☀️ 明亮</button>
                         <button type="button" data-theme-choice="dark" aria-pressed="false" class="ds-theme-choice ds-secondary rounded-lg border px-4 py-3 text-sm font-semibold transition">🌙 深色</button>
+                    </div>
+                </div>
+                <div>
+                    <p class="mb-2 text-sm font-semibold text-slate-700">朗讀聲音</p>
+                    <div class="grid grid-cols-2 gap-2" role="group" aria-label="選擇朗讀聲音">
+                        <button type="button" data-voice-choice="female" aria-pressed="false" class="ds-secondary rounded-lg border px-4 py-3 text-sm font-semibold transition">女聲</button>
+                        <button type="button" data-voice-choice="male" aria-pressed="false" class="ds-secondary rounded-lg border px-4 py-3 text-sm font-semibold transition">男聲</button>
                     </div>
                 </div>
                 <button id="export-records" type="button" class="ds-secondary w-full rounded-lg border px-4 py-3 text-left text-sm font-semibold transition">匯出成績統計紀錄（CSV）</button>
@@ -53,6 +60,12 @@ function updateThemeChoices(state) {
     });
 }
 
+function updateVoiceChoices(state) {
+    document.querySelectorAll('[data-voice-choice]').forEach((button) => {
+        button.setAttribute('aria-pressed', button.dataset.voiceChoice === state.voiceGender ? 'true' : 'false');
+    });
+}
+
 export function initSettings(state) {
     const settingsModal = document.getElementById('settings-modal');
     const closeSettings = () => settingsModal.classList.add('hidden');
@@ -70,7 +83,16 @@ export function initSettings(state) {
             updateThemeChoices(state);
         });
     });
+    document.querySelectorAll('[data-voice-choice]').forEach((button) => {
+        button.addEventListener('click', () => {
+            state.voiceGender = button.dataset.voiceChoice;
+            saveState(state);
+            updateVoiceChoices(state);
+            settingsModal.dispatchEvent(new CustomEvent('voice-change', { detail: { voiceGender: state.voiceGender } }));
+        });
+    });
     updateThemeChoices(state);
+    updateVoiceChoices(state);
     document.getElementById('export-records').addEventListener('click', () => { exportRecords(state); closeSettings(); });
     document.getElementById('clear-storage').addEventListener('click', () => {
         if (window.confirm('確定要清除所有練習紀錄與目前進度嗎？此操作無法復原。')) {
