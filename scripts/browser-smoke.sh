@@ -31,7 +31,7 @@ trap cleanup EXIT
 
 if [[ -z "$target_url" ]]; then
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
-    cp index.html quiz.html study.html app.js sw.js design-tokens.css pwa.css theme-init.js manifest.webmanifest "$fixture_dir/"
+    cp index.html quiz.html study.html app.js sw.js design-tokens.css pwa.css tailwind.css theme-init.js manifest.webmanifest "$fixture_dir/"
     cp -R app icons "$fixture_dir/"
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
@@ -48,6 +48,7 @@ else
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
     curl -fsSL "$remote_root/study.html" >"$fixture_dir/study.html"
+    curl -fsSL "$remote_root/tailwind.css" >"$fixture_dir/tailwind.css"
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e "s#src=\"app\\.js[^\"]*\"#src=\"${remote_root}/app.js\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html" "$fixture_dir/study.html"
