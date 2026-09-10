@@ -26,6 +26,10 @@ html {
     touch-action: manipulation;
 }
 
+#multiplication-grid {
+    touch-action: none;
+}
+
 .safe-action-bar {
     padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
     background-color: var(--ds-surface-strong, rgb(255 255 255 / 0.82));

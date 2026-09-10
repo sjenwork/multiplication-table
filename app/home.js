@@ -1,5 +1,5 @@
-import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-170127';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-170127';
+import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-170628';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-170628';
 
 function updateSelectionStatus(state) {
     const status = document.getElementById('selection-status');
@@ -125,7 +125,22 @@ function setupSelectionGesture(state, grid) {
         gesture.clientX = event.clientX;
         gesture.clientY = event.clientY;
         if (!gesture.active) {
-            if (Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY) > MOVE_TOLERANCE && gesture.pointerType === 'mouse') {
+            const distance = Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY);
+            if (gesture.pointerType !== 'mouse') {
+                if (!gesture.scrolling && distance > MOVE_TOLERANCE) {
+                    window.clearTimeout(gesture.timer);
+                    gesture.scrolling = true;
+                }
+                if (gesture.scrolling) {
+                    scrollContainer.scrollLeft -= event.clientX - gesture.lastX;
+                    scrollContainer.scrollTop -= event.clientY - gesture.lastY;
+                    event.preventDefault();
+                }
+                gesture.lastX = event.clientX;
+                gesture.lastY = event.clientY;
+                return;
+            }
+            if (distance > MOVE_TOLERANCE) {
                 window.clearTimeout(gesture.timer);
                 gesture.moved = false;
                 activateGesture();
@@ -145,12 +160,15 @@ function setupSelectionGesture(state, grid) {
             startY: event.clientY,
             clientX: event.clientX,
             clientY: event.clientY,
+            lastX: event.clientX,
+            lastY: event.clientY,
             startCell: cell,
             pointerType: event.pointerType,
             selected: new Set(state.selected),
             touched: new Set(),
             active: false,
             moved: false,
+            scrolling: false,
             selecting: false,
             previousOverflow: scrollContainer.style.overflow,
             timer: window.setTimeout(activateGesture, LONG_PRESS_MS),

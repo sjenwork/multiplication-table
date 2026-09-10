@@ -1,9 +1,9 @@
-import { questionList, saveState } from './state.js?v=20260910-170127';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260910-170127';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-170127';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260910-170127';
-import { startQuizWithQuestions } from './home.js?v=20260910-170127';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260910-170127';
+import { questionList, saveState } from './state.js?v=20260910-170628';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260910-170628';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-170628';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260910-170628';
+import { startQuizWithQuestions } from './home.js?v=20260910-170628';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260910-170628';
 
 
 function scrollActiveQuestionIntoView(questionKey) {
@@ -82,7 +82,7 @@ function finishQuiz(state, correctCount) {
     });
     state.quiz.completed = true;
     saveState(state);
-    renderQuiz(state);
+    renderQuiz(state, focusQuizQuestion);
     message(allCorrect ? '太棒了！這次全部答對。' : '本輪挑戰完成，紀錄已保存。', false);
     showCompletionOverlay(correctCount, state.quiz.questions.length);
 }
@@ -111,7 +111,7 @@ function restartQuiz(state) {
     state.quiz.completed = false;
     saveState(state);
     hideCompletionOverlay();
-    renderQuiz(state);
+    renderQuiz(state, focusQuizQuestion);
     showKeypad();
     scrollActiveQuestionIntoView(state.quiz.activeKey);
 }
@@ -153,7 +153,7 @@ function submitAnswer(state) {
     }
     if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
     else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
-    renderQuiz(state);
+        renderQuiz(state, focusQuizQuestion);
     showCompletionOverlay(correctCount, state.quiz.questions.length);
     if (firstWrongKey) focusQuizQuestion(state, firstWrongKey, false);
 }
@@ -162,7 +162,7 @@ export function initQuiz(state) {
     if (!state.quiz || !state.quiz.questions.length) { window.location.href = 'index.html'; return; }
     ensureSettingsModal();
     initSettings(state);
-    renderQuiz(state);
+    renderQuiz(state, focusQuizQuestion);
     applyKeypadPosition(state);
     setupKeypadDrag(state);
     setupKeypadClose();
@@ -188,4 +188,3 @@ export function initQuiz(state) {
     modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
     document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
 }
-
