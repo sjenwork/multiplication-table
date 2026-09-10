@@ -64,6 +64,8 @@ test('audio playback exposes pause and stop controls with the study table', () =
     assert.match(multiplicationTableSource, /停止播放/);
     assert.match(studySource, /keepActiveRowVisible/);
     assert.match(studySource, /getBoundingClientRect/);
+    assert.match(studySource, /safe-action-bar/);
+    assert.match(studySource, /actionBarTop/);
     assert.match(studySource, /scrollArea\.scrollBy/);
 });
 
