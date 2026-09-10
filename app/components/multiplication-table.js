@@ -25,7 +25,7 @@ export class MultiplicationTable extends LitElement {
         this.stackAnimationToken = 0;
     }
 
-    updated(changedProperties) {
+    willUpdate(changedProperties) {
         if (!changedProperties.has('factor')) return;
         const previousFactor = changedProperties.get('factor');
         if (previousFactor === undefined || previousFactor === this.factor) return;
