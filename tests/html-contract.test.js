@@ -48,6 +48,9 @@ test('study page keeps the learning table contract', () => {
     assert.match(studyHtml, /\.study-equation-list\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 1fr\)/);
     assert.match(studyHtml, /\.study-equation\s*\{[\s\S]*?white-space:\s*nowrap/);
     assert.match(studyHtml, /\.study-equation-list\s*\{[\s\S]*?gap:\s*0/);
+    assert.match(studyHtml, /\.study-equation-stage\s*\{[\s\S]*?overflow:\s*hidden/);
+    assert.match(studyHtml, /@keyframes study-page-slide-forward/);
+    assert.match(studyHtml, /@keyframes study-page-slide-backward/);
     assert.match(studyHtml, /\.study-equation:not\(:last-child\)::after\s*\{[\s\S]*?right:\s*16\.6667%;[\s\S]*?left:\s*16\.6667%;[\s\S]*?border-bottom:\s*1px solid var\(--ds-divider\)/);
 });
 

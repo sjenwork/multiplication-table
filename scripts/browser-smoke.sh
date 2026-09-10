@@ -198,6 +198,8 @@ if evaluate("document.querySelector('#study-table [data-auto-play]')?.getAttribu
 if evaluate("!!document.querySelector('#study-table [data-play-factor]') || !!document.querySelector('#study-table [data-toggle-playback]')") is not True:
     raise SystemExit('browser smoke failed: study playback controls did not render')
 evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
+if evaluate("document.querySelector('.study-equation-page')?.classList.contains('study-page-slide-forward')") is not True:
+    raise SystemExit('browser smoke failed: forward study page animation did not start')
 if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]:not(:disabled)')") is not True:
     raise SystemExit('browser smoke failed: active playback did not expose pause and stop controls')
 evaluate("document.querySelector('#study-table [data-toggle-playback]').click()")
@@ -211,6 +213,9 @@ if evaluate("document.getElementById('open-settings').click(); document.querySel
 evaluate("document.querySelector('app-settings-modal [data-modal-close]').click()")
 if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return document.querySelector('.study-equation-list').textContent.includes('63'); })()") is not True:
     raise SystemExit('browser smoke failed: study factor selection did not update the table')
+evaluate("(async () => { document.querySelector('[data-factor=\"3\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
+if evaluate("document.querySelector('.study-equation-page')?.classList.contains('study-page-slide-backward')") is not True:
+    raise SystemExit('browser smoke failed: backward study page animation did not start')
 print('browser smoke passed')
 ws.close()
 PY

@@ -54,6 +54,9 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /disabled/);
     assert.match(multiplicationTableSource, /isPaused/);
     assert.match(multiplicationTableSource, /activeRow/);
+    assert.match(multiplicationTableSource, /updated\(changedProperties\)/);
+    assert.match(multiplicationTableSource, /study-equation-page study-equation-list/);
+    assert.match(multiplicationTableSource, /study-page-slide-\$\{this\.animationDirection\}/);
     assert.doesNotMatch(multiplicationTableSource, /study-table-card|study-equation ds-surface-muted|<h2/);
     assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
 });

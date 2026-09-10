@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-130230">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-130230">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-130230">
-    <script src="app/theme-colors.js?v=20260910-130230" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-131229">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-131229">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-131229">
+    <script src="app/theme-colors.js?v=20260910-131229" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -39,6 +39,44 @@
             display: grid;
             grid-template-columns: minmax(0, 1fr);
             gap: 0;
+        }
+
+        .study-equation-stage {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--ds-radius-md);
+            perspective: 900px;
+        }
+
+        .study-equation-page {
+            position: relative;
+            transform-origin: center center;
+            backface-visibility: hidden;
+        }
+
+        .study-page-slide-forward {
+            animation: study-page-slide-forward 0.36s cubic-bezier(0.22, 0.8, 0.24, 1) both;
+        }
+
+        .study-page-slide-backward {
+            animation: study-page-slide-backward 0.36s cubic-bezier(0.22, 0.8, 0.24, 1) both;
+        }
+
+        @keyframes study-page-slide-forward {
+            from { opacity: 0.35; transform: translate3d(18%, 0, 0) rotateY(-4deg); box-shadow: -18px 0 24px -24px var(--ds-brand-strong); }
+            to { opacity: 1; transform: translate3d(0, 0, 0) rotateY(0); box-shadow: none; }
+        }
+
+        @keyframes study-page-slide-backward {
+            from { opacity: 0.35; transform: translate3d(-18%, 0, 0) rotateY(4deg); box-shadow: 18px 0 24px -24px var(--ds-brand-strong); }
+            to { opacity: 1; transform: translate3d(0, 0, 0) rotateY(0); box-shadow: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .study-page-slide-forward,
+            .study-page-slide-backward {
+                animation: none;
+            }
         }
 
         .study-table-heading {
@@ -225,6 +263,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260910-130230" type="module"></script>
+    <script src="app.js?v=20260910-131229" type="module"></script>
 </body>
 </html>

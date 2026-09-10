@@ -1,7 +1,7 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-130230';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-130230';
-import { saveState } from './state.js?v=20260910-130230';
-import './components/multiplication-table.js?v=20260910-130230';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-131229';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-131229';
+import { saveState } from './state.js?v=20260910-131229';
+import './components/multiplication-table.js?v=20260910-131229';
 
 function updateFactor(table, selectedFactor, isPlaying = false) {
     table.factor = selectedFactor;
@@ -121,12 +121,6 @@ export function initStudy(state) {
                 if (!await playClip(factor, multiplier, token)) return false;
             } catch (error) {
                 if (!isCurrentPlayback(token)) return false;
-                console.warn('[multiplication-audio] waiting for user gesture', {
-                    factor,
-                    multiplier,
-                    errorName: error?.name,
-                    errorMessage: error?.message,
-                });
                 isPaused = true;
                 resumePlaybackTask = () => runPlayback(
                     playbackMode,
@@ -178,12 +172,6 @@ export function initStudy(state) {
         playbackStartFactor = factor;
         isPaused = false;
         const token = playbackToken;
-        console.info('[multiplication-audio] sequence start', {
-            mode,
-            factor,
-            autoPlay,
-            userActivation: navigator.userActivation?.isActive ?? 'unsupported',
-        });
         syncPlaybackState();
         await runPlayback(mode, factor, token);
     };
@@ -241,10 +229,4 @@ export function initStudy(state) {
         window.location.href = 'index.html';
     });
     if (autoPlay) playFactor(selectedFactor, 'factor').then(() => {});
-    console.info('[multiplication-audio] study initialized', {
-        autoPlay,
-        selectedFactor,
-        voiceGender,
-        userActivation: navigator.userActivation?.isActive ?? 'unsupported',
-    });
 }

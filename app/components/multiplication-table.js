@@ -20,6 +20,8 @@ export class MultiplicationTable extends LitElement {
         this.playbackMode = 'idle';
         this.isPaused = false;
         this.autoPlay = true;
+        this.animationDirection = null;
+        this.hasRendered = false;
     }
 
     createRenderRoot() {
@@ -58,6 +60,24 @@ export class MultiplicationTable extends LitElement {
         });
     }
 
+    updated(changedProperties) {
+        if (!changedProperties.has('factor')) return;
+        const previousFactor = changedProperties.get('factor');
+        if (!this.hasRendered || previousFactor === undefined || previousFactor === this.factor) {
+            this.hasRendered = true;
+            return;
+        }
+        this.animationDirection = this.factor > previousFactor ? 'forward' : 'backward';
+        const page = this.querySelector('.study-equation-page');
+        if (!page) return;
+        page.classList.remove('study-page-slide-forward', 'study-page-slide-backward');
+        void page.offsetWidth;
+        page.classList.add(`study-page-slide-${this.animationDirection}`);
+        page.addEventListener('animationend', () => {
+            page.classList.remove('study-page-slide-forward', 'study-page-slide-backward');
+        }, { once: true });
+    }
+
     render() {
         return html`
             <div class="study-equation-sheet ds-surface border rounded-2xl p-4 sm:p-5">
@@ -70,16 +90,18 @@ export class MultiplicationTable extends LitElement {
                         <button type="button" class="study-auto-play-button ${this.autoPlay ? 'study-auto-play-active' : ''}" data-auto-play aria-label="自動播放${this.autoPlay ? '已開啟' : '已關閉'}" title="自動播放${this.autoPlay ? '已開啟' : '已關閉'}" aria-pressed="${this.autoPlay}"><span aria-hidden="true">↻</span><span>自動</span></button>
                     </div>
                 </div>
-                <div class="study-equation-list" role="list" aria-label="${this.factor} 的乘法表">
-                    ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((row) => html`
-                        <div class="study-equation ${this.activeRow === row ? 'study-equation-active' : ''}" role="listitem">
-                            <span class="ds-factor-one">${this.factor}</span>
-                            <span aria-hidden="true">×</span>
-                            <span class="ds-factor-two">${row}</span>
-                            <span aria-hidden="true">=</span>
-                            <strong class="study-answer">${this.factor * row}</strong>
-                            <button type="button" class="study-play-button study-question-play" data-play-question="${row}" aria-label="${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${this.factor}乘${row}`}" title="${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${this.factor}乘${row}`}" >${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? playIcon() : pauseIcon()) : playIcon()}</button>
-                        </div>`)}
+                <div class="study-equation-stage">
+                    <div class="study-equation-page study-equation-list" role="list" aria-label="${this.factor} 的乘法表">
+                        ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((row) => html`
+                            <div class="study-equation ${this.activeRow === row ? 'study-equation-active' : ''}" role="listitem">
+                                <span class="ds-factor-one">${this.factor}</span>
+                                <span aria-hidden="true">×</span>
+                                <span class="ds-factor-two">${row}</span>
+                                <span aria-hidden="true">=</span>
+                                <strong class="study-answer">${this.factor * row}</strong>
+                                <button type="button" class="study-play-button study-question-play" data-play-question="${row}" aria-label="${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${this.factor}乘${row}`}" title="${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${this.factor}乘${row}`}" >${this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? playIcon() : pauseIcon()) : playIcon()}</button>
+                            </div>`)}
+                    </div>
                 </div>
             </div>`;
     }
