@@ -31,7 +31,7 @@ trap cleanup EXIT
 
 if [[ -z "$target_url" ]]; then
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
-    cp index.html quiz.html app.js sw.js design-tokens.css pwa.css theme-init.js manifest.webmanifest "$fixture_dir/"
+    cp index.html quiz.html study.html app.js sw.js design-tokens.css pwa.css theme-init.js manifest.webmanifest "$fixture_dir/"
     cp -R app icons "$fixture_dir/"
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
@@ -47,9 +47,10 @@ else
     remote_root="${target_url%/index.html}"
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
+    curl -fsSL "$remote_root/study.html" >"$fixture_dir/study.html"
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
-    perl -0pi -e "s#src=\"app\\.js[^\"]*\"#src=\"${remote_root}/app.js\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html"
+    perl -0pi -e "s#src=\"app\\.js[^\"]*\"#src=\"${remote_root}/app.js\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html" "$fixture_dir/study.html"
     (cd "$fixture_dir" && python3 -m http.server 8766 --bind 127.0.0.1) >"$server_log" 2>&1 &
     server_pid=$!
     target_url="http://127.0.0.1:8766/index.html"
@@ -138,6 +139,18 @@ evaluate("document.getElementById('close-settings').click(); document.getElement
 time.sleep(2)
 if evaluate("document.querySelectorAll('#question-list article').length") == 0:
     raise SystemExit('browser smoke failed: quiz questions did not render')
+evaluate("window.location.href = 'study.html'")
+time.sleep(2)
+if evaluate("document.querySelectorAll('#study-table .study-equation').length") != 9:
+    raise SystemExit('browser smoke failed: vanilla study table did not render 9 equations')
+if evaluate("document.querySelectorAll('#study-factor-buttons [data-factor]').length") != 8:
+    raise SystemExit('browser smoke failed: vanilla study factor buttons did not render')
+if evaluate("document.querySelectorAll('#study-table [data-play-question]').length") != 9:
+    raise SystemExit('browser smoke failed: vanilla study question controls did not render')
+if evaluate("document.querySelectorAll('#study-table [data-play-factor], #study-table [data-toggle-playback], #study-table [data-play-all], #study-table [data-auto-play]').length") != 3:
+    raise SystemExit('browser smoke failed: vanilla study playback controls did not render')
+if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('[data-voice-choice]').length") != 2:
+    raise SystemExit('browser smoke failed: vanilla settings voice choices did not render')
 print('browser smoke passed')
 ws.close()
 PY
