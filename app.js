@@ -1,9 +1,9 @@
-import { loadState } from './app/state.js?v=20260910-172554';
-import { applyTheme } from './app/settings.js?v=20260910-172554';
-import { initVersionUpdate } from './app/update.js?v=20260910-172554';
-import { initHome } from './app/home.js?v=20260910-172554';
-import { initQuiz } from './app/quiz.js?v=20260910-172554';
-import { initStudy } from './app/study.js?v=20260910-172554';
+import { loadState } from './app/state.js?v=20260910-172909';
+import { applyTheme } from './app/settings.js?v=20260910-172909';
+import { initVersionUpdate } from './app/update.js?v=20260910-172909';
+import { initHome } from './app/home.js?v=20260910-172909';
+import { initQuiz } from './app/quiz.js?v=20260910-172909';
+import { initStudy } from './app/study.js?v=20260910-172909';
 
 (function () {
     'use strict';

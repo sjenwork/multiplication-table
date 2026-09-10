@@ -58,3 +58,7 @@ test('partial quiz submission does not show the completion overlay', () => {
     const submitSection = quiz.slice(quiz.indexOf('function submitAnswer'), quiz.indexOf('export function initQuiz'));
     assert.doesNotMatch(submitSection, /showCompletionOverlay\(/);
 });
+
+test('completion overlay hidden state wins over its flex layout rule', () => {
+    assert.match(quizHtml, /\.completion-overlay\.hidden\s*\{\s*display:\s*none\s*!important;/);
+});
