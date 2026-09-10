@@ -1,6 +1,6 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-172909';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-172909';
-import { saveState } from './state.js?v=20260910-172909';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-172934';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-172934';
+import { saveState } from './state.js?v=20260910-172934';
 
 const FACTORS = [2, 3, 4, 5, 6, 7, 8, 9];
 

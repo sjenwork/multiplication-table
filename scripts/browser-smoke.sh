@@ -149,6 +149,8 @@ evaluate("document.getElementById('start-quiz').click()")
 time.sleep(2)
 if evaluate("document.querySelectorAll('#question-list article').length") == 0:
     raise SystemExit('browser smoke failed: quiz questions did not render')
+if not evaluate("document.getElementById('completion-overlay').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: completion overlay was visible on quiz start')
 if evaluate("document.getElementById('number-pad').classList.contains('hidden')"):
     raise SystemExit('browser smoke failed: numeric keypad was hidden on quiz start')
 if evaluate("document.querySelectorAll('input[data-question]').length < 2"):
