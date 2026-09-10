@@ -15,6 +15,9 @@ test('home page keeps the interaction contract', () => {
     for (const id of ['multiplication-grid', 'selection-status', 'start-study', 'start-random-quiz', 'start-wrong-quiz', 'start-quiz', 'open-settings']) {
         assert.match(indexHtml, new RegExp(`id="${id}"`));
     }
+    const statusPosition = indexHtml.indexOf('id="selection-status"');
+    const actionBarPosition = indexHtml.indexOf('class="safe-action-bar');
+    assert.ok(statusPosition > 0 && statusPosition < actionBarPosition, 'selection status belongs above the bottom action bar');
 });
 
 test('quiz page keeps the interaction contract', () => {

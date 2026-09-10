@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-172934">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-172934">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-172934">
-    <script src="theme-init.js?v=20260910-172934"></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-173135">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-173135">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-173135">
+    <script src="theme-init.js?v=20260910-173135"></script>
     <style>
         #multiplication-grid.selection-dragging {
             outline: 3px solid var(--ds-focus-ring);
@@ -46,7 +46,7 @@
             <h1 class="text-2xl md:text-3xl font-bold text-slate-800 mb-2">乘法小達人</h1>
         </header>
 
-        <div class="ds-surface mb-4 rounded-xl px-4 py-3 text-center text-sm">
+        <div id="selection-status" class="selection-status ds-surface mb-4 rounded-xl px-4 py-3 text-center text-sm" role="status">
             點選或長按滑動選題；每次隨機 10 題，不足則全部出題。
         </div>
 
@@ -56,7 +56,7 @@
     </main>
 
     <div class="safe-action-bar ds-surface-strong fixed bottom-0 left-0 right-0 border-t py-2.5 px-2 sm:px-4 md:px-6 flex flex-nowrap items-center gap-2 z-50">
-        <p id="selection-status" class="ds-text-muted text-xs sm:text-sm font-medium leading-tight flex-1 min-w-0" role="status"></p>
+        <span class="flex-1 min-w-0" aria-hidden="true"></span>
         <div class="flex items-center gap-2 shrink-0">
             <button id="start-study" type="button" class="ds-secondary whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-md transition cursor-pointer">
                 乘法表
@@ -73,6 +73,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260910-172934" type="module"></script>
+    <script src="app.js?v=20260910-173135" type="module"></script>
 </body>
 </html>
