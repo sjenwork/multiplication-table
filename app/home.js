@@ -1,5 +1,5 @@
-import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-164140';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-164140';
+import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260910-170127';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-170127';
 
 function updateSelectionStatus(state) {
     const status = document.getElementById('selection-status');
@@ -50,7 +50,7 @@ function setupSelectionGesture(state, grid) {
     if (!scrollContainer) return;
     grid.dataset.gestureReady = 'true';
     const LONG_PRESS_MS = 400;
-    const MOVE_TOLERANCE = 10;
+    const MOVE_TOLERANCE = 18;
     const EDGE_ZONE = 48;
     const MAX_SCROLL_SPEED = 14;
     let gesture = null;
@@ -125,14 +125,10 @@ function setupSelectionGesture(state, grid) {
         gesture.clientX = event.clientX;
         gesture.clientY = event.clientY;
         if (!gesture.active) {
-            if (Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY) > MOVE_TOLERANCE) {
+            if (Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY) > MOVE_TOLERANCE && gesture.pointerType === 'mouse') {
                 window.clearTimeout(gesture.timer);
-                if (gesture.pointerType === 'mouse') {
-                    gesture.moved = false;
-                    activateGesture();
-                } else {
-                    gesture.moved = true;
-                }
+                gesture.moved = false;
+                activateGesture();
             }
             return;
         }

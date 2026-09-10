@@ -1,22 +1,24 @@
-const CACHE_NAME = 'multiplication-master-v20260910-164140';
+const CACHE_NAME = 'multiplication-master-v20260910-170127';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
-    '/app.js?v=20260910-164140',
-    '/app/state.js?v=20260910-164140',
-    '/app/keypad.js?v=20260910-164140',
-    '/app/settings.js?v=20260910-164140',
-    '/app/update.js?v=20260910-164140',
-    '/app/quiz-view.js?v=20260910-164140',
-    '/app/completion.js?v=20260910-164140',
-    '/app/home.js?v=20260910-164140',
-    '/app/quiz.js?v=20260910-164140',
-    '/app/audio.js?v=20260910-164140',
-    '/app/study.js?v=20260910-164140',
-    '/design-tokens.css?v=20260910-164140',
-    '/theme-init.js?v=20260910-164140',
-    '/pwa.css?v=20260910-164140',
+    '/study.html',
+    '/app.js?v=20260910-170127',
+    '/app/state.js?v=20260910-170127',
+    '/app/keypad.js?v=20260910-170127',
+    '/app/settings.js?v=20260910-170127',
+    '/app/update.js?v=20260910-170127',
+    '/app/quiz-view.js?v=20260910-170127',
+    '/app/completion.js?v=20260910-170127',
+    '/app/home.js?v=20260910-170127',
+    '/app/quiz.js?v=20260910-170127',
+    '/app/audio.js?v=20260910-170127',
+    '/app/study.js?v=20260910-170127',
+    '/design-tokens.css?v=20260910-170127',
+    '/theme-init.js?v=20260910-170127',
+    '/pwa.css?v=20260910-170127',
+    '/tailwind.css?v=20260910-170127',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -53,7 +55,8 @@ self.addEventListener('fetch', (event) => {
         || requestUrl.pathname.endsWith('/app/home.js')
         || requestUrl.pathname.endsWith('/app/quiz.js')
         || requestUrl.pathname.endsWith('/app/audio.js')
-        || requestUrl.pathname.endsWith('/app/study.js');
+        || requestUrl.pathname.endsWith('/app/study.js')
+        || requestUrl.pathname.endsWith('/tailwind.css');
     if (latestFirst) {
         event.respondWith(
             fetch(event.request).then((response) => {
