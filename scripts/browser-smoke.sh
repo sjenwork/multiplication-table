@@ -198,7 +198,7 @@ if evaluate("document.querySelector('#study-table [data-auto-play]')?.getAttribu
 if evaluate("!!document.querySelector('#study-table [data-play-factor]') || !!document.querySelector('#study-table [data-toggle-playback]')") is not True:
     raise SystemExit('browser smoke failed: study playback controls did not render')
 evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("document.querySelector('[data-current-factor=\"7\"]') && document.querySelectorAll('.study-stack-card').length === 8 && document.querySelectorAll('.study-stack-card-extracted').length === 5") is not True:
+if evaluate("document.querySelector('[data-current-factor=\"7\"]') && document.querySelector('.study-moving-stack-forward') && document.querySelectorAll('.study-moving-card').length === 5") is not True:
     raise SystemExit('browser smoke failed: forward study page animation did not start')
 if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]:not(:disabled)')") is not True:
     raise SystemExit('browser smoke failed: active playback did not expose pause and stop controls')
@@ -214,7 +214,7 @@ evaluate("document.querySelector('app-settings-modal [data-modal-close]').click(
 if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return [...document.querySelectorAll('.study-equation-list')].some((page) => page.textContent.includes('63')); })()") is not True:
     raise SystemExit('browser smoke failed: study factor selection did not update the table')
 evaluate("(async () => { document.querySelector('[data-factor=\"3\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("document.querySelector('[data-current-factor=\"3\"]') && document.querySelectorAll('.study-stack-card').length === 8 && document.querySelectorAll('.study-stack-card-extracted').length === 1") is not True:
+if evaluate("document.querySelector('[data-current-factor=\"3\"]') && document.querySelector('.study-moving-stack-backward') && document.querySelectorAll('.study-moving-card').length === 4") is not True:
     raise SystemExit('browser smoke failed: backward study page animation did not start')
 print('browser smoke passed')
 ws.close()

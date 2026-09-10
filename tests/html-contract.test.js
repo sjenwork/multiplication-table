@@ -52,6 +52,9 @@ test('study page keeps the learning table contract', () => {
     assert.match(studyHtml, /\.study-equation-stack\s*\{[\s\S]*?display:\s*grid/);
     assert.match(studyHtml, /\.study-stack-card\s*\{[\s\S]*?z-index:\s*calc\(100 - var\(--stack-factor\)\)/);
     assert.match(studyHtml, /\.study-stack-card-extracted\s*\{[\s\S]*?translate3d\(-112%/);
+    assert.match(studyHtml, /\.study-moving-stack\s*\{[\s\S]*?z-index:\s*200/);
+    assert.match(studyHtml, /@keyframes study-moving-stack-forward/);
+    assert.match(studyHtml, /@keyframes study-moving-stack-backward/);
     assert.match(studyHtml, /\.study-equation:not\(:last-child\)::after\s*\{[\s\S]*?right:\s*16\.6667%;[\s\S]*?left:\s*16\.6667%;[\s\S]*?border-bottom:\s*1px solid var\(--ds-divider\)/);
 });
 

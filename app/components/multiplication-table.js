@@ -20,6 +20,33 @@ export class MultiplicationTable extends LitElement {
         this.playbackMode = 'idle';
         this.isPaused = false;
         this.autoPlay = true;
+        this.stackAnimation = null;
+        this.stackAnimationTimer = null;
+        this.stackAnimationToken = 0;
+    }
+
+    updated(changedProperties) {
+        if (!changedProperties.has('factor')) return;
+        const previousFactor = changedProperties.get('factor');
+        if (previousFactor === undefined || previousFactor === this.factor) return;
+        this.startStackAnimation(previousFactor, this.factor);
+    }
+
+    startStackAnimation(previousFactor, nextFactor) {
+        if (this.stackAnimationTimer) window.clearTimeout(this.stackAnimationTimer);
+        const direction = nextFactor > previousFactor ? 'forward' : 'backward';
+        const factors = direction === 'forward'
+            ? Array.from({ length: nextFactor - previousFactor }, (_, index) => previousFactor + index)
+            : Array.from({ length: previousFactor - nextFactor }, (_, index) => nextFactor + index);
+        const token = ++this.stackAnimationToken;
+        this.stackAnimation = { direction, factors };
+        this.requestUpdate();
+        this.stackAnimationTimer = window.setTimeout(() => {
+            if (token !== this.stackAnimationToken) return;
+            this.stackAnimation = null;
+            this.stackAnimationTimer = null;
+            this.requestUpdate();
+        }, 390);
     }
 
     createRenderRoot() {
@@ -88,10 +115,17 @@ export class MultiplicationTable extends LitElement {
                 <div class="study-equation-stage">
                     <div class="study-equation-stack" data-current-factor="${this.factor}">
                         ${[2, 3, 4, 5, 6, 7, 8, 9].map((factor) => html`
-                            <div class="study-stack-card ${factor === this.factor ? 'study-stack-card-current' : ''} ${factor < this.factor ? 'study-stack-card-extracted' : ''}" data-stack-factor="${factor}" style="--stack-factor: ${factor};">
+                            <div class="study-stack-card ${factor === this.factor ? 'study-stack-card-current' : ''} ${factor < this.factor ? 'study-stack-card-extracted' : ''} ${this.stackAnimation?.factors.includes(factor) ? 'study-stack-card-moving' : ''}" data-stack-factor="${factor}" style="--stack-factor: ${factor};">
                                 ${this.renderEquationPage(factor, factor === this.factor)}
                             </div>`)}
                     </div>
+                    ${this.stackAnimation ? html`
+                        <div class="study-moving-stack study-moving-stack-${this.stackAnimation.direction}" aria-hidden="true">
+                            ${this.stackAnimation.factors.map((factor) => html`
+                                <div class="study-moving-card" data-moving-factor="${factor}" style="--stack-factor: ${factor};">
+                                    ${this.renderEquationPage(factor, false)}
+                                </div>`)}
+                        </div>` : ''}
                 </div>
             </div>`;
     }
