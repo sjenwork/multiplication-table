@@ -40,9 +40,9 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /factor: \{ type: Number/);
     assert.match(multiplicationTableSource, /\$\{this\.factor\}/);
     assert.match(multiplicationTableSource, /\$\{row\}/);
-    assert.match(multiplicationTableSource, /<span class="ds-factor-one">\$\{this\.factor\}<\/span>/);
+    assert.match(multiplicationTableSource, /<span class="ds-factor-one">\$\{factor\}<\/span>/);
     assert.match(multiplicationTableSource, /<span class="ds-factor-two">\$\{row\}<\/span>/);
-    assert.match(multiplicationTableSource, /\$\{this\.factor \* row\}/);
+    assert.match(multiplicationTableSource, /\$\{factor \* row\}/);
     assert.match(multiplicationTableSource, /study-equation-sheet/);
     assert.match(multiplicationTableSource, /study-equation-sheet ds-surface border rounded-2xl/);
     assert.match(multiplicationTableSource, /play-factor/);
@@ -55,8 +55,8 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /isPaused/);
     assert.match(multiplicationTableSource, /activeRow/);
     assert.match(multiplicationTableSource, /updated\(changedProperties\)/);
-    assert.match(multiplicationTableSource, /study-equation-page study-equation-list/);
-    assert.match(multiplicationTableSource, /study-page-slide-\$\{this\.animationDirection\}/);
+    assert.match(multiplicationTableSource, /transitionFromFactor/);
+    assert.match(multiplicationTableSource, /study-page-transition-\$\{this\.transitionDirection\}/);
     assert.doesNotMatch(multiplicationTableSource, /study-table-card|study-equation ds-surface-muted|<h2/);
     assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
 });

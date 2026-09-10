@@ -198,7 +198,7 @@ if evaluate("document.querySelector('#study-table [data-auto-play]')?.getAttribu
 if evaluate("!!document.querySelector('#study-table [data-play-factor]') || !!document.querySelector('#study-table [data-toggle-playback]')") is not True:
     raise SystemExit('browser smoke failed: study playback controls did not render')
 evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("document.querySelector('.study-equation-page')?.classList.contains('study-page-slide-forward')") is not True:
+if evaluate("document.querySelector('.study-page-transition-forward') && document.querySelectorAll('.study-equation-page').length === 2") is not True:
     raise SystemExit('browser smoke failed: forward study page animation did not start')
 if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]:not(:disabled)')") is not True:
     raise SystemExit('browser smoke failed: active playback did not expose pause and stop controls')
@@ -211,10 +211,10 @@ if evaluate("document.querySelector('#study-table [data-stop-playback]')?.disabl
 if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('app-settings-modal [data-voice-choice]').length") != 2:
     raise SystemExit('browser smoke failed: voice gender choices did not render')
 evaluate("document.querySelector('app-settings-modal [data-modal-close]').click()")
-if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return document.querySelector('.study-equation-list').textContent.includes('63'); })()") is not True:
+if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return [...document.querySelectorAll('.study-equation-list')].some((page) => page.textContent.includes('63')); })()") is not True:
     raise SystemExit('browser smoke failed: study factor selection did not update the table')
 evaluate("(async () => { document.querySelector('[data-factor=\"3\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("document.querySelector('.study-equation-page')?.classList.contains('study-page-slide-backward')") is not True:
+if evaluate("document.querySelector('.study-page-transition-backward') && document.querySelectorAll('.study-equation-page').length === 2") is not True:
     raise SystemExit('browser smoke failed: backward study page animation did not start')
 print('browser smoke passed')
 ws.close()
