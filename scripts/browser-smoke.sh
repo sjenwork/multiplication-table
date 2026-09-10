@@ -193,6 +193,8 @@ if evaluate("document.querySelector('.study-equation-list').textContent.includes
     raise SystemExit('browser smoke failed: default study table did not render factor 2')
 if evaluate("document.querySelectorAll('#study-table [data-play-question]').length") != 9:
     raise SystemExit('browser smoke failed: study question play buttons did not render')
+if evaluate("(async () => { const area = document.querySelector('.study-content'); area.scrollTop = 0; document.querySelector('#study-table [data-play-question=\\\"9\\\"]').click(); await new Promise((resolve) => setTimeout(resolve, 600)); const row = document.querySelector('.study-equation-active').getBoundingClientRect(); const bar = document.querySelector('.safe-action-bar').getBoundingClientRect(); return row.bottom <= bar.top - 8; })()") is not True:
+    raise SystemExit('browser smoke failed: active ninth row was covered by the bottom action bar')
 if evaluate("document.querySelector('#study-table [data-auto-play]')?.getAttribute('aria-pressed')") != 'true':
     raise SystemExit('browser smoke failed: auto-play did not default to enabled')
 if evaluate("!!document.querySelector('#study-table [data-play-factor]') || !!document.querySelector('#study-table [data-toggle-playback]')") is not True:
