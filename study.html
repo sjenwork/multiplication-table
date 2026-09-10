@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-134629">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-134629">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-134629">
-    <script src="app/theme-colors.js?v=20260910-134629" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-140717">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-140717">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-140717">
+    <script src="app/theme-colors.js?v=20260910-140717" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -60,12 +60,15 @@
             z-index: calc(100 - var(--stack-factor));
             transform-origin: center left;
             backface-visibility: hidden;
+            background: var(--ds-canvas);
+            border-radius: var(--ds-radius-md);
+            overflow: hidden;
             transition: transform 0.38s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.38s ease, box-shadow 0.38s ease;
         }
 
         .study-stack-card-extracted {
             pointer-events: none;
-            opacity: 0.18;
+            opacity: 1;
             transform: translate3d(-112%, 0, 0) rotateY(5deg);
             box-shadow: -22px 0 28px -20px var(--ds-brand-strong);
         }
@@ -77,7 +80,7 @@
         }
 
         .study-stack-card:not(.study-stack-card-extracted):not(.study-stack-card-current) {
-            opacity: 0.98;
+            opacity: 1;
             transform: translate3d(0, 0, 0) rotateY(0);
             pointer-events: none;
         }
@@ -272,6 +275,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260910-134629" type="module"></script>
+    <script src="app.js?v=20260910-140717" type="module"></script>
 </body>
 </html>

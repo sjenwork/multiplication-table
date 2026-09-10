@@ -1,7 +1,7 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-134629';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-134629';
-import { saveState } from './state.js?v=20260910-134629';
-import './components/multiplication-table.js?v=20260910-134629';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-140717';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-140717';
+import { saveState } from './state.js?v=20260910-140717';
+import './components/multiplication-table.js?v=20260910-140717';
 
 function updateFactor(table, selectedFactor, isPlaying = false) {
     table.factor = selectedFactor;
