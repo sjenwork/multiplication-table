@@ -33,4 +33,6 @@ test('study page keeps the playback interaction contract', () => {
     for (const attribute of ['data-factor="2"', 'data-factor="9"']) {
         assert.match(studyHtml, new RegExp(attribute));
     }
+    assert.match(studyHtml, /id="open-settings"[\s\S]*?<svg[^>]*viewBox="0 0 24 24"/);
+    assert.doesNotMatch(studyHtml, /id="open-settings"[^>]*>⚙/);
 });
