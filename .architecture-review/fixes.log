@@ -7,3 +7,8 @@
 | 2026-09-06 | REV-20260906-02 | `3813ed4` | 統一跨頁 action hierarchy，移除測驗 action bar 重複的 shadow/backdrop utilities。 |
 | 2026-09-06 | REV-20260906-03 | `adf2b7c` | 抽出 focus、drag/dock、keypad control 的 light/dark visual tokens。 |
 | 2026-09-06 | REV-20260906-04 | `56f1f01` | 將 settings modal markup 改為 app.js 單一 template，兩頁初始化時共用。 |
+| 2026-09-06 | REV-20260906-06 | `c5e0f2f` | 集中 theme-color runtime source，保留 metadata 的 light default。 |
+| 2026-09-06 | REV-20260906-07 | `c5e0f2f` | 將 theme-sensitive raw palette 遷移至 semantic classes，並新增 style contract test。 |
+| 2026-09-06 | REV-20260906-08 | `c5e0f2f` | 將 completion confetti palette 移至 design tokens。 |
+| 2026-09-06 | REV-20260906-09 | `c5e0f2f` | 統一 scrim、keypad shadow 與 input/focus visual tokens。 |
+| 2026-09-06 | REV-20260906-10 | `4e6e310` | 命名 layer 與 blur tokens，移除頁面散落的 stacking/effect 數值。 |

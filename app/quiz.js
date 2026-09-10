@@ -1,9 +1,11 @@
-import { questionList, saveState } from './state.js?v=20260906-104354';
-import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260906-104354';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260906-104354';
-import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260906-104354';
-import { startQuizWithQuestions } from './home.js?v=20260906-104354';
-import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260906-104354';
+import { questionList, saveState } from './state.js?v=20260910-153224';
+import { applyKeypadPosition, hideKeypad, setupKeypadClose, setupKeypadDrag, showKeypad, updateQuizScrollReserve } from './keypad.js?v=20260910-153224';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-153224';
+import { hideCompletionOverlay, setupCompletionOverlay, showCompletionOverlay } from './completion.js?v=20260910-153224';
+import { startQuizWithQuestions } from './home.js?v=20260910-153224';
+import { message, renderQuiz, updateSubmitButton } from './quiz-view.js?v=20260910-153224';
+import './components/app-modal.js?v=20260910-153224';
+import './components/numeric-keypad.js?v=20260910-153224';
 
 
 function scrollActiveQuestionIntoView(questionKey) {
@@ -39,8 +41,7 @@ function focusQuizQuestion(state, questionKey, openKeypad = true) {
     state.quiz.activeKey = questionKey;
     document.querySelectorAll('input[data-question]').forEach((answerInput) => {
         const active = answerInput.dataset.question === questionKey;
-        answerInput.classList.toggle('ring-2', active);
-        answerInput.classList.toggle('ring-blue-300', active);
+        answerInput.classList.toggle('ds-question-active', active);
     });
     saveState(state);
     if (openKeypad) showKeypad();
@@ -64,8 +65,7 @@ function updateKeypadAnswer(state, value) {
     else active.input += value;
     const input = document.getElementById(`answer-${active.key}`);
     if (input) input.value = active.input;
-    document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-2', answerInput === input));
-    document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ring-blue-300', answerInput === input));
+    document.querySelectorAll('input[data-question]').forEach((answerInput) => answerInput.classList.toggle('ds-question-active', answerInput === input));
     saveState(state);
     updateSubmitButton(state);
     showKeypad();
@@ -154,7 +154,6 @@ function submitAnswer(state) {
     if (unanswered > 0) message(`還有 ${unanswered} 題尚未填寫，完成後再檢查結果。`, true);
     else message(`還有 ${remaining} 題需要再試一次，錯誤答案已清空。`, true);
     renderQuiz(state);
-    showCompletionOverlay(correctCount, state.quiz.questions.length);
     if (firstWrongKey) focusQuizQuestion(state, firstWrongKey, false);
 }
 
@@ -164,28 +163,28 @@ export function initQuiz(state) {
     initSettings(state);
     renderQuiz(state);
     applyKeypadPosition(state);
-    setupKeypadDrag(state);
-    setupKeypadClose();
     setupCompletionOverlay();
     updateQuizScrollReserve();
     window.addEventListener('resize', updateQuizScrollReserve);
     document.getElementById('submit-answer').addEventListener('click', () => submitAnswer(state));
-    document.querySelectorAll('[data-pad-value]').forEach((button) => {
-        button.addEventListener('click', () => updateKeypadAnswer(state, button.dataset.padValue));
+    const keypad = document.getElementById('number-pad');
+    keypad?.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-pad-value]');
+        if (button) updateKeypadAnswer(state, button.dataset.padValue);
+    });
+    Promise.resolve(keypad?.updateComplete).then(() => {
+        setupKeypadDrag(state);
+        setupKeypadClose();
+        updateQuizScrollReserve();
     });
     const modal = document.getElementById('leave-modal');
-    const closeModal = () => modal.classList.add('hidden');
     document.getElementById('back-home').addEventListener('click', () => {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.getElementById('cancel-leave').focus();
+        modal.show();
     });
-    document.getElementById('cancel-leave').addEventListener('click', closeModal);
+    document.getElementById('cancel-leave').addEventListener('click', () => modal.hide());
     document.getElementById('confirm-leave').addEventListener('click', () => returnToHomeAfterQuiz(state));
     document.getElementById('return-home-after-quiz').addEventListener('click', () => returnToHomeAfterQuiz(state));
     document.getElementById('another-quiz').addEventListener('click', () => startAnotherQuiz(state));
     document.getElementById('retry-quiz').addEventListener('click', () => restartQuiz(state));
-    modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
     document.addEventListener('keydown', (event) => { if (event.key === 'Enter') submitAnswer(state); });
 }
-

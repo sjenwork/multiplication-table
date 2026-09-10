@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'multiplication-practice-state';
 
 function newState() {
-    return { selected: [], records: {}, quiz: null, theme: 'light', keypadPosition: { detached: false, left: null, top: null } };
+    return { selected: [], records: {}, quiz: null, theme: 'light', voiceGender: 'female', autoPlay: true, keypadPosition: { detached: false, left: null, top: null } };
 }
 
 function loadState() {
@@ -10,6 +10,8 @@ function loadState() {
         if (!saved || typeof saved !== 'object') return newState();
         const state = { ...newState(), ...saved };
         if (state.theme !== 'light' && state.theme !== 'dark') state.theme = 'light';
+        if (state.voiceGender !== 'female' && state.voiceGender !== 'male') state.voiceGender = 'female';
+        if (typeof state.autoPlay !== 'boolean') state.autoPlay = true;
         if (!state.keypadPosition || typeof state.keypadPosition !== 'object') state.keypadPosition = newState().keypadPosition;
         state.keypadPosition = { ...newState().keypadPosition, ...state.keypadPosition };
         return state;

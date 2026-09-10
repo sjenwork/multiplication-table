@@ -18,22 +18,42 @@ async function forceUpdate() {
 export function initVersionUpdate() {
     const button = document.getElementById('force-update');
     if (!button) return;
+    let updateShown = false;
     const showUpdate = () => {
+        if (updateShown) return;
+        updateShown = true;
         button.classList.remove('hidden');
         button.textContent = '有新版本，立即更新';
     };
     button.addEventListener('click', forceUpdate);
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then((registration) => {
-            if (registration.waiting) showUpdate();
-            registration.update().catch(() => {});
-            registration.addEventListener('updatefound', () => {
+            const checkWaiting = () => {
+                if (registration.waiting) showUpdate();
+            };
+            const watchInstalling = () => {
                 const worker = registration.installing;
                 if (!worker) return;
                 worker.addEventListener('statechange', () => {
                     if (worker.state === 'installed' && navigator.serviceWorker.controller) showUpdate();
                 });
+            };
+
+            checkWaiting();
+            registration.addEventListener('updatefound', () => {
+                watchInstalling();
             });
+            watchInstalling();
+            registration.update().then(checkWaiting).catch(() => {});
+
+            // Some browsers complete update() after the event listener turn.
+            // Keep checking briefly so the update pill cannot be missed.
+            let attempts = 0;
+            const checkAgain = () => {
+                checkWaiting();
+                if (!updateShown && attempts++ < 10) window.setTimeout(checkAgain, 500);
+            };
+            window.setTimeout(checkAgain, 0);
         }).catch(() => {});
     }
 }

@@ -21,6 +21,18 @@
 
 其他分支禁止部署。正式分支名稱是 `main`，不是 `master`。
 
+Feature branch 或 subagent 若需要直接部署目前已提交內容到測試環境，可使用：
+
+```bash
+./scripts/deploy-dev.sh
+```
+
+此腳本固定使用 Cloudflare Pages 的 `dev` branch alias，不會切換 Git 分支；部署前會要求工作樹乾淨並執行靜態檢查與測試。若要加跑部署後瀏覽器 smoke test：
+
+```bash
+RUN_BROWSER_SMOKE=1 ./scripts/deploy-dev.sh
+```
+
 ## DNS
 
 測試版使用 Cloudflare Pages branch alias，不需要新增 DNS、CNAME 或自訂網域設定。正式版目前使用既有的 `multiplication-table.maderaojen.me`。
@@ -42,8 +54,14 @@
 Git hooks 位於 `.githooks/`，目前的 `core.hooksPath` 指向這個目錄：
 
 - `pre-commit`：同步前端資源版本，檢查所有 JavaScript 語法、相對 import、Service Worker app shell 與 whitespace diff。
-- `pre-push`：重跑靜態檢查；設定 `SMOKE_URL` 時，另外用 headless Chrome 驗證首頁選題、設定 modal 與 quiz 啟動。
+- `pre-push`：重跑靜態檢查與 Node 行為測試；設定 `SMOKE_URL` 時，另外用 headless Chrome 驗證首頁選題、設定 modal 與 quiz 啟動。
 - `deploy.sh`：部署前一定執行靜態檢查；部署後可用 `RUN_BROWSER_SMOKE=1 ./deploy.sh` 執行實際網址 smoke test。
+
+測試可單獨執行：
+
+```bash
+./scripts/test.sh
+```
 
 若 Git 沒有套用 hooks，可執行：
 
