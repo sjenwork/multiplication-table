@@ -56,6 +56,8 @@ test('loadState returns safe defaults and normalizes persisted values', () => {
         records: {},
         quiz: null,
         theme: 'light',
+        voiceGender: 'female',
+        autoPlay: true,
         keypadPosition: { detached: false, left: null, top: null },
     });
 
@@ -69,12 +71,14 @@ test('loadState returns safe defaults and normalizes persisted values', () => {
         records: {},
         quiz: null,
         theme: 'light',
+        voiceGender: 'female',
+        autoPlay: true,
         keypadPosition: { detached: true, left: 12, top: null },
     });
 });
 
 test('saveState persists the complete state under the shared storage key', () => {
-    const state = { selected: ['4x4'], records: {}, quiz: null, theme: 'dark', keypadPosition: { detached: false, left: null, top: null } };
+    const state = { selected: ['4x4'], records: {}, quiz: null, theme: 'dark', voiceGender: 'male', autoPlay: false, keypadPosition: { detached: false, left: null, top: null } };
 
     saveState(state);
 
