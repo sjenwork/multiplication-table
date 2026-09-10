@@ -1,6 +1,7 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-122601';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-122601';
-import './components/multiplication-table.js?v=20260910-122601';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-124616';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-124616';
+import { saveState } from './state.js?v=20260910-124616';
+import './components/multiplication-table.js?v=20260910-124616';
 
 function updateFactor(table, selectedFactor, isPlaying = false) {
     table.factor = selectedFactor;
@@ -20,6 +21,7 @@ export function initStudy(state) {
     const settingsModal = document.querySelector('app-settings-modal');
     let selectedFactor = 2;
     let voiceGender = state.voiceGender;
+    let autoPlay = state.autoPlay;
     let audio = new Audio();
     let playbackToken = 0;
     let playbackMode = 'idle';
@@ -156,6 +158,7 @@ export function initStudy(state) {
 
     updateFactor(table, selectedFactor);
     table.gender = voiceGender;
+    table.autoPlay = autoPlay;
     syncPlaybackState();
     settingsModal.addEventListener('voice-change', (event) => {
         voiceGender = event.detail.voiceGender;
@@ -167,14 +170,22 @@ export function initStudy(state) {
     table.addEventListener('play-all', () => playFactor(2, 'all').then(() => {}));
     table.addEventListener('toggle-playback', togglePlayback);
     table.addEventListener('stop-playback', stopPlayback);
+    table.addEventListener('toggle-auto-play', () => {
+        autoPlay = !autoPlay;
+        state.autoPlay = autoPlay;
+        table.autoPlay = autoPlay;
+        saveState(state);
+    });
     buttons.forEach((button) => {
         button.addEventListener('click', () => {
             stopPlayback();
             selectedFactor = Number(button.dataset.factor);
             updateFactor(table, selectedFactor);
+            if (autoPlay) playFactor(selectedFactor, 'factor').then(() => {});
         });
     });
     document.getElementById('back-home').addEventListener('click', () => {
         window.location.href = 'index.html';
     });
+    if (autoPlay) playFactor(selectedFactor, 'factor').then(() => {});
 }

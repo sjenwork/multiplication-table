@@ -1,4 +1,4 @@
-import { LitElement, html, nothing } from '../../vendor/lit-core.min.js';
+import { LitElement, html } from '../../vendor/lit-core.min.js';
 
 export class MultiplicationTable extends LitElement {
     static properties = {
@@ -8,6 +8,7 @@ export class MultiplicationTable extends LitElement {
         isPlaying: { type: Boolean },
         playbackMode: { type: String },
         isPaused: { type: Boolean },
+        autoPlay: { type: Boolean },
     };
 
     constructor() {
@@ -18,6 +19,7 @@ export class MultiplicationTable extends LitElement {
         this.isPlaying = false;
         this.playbackMode = 'idle';
         this.isPaused = false;
+        this.autoPlay = true;
     }
 
     createRenderRoot() {
@@ -29,6 +31,10 @@ export class MultiplicationTable extends LitElement {
         this.addEventListener('click', (event) => {
             if (event.target.closest('[data-toggle-playback]')) {
                 this.dispatchEvent(new CustomEvent('toggle-playback', { bubbles: true }));
+                return;
+            }
+            if (event.target.closest('[data-auto-play]')) {
+                this.dispatchEvent(new CustomEvent('toggle-auto-play', { bubbles: true }));
                 return;
             }
             const questionButton = event.target.closest('[data-play-question]');
@@ -60,7 +66,8 @@ export class MultiplicationTable extends LitElement {
                     <div class="study-table-actions" role="group" aria-label="播放控制">
                         ${this.playbackMode === 'factor' ? toggleButton(this.isPaused) : html`<button type="button" class="study-play-button" data-play-factor aria-label="播放${this.factor}的乘法表" title="播放${this.factor}的乘法表">${playIcon()}</button>`}
                         ${this.playbackMode === 'all' ? toggleButton(this.isPaused) : html`<button type="button" class="study-play-button study-play-all" data-play-all aria-label="全部播放" title="全部播放">${playAllIcon()}</button>`}
-                        ${this.playbackMode !== 'idle' ? html`<button type="button" class="study-play-button study-stop-button" data-stop-playback aria-label="停止播放" title="停止播放">${stopIcon()}</button>` : nothing}
+                        <button type="button" class="study-play-button study-stop-button" data-stop-playback aria-label="停止播放" title="停止播放" ?disabled=${this.playbackMode === 'idle'}>${stopIcon()}</button>
+                        <button type="button" class="study-auto-play-button ${this.autoPlay ? 'study-auto-play-active' : ''}" data-auto-play aria-label="自動播放${this.autoPlay ? '已開啟' : '已關閉'}" title="自動播放${this.autoPlay ? '已開啟' : '已關閉'}" aria-pressed="${this.autoPlay}"><span aria-hidden="true">↻</span><span>自動</span></button>
                     </div>
                 </div>
                 <div class="study-equation-list" role="list" aria-label="${this.factor} 的乘法表">

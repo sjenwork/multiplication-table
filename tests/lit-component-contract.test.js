@@ -50,6 +50,8 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /play-all/);
     assert.match(multiplicationTableSource, /toggle-playback/);
     assert.match(multiplicationTableSource, /stop-playback/);
+    assert.match(multiplicationTableSource, /auto-play/);
+    assert.match(multiplicationTableSource, /disabled/);
     assert.match(multiplicationTableSource, /isPaused/);
     assert.match(multiplicationTableSource, /activeRow/);
     assert.doesNotMatch(multiplicationTableSource, /study-table-card|study-equation ds-surface-muted|<h2/);

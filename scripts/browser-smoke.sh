@@ -193,16 +193,18 @@ if evaluate("document.querySelector('.study-equation-list').textContent.includes
     raise SystemExit('browser smoke failed: default study table did not render factor 2')
 if evaluate("document.querySelectorAll('#study-table [data-play-question]').length") != 9:
     raise SystemExit('browser smoke failed: study question play buttons did not render')
-if evaluate("!!document.querySelector('#study-table [data-play-factor]') && !!document.querySelector('#study-table [data-play-all]')") is not True:
+if evaluate("document.querySelector('#study-table [data-auto-play]')?.getAttribute('aria-pressed')") != 'true':
+    raise SystemExit('browser smoke failed: auto-play did not default to enabled')
+if evaluate("!!document.querySelector('#study-table [data-play-factor]') || !!document.querySelector('#study-table [data-toggle-playback]')") is not True:
     raise SystemExit('browser smoke failed: study playback controls did not render')
-evaluate("(async () => { document.querySelector('#study-table [data-play-factor]').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]')") is not True:
+evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
+if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]:not(:disabled)')") is not True:
     raise SystemExit('browser smoke failed: active playback did not expose pause and stop controls')
 evaluate("document.querySelector('#study-table [data-toggle-playback]').click()")
 if evaluate("document.querySelector('#study-table [data-toggle-playback]')?.getAttribute('aria-label')") != '繼續播放':
     raise SystemExit('browser smoke failed: pause control did not preserve playback state')
 evaluate("document.querySelector('#study-table [data-stop-playback]').click()")
-if evaluate("document.querySelector('#study-table [data-stop-playback]')") is not None:
+if evaluate("document.querySelector('#study-table [data-stop-playback]')?.disabled") is not True:
     raise SystemExit('browser smoke failed: stop control did not clear playback state')
 if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('app-settings-modal [data-voice-choice]').length") != 2:
     raise SystemExit('browser smoke failed: voice gender choices did not render')

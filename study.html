@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-122601">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-122601">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-122601">
-    <script src="app/theme-colors.js?v=20260910-122601" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-124616">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-124616">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-124616">
+    <script src="app/theme-colors.js?v=20260910-124616" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -80,9 +80,37 @@
             transform: scale(0.95);
         }
 
+        .study-play-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.42;
+        }
+
         .study-stop-button {
             color: var(--ds-danger);
             border-color: var(--ds-danger-soft);
+        }
+
+        .study-auto-play-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.2rem;
+            min-width: 4rem;
+            height: 2.25rem;
+            padding: 0 0.65rem;
+            color: var(--ds-text-muted);
+            border: 1px solid var(--ds-border);
+            border-radius: 9999px;
+            background: var(--ds-surface-strong);
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .study-auto-play-button.study-auto-play-active {
+            color: var(--ds-brand-strong);
+            border-color: var(--ds-brand-strong);
+            background: var(--ds-brand-soft);
         }
 
         .study-question-play {
@@ -197,6 +225,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260910-122601" type="module"></script>
+    <script src="app.js?v=20260910-124616" type="module"></script>
 </body>
 </html>
