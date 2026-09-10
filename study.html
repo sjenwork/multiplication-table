@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-115724">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-115724">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-115724">
-    <script src="app/theme-colors.js?v=20260910-115724" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-122601">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-122601">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-122601">
+    <script src="app/theme-colors.js?v=20260910-122601" async></script>
     <style>
         .quiz-header {
             width: 100%;
@@ -78,6 +78,11 @@
 
         .study-play-button:active {
             transform: scale(0.95);
+        }
+
+        .study-stop-button {
+            color: var(--ds-danger);
+            border-color: var(--ds-danger-soft);
         }
 
         .study-question-play {
@@ -192,6 +197,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=20260910-115724" type="module"></script>
+    <script src="app.js?v=20260910-122601" type="module"></script>
 </body>
 </html>

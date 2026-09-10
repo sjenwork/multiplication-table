@@ -2,6 +2,8 @@ const AUDIO_ROOTS = {
     female: 'female/aoede/audio',
     male: 'male/puck/audio',
 };
+const CLIP_GAP_MIN_MS = 212;
+const CLIP_GAP_MAX_MS = 224;
 
 function audioPath(gender, factor, multiplier) {
     const root = AUDIO_ROOTS[gender] || AUDIO_ROOTS.female;
@@ -23,4 +25,4 @@ function playAudioClip(audio, gender, factor, multiplier) {
     });
 }
 
-export { AUDIO_ROOTS, audioPath, playAudioClip };
+export { AUDIO_ROOTS, CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, audioPath, playAudioClip };

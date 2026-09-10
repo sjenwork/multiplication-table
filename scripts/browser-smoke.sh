@@ -195,6 +195,15 @@ if evaluate("document.querySelectorAll('#study-table [data-play-question]').leng
     raise SystemExit('browser smoke failed: study question play buttons did not render')
 if evaluate("!!document.querySelector('#study-table [data-play-factor]') && !!document.querySelector('#study-table [data-play-all]')") is not True:
     raise SystemExit('browser smoke failed: study playback controls did not render')
+evaluate("(async () => { document.querySelector('#study-table [data-play-factor]').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
+if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]')") is not True:
+    raise SystemExit('browser smoke failed: active playback did not expose pause and stop controls')
+evaluate("document.querySelector('#study-table [data-toggle-playback]').click()")
+if evaluate("document.querySelector('#study-table [data-toggle-playback]')?.getAttribute('aria-label')") != '繼續播放':
+    raise SystemExit('browser smoke failed: pause control did not preserve playback state')
+evaluate("document.querySelector('#study-table [data-stop-playback]').click()")
+if evaluate("document.querySelector('#study-table [data-stop-playback]')") is not None:
+    raise SystemExit('browser smoke failed: stop control did not clear playback state')
 if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('app-settings-modal [data-voice-choice]').length") != 2:
     raise SystemExit('browser smoke failed: voice gender choices did not render')
 evaluate("document.querySelector('app-settings-modal [data-modal-close]').click()")

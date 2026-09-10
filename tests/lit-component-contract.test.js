@@ -48,9 +48,17 @@ test('multiplication table owns the read-only learning table', () => {
     assert.match(multiplicationTableSource, /play-factor/);
     assert.match(multiplicationTableSource, /play-question/);
     assert.match(multiplicationTableSource, /play-all/);
+    assert.match(multiplicationTableSource, /toggle-playback/);
+    assert.match(multiplicationTableSource, /stop-playback/);
+    assert.match(multiplicationTableSource, /isPaused/);
     assert.match(multiplicationTableSource, /activeRow/);
     assert.doesNotMatch(multiplicationTableSource, /study-table-card|study-equation ds-surface-muted|<h2/);
     assert.match(multiplicationTableSource, /customElements\.define\(['"]multiplication-table['"]/);
+});
+
+test('audio playback exposes pause and stop controls with the study table', () => {
+    assert.match(multiplicationTableSource, /暫停播放/);
+    assert.match(multiplicationTableSource, /停止播放/);
 });
 
 test('factor legend owns the shared factor labels and semantic colors', () => {
