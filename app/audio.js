@@ -13,15 +13,20 @@ function audioPath(gender, factor, multiplier) {
 function playAudioClip(audio, gender, factor, multiplier) {
     audio.src = audioPath(gender, factor, multiplier);
     audio.currentTime = 0;
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const finish = () => {
             audio.removeEventListener('ended', finish);
-            audio.removeEventListener('error', finish);
+            audio.removeEventListener('error', fail);
             resolve();
         };
+        const fail = (error) => {
+            audio.removeEventListener('ended', finish);
+            audio.removeEventListener('error', fail);
+            reject(error instanceof Error ? error : new Error('Audio playback failed'));
+        };
         audio.addEventListener('ended', finish, { once: true });
-        audio.addEventListener('error', finish, { once: true });
-        audio.play().catch(finish);
+        audio.addEventListener('error', fail, { once: true });
+        audio.play().catch(fail);
     });
 }
 

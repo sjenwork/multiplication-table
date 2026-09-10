@@ -1,7 +1,7 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-124616';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-124616';
-import { saveState } from './state.js?v=20260910-124616';
-import './components/multiplication-table.js?v=20260910-124616';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-125823';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-125823';
+import { saveState } from './state.js?v=20260910-125823';
+import './components/multiplication-table.js?v=20260910-125823';
 
 function updateFactor(table, selectedFactor, isPlaying = false) {
     table.factor = selectedFactor;
@@ -27,6 +27,8 @@ export function initStudy(state) {
     let playbackMode = 'idle';
     let isPaused = false;
     let pendingGap = null;
+    let resumePlaybackTask = null;
+    let playbackStartFactor = 2;
 
     const syncPlaybackState = () => {
         table.playbackMode = playbackMode;
@@ -65,6 +67,7 @@ export function initStudy(state) {
         audio.load();
         playbackMode = 'idle';
         isPaused = false;
+        resumePlaybackTask = null;
         table.activeRow = null;
         syncPlaybackState();
         updateFactor(table, selectedFactor);
@@ -85,6 +88,14 @@ export function initStudy(state) {
 
     const resumePlayback = () => {
         if (playbackMode === 'idle' || !isPaused) return;
+        if (resumePlaybackTask) {
+            const task = resumePlaybackTask;
+            resumePlaybackTask = null;
+            isPaused = false;
+            syncPlaybackState();
+            task().catch(() => {});
+            return;
+        }
         isPaused = false;
         if (pendingGap) scheduleGap();
         else audio.play().catch(() => {});
@@ -104,9 +115,23 @@ export function initStudy(state) {
         return isCurrentPlayback(token);
     };
 
-    const playFactorSequence = async (factor, token) => {
-        for (let multiplier = 1; multiplier <= 9; multiplier += 1) {
-            if (!await playClip(factor, multiplier, token)) return false;
+    const playFactorSequence = async (factor, token, startMultiplier = 1) => {
+        for (let multiplier = startMultiplier; multiplier <= 9; multiplier += 1) {
+            try {
+                if (!await playClip(factor, multiplier, token)) return false;
+            } catch (error) {
+                if (!isCurrentPlayback(token)) return false;
+                isPaused = true;
+                resumePlaybackTask = () => runPlayback(
+                    playbackMode,
+                    playbackStartFactor,
+                    token,
+                    factor,
+                    multiplier,
+                );
+                syncPlaybackState();
+                return false;
+            }
             const needsGap = multiplier < 9 || playbackMode === 'all' && factor < 9;
             if (needsGap) {
                 await waitBetweenClips();
@@ -114,6 +139,21 @@ export function initStudy(state) {
             }
         }
         return true;
+    };
+
+    const runPlayback = async (mode, initialFactor, token, resumeFactor = initialFactor, resumeMultiplier = 1) => {
+        if (mode === 'all') {
+            for (let factor = resumeFactor; factor <= 9; factor += 1) {
+                selectedFactor = factor;
+                updateFactor(table, factor, true);
+                const startMultiplier = factor === resumeFactor ? resumeMultiplier : 1;
+                if (!await playFactorSequence(factor, token, startMultiplier)) return;
+            }
+        } else {
+            updateFactor(table, initialFactor, true);
+            if (!await playFactorSequence(initialFactor, token, resumeMultiplier)) return;
+        }
+        finishPlayback(token, selectedFactor);
     };
 
     const finishPlayback = (token, factor) => {
@@ -129,21 +169,22 @@ export function initStudy(state) {
         stopPlayback();
         playbackMode = mode;
         selectedFactor = factor;
+        playbackStartFactor = factor;
         isPaused = false;
         const token = playbackToken;
         syncPlaybackState();
+        await runPlayback(mode, factor, token);
+    };
 
-        if (mode === 'all') {
-            for (let currentFactor = 2; currentFactor <= 9; currentFactor += 1) {
-                selectedFactor = currentFactor;
-                updateFactor(table, currentFactor, true);
-                if (!await playFactorSequence(currentFactor, token)) return;
-            }
-        } else {
-            updateFactor(table, factor, true);
-            if (!await playFactorSequence(factor, token)) return;
+    const runSingleQuestion = async (factor, multiplier, token) => {
+        try {
+            if (await playClip(factor, multiplier, token)) finishPlayback(token, factor);
+        } catch (error) {
+            if (!isCurrentPlayback(token)) return;
+            isPaused = true;
+            resumePlaybackTask = () => runSingleQuestion(factor, multiplier, token);
+            syncPlaybackState();
         }
-        finishPlayback(token, selectedFactor);
     };
 
     const playSingleQuestion = async (factor, multiplier) => {
@@ -153,7 +194,7 @@ export function initStudy(state) {
         const token = playbackToken;
         syncPlaybackState();
         updateFactor(table, factor, true);
-        if (await playClip(factor, multiplier, token)) finishPlayback(token, factor);
+        await runSingleQuestion(factor, multiplier, token);
     };
 
     updateFactor(table, selectedFactor);

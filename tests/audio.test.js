@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AUDIO_ROOTS, CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, audioPath } from '../app/audio.js';
+import { AUDIO_ROOTS, CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, audioPath, playAudioClip } from '../app/audio.js';
 
 test('audio paths use the gender and voice folders without speaker names', () => {
     assert.deepEqual(AUDIO_ROOTS, {
@@ -14,4 +14,17 @@ test('audio paths use the gender and voice folders without speaker names', () =>
 test('audio playback leaves a short gap between clips', () => {
     assert.equal(CLIP_GAP_MIN_MS, 212);
     assert.equal(CLIP_GAP_MAX_MS, 224);
+});
+
+test('audio playback rejects when the browser blocks autoplay', async () => {
+    const listeners = new Map();
+    const audio = {
+        src: '',
+        currentTime: 0,
+        addEventListener(type, listener) { listeners.set(type, listener); },
+        removeEventListener(type) { listeners.delete(type); },
+        play() { return Promise.reject(new Error('NotAllowedError')); },
+    };
+
+    await assert.rejects(playAudioClip(audio, 'female', 2, 1), /NotAllowedError/);
 });
