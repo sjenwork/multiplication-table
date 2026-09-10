@@ -169,16 +169,16 @@ html {
     border-color: var(--ds-border) !important;
     color: var(--ds-text) !important;
     box-shadow: var(--ds-shadow-sm);
-    backdrop-filter: var(--ds-blur-base);
-    -webkit-backdrop-filter: var(--ds-blur-base);
+    backdrop-filter: blur(16px) saturate(135%);
+    -webkit-backdrop-filter: blur(16px) saturate(135%);
 }
 
 .ds-surface-strong {
     background: var(--ds-surface-strong) !important;
     border-color: var(--ds-border) !important;
     color: var(--ds-text) !important;
-    backdrop-filter: var(--ds-blur-strong);
-    -webkit-backdrop-filter: var(--ds-blur-strong);
+    backdrop-filter: blur(20px) saturate(145%);
+    -webkit-backdrop-filter: blur(20px) saturate(145%);
 }
 
 .ds-modal-backdrop {
@@ -206,10 +206,6 @@ html {
     background: var(--ds-modal-surface) !important;
     border: 1px solid var(--ds-modal-border) !important;
     box-shadow: var(--ds-shadow-md), 0 0 0 3px rgb(97 183 255 / 0.12);
-}
-
-.ds-text-muted {
-    color: var(--ds-text-muted) !important;
 }
 
 .ds-text {
@@ -268,10 +264,7 @@ html {
     box-shadow: var(--ds-focus-shadow) !important;
 }
 
-.ds-layer-update {
-    position: fixed !important;
-    z-index: var(--ds-layer-update) !important;
-}
+.ds-layer-update { position: fixed !important; z-index: var(--ds-layer-update) !important; }
 .ds-layer-keypad { z-index: var(--ds-layer-keypad); }
 .ds-layer-dock { z-index: var(--ds-layer-dock); }
 .ds-layer-modal { z-index: var(--ds-layer-modal); }
@@ -281,19 +274,20 @@ html {
 .ds-layer-table-row { z-index: var(--ds-layer-table-row); }
 .ds-layer-table-corner { z-index: var(--ds-layer-table-corner); }
 
+[data-theme="dark"] .ds-modal-backdrop {
+    background-color: rgb(2 10 22 / 0.68) !important;
+}
+
+.ds-text-muted {
+    color: var(--ds-text-muted) !important;
+}
+
 .ds-factor-one {
     color: var(--ds-factor-one) !important;
 }
 
 .ds-factor-two {
     color: var(--ds-factor-two) !important;
-}
-
-.factor-legend {
-    color: var(--ds-text-muted);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    line-height: 1;
 }
 
 .ds-table-header,
@@ -375,37 +369,6 @@ html {
     background: var(--ds-brand-soft) !important;
     color: var(--ds-brand-strong) !important;
     box-shadow: 0 0 0 2px rgb(97 183 255 / 0.2);
-}
-
-/* Light-DOM app-button hosts must carry the same width as their native button. */
-.ds-theme-choice {
-    display: block;
-    width: 100%;
-}
-
-.ds-theme-choice > button {
-    width: 100%;
-}
-
-.selection-status {
-    height: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.25rem;
-    overflow: hidden;
-}
-
-/* Visual styles belong to the native button inside the Light-DOM component. */
-app-button {
-    display: inline-block;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-}
-
-app-button[full] {
-    display: block;
 }
 
 [data-theme="dark"] .text-slate-800,

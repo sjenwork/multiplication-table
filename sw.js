@@ -1,34 +1,24 @@
-const CACHE_NAME = 'multiplication-master-v20260910-153224';
+const CACHE_NAME = 'multiplication-master-v20260910-175108';
 const APP_SHELL = [
     '/',
     '/index.html',
     '/quiz.html',
     '/study.html',
-    '/app.js?v=20260910-153224',
-    '/app/state.js?v=20260910-153224',
-    '/app/keypad.js?v=20260910-153224',
-    '/app/settings.js?v=20260910-153224',
-    '/app/update.js?v=20260910-153224',
-    '/app/quiz-view.js?v=20260910-153224',
-    '/app/completion.js?v=20260910-153224',
-    '/app/home.js?v=20260910-153224',
-    '/app/quiz.js?v=20260910-153224',
-    '/app/study.js?v=20260910-153224',
-    '/app/audio.js?v=20260910-153224',
-    '/app/components/settings-modal.js?v=20260910-153224',
-    '/app/components/completion-overlay.js?v=20260910-153224',
-    '/app/components/app-modal.js?v=20260910-153224',
-    '/app/components/app-button.js?v=20260910-153224',
-    '/app/theme-colors.js?v=20260910-153224',
-    '/app/components/multiplication-selector.js?v=20260910-153224',
-    '/app/components/numeric-keypad.js?v=20260910-153224',
-    '/app/components/multiplication-table.js?v=20260910-153224',
-    '/app/components/factor-legend.js?v=20260910-153224',
-    '/vendor/lit-core.min.js?v=20260910-153224',
-    '/design-tokens.css?v=20260910-153224',
-    '/theme-init.js?v=20260910-153224',
-    '/pwa.css?v=20260910-153224',
-    '/tailwind.css?v=20260910-153224',
+    '/app.js?v=20260910-175108',
+    '/app/state.js?v=20260910-175108',
+    '/app/keypad.js?v=20260910-175108',
+    '/app/settings.js?v=20260910-175108',
+    '/app/update.js?v=20260910-175108',
+    '/app/quiz-view.js?v=20260910-175108',
+    '/app/completion.js?v=20260910-175108',
+    '/app/home.js?v=20260910-175108',
+    '/app/quiz.js?v=20260910-175108',
+    '/app/audio.js?v=20260910-175108',
+    '/app/study.js?v=20260910-175108',
+    '/design-tokens.css?v=20260910-175108',
+    '/theme-init.js?v=20260910-175108',
+    '/pwa.css?v=20260910-175108',
+    '/tailwind.css?v=20260910-175108',
     '/manifest.webmanifest',
     '/icons/icon.svg',
     '/icons/icon-192.png',
@@ -65,17 +55,9 @@ self.addEventListener('fetch', (event) => {
         || requestUrl.pathname.endsWith('/app/completion.js')
         || requestUrl.pathname.endsWith('/app/home.js')
         || requestUrl.pathname.endsWith('/app/quiz.js')
-        || requestUrl.pathname.endsWith('/app/study.js')
         || requestUrl.pathname.endsWith('/app/audio.js')
-        || requestUrl.pathname.endsWith('/app/components/settings-modal.js')
-        || requestUrl.pathname.endsWith('/app/components/completion-overlay.js')
-        || requestUrl.pathname.endsWith('/app/components/app-modal.js')
-        || requestUrl.pathname.endsWith('/app/components/app-button.js')
-        || requestUrl.pathname.endsWith('/app/theme-colors.js')
-        || requestUrl.pathname.endsWith('/app/components/multiplication-selector.js')
-        || requestUrl.pathname.endsWith('/app/components/multiplication-table.js')
-        || requestUrl.pathname.endsWith('/app/components/factor-legend.js')
-        || requestUrl.pathname.endsWith('/vendor/lit-core.min.js');
+        || requestUrl.pathname.endsWith('/app/study.js')
+        || requestUrl.pathname.endsWith('/tailwind.css');
     if (latestFirst) {
         event.respondWith(
             fetch(event.request).then((response) => {

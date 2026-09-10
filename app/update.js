@@ -38,16 +38,12 @@ export function initVersionUpdate() {
                     if (worker.state === 'installed' && navigator.serviceWorker.controller) showUpdate();
                 });
             };
-
             checkWaiting();
             registration.addEventListener('updatefound', () => {
                 watchInstalling();
             });
             watchInstalling();
             registration.update().then(checkWaiting).catch(() => {});
-
-            // Some browsers complete update() after the event listener turn.
-            // Keep checking briefly so the update pill cannot be missed.
             let attempts = 0;
             const checkAgain = () => {
                 checkWaiting();

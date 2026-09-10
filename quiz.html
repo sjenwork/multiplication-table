@@ -12,10 +12,10 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-    <link rel="stylesheet" href="pwa.css?v=20260910-153224">
-    <link rel="stylesheet" href="tailwind.css?v=20260910-153224">
-    <link rel="stylesheet" href="design-tokens.css?v=20260910-153224">
-    <script src="app/theme-colors.js?v=20260910-153224" async></script>
+    <link rel="stylesheet" href="pwa.css?v=20260910-175108">
+    <link rel="stylesheet" href="tailwind.css?v=20260910-175108">
+    <link rel="stylesheet" href="design-tokens.css?v=20260910-175108">
+    <script src="theme-init.js?v=20260910-175108"></script>
     <style>
         .numeric-pad {
             display: grid;
@@ -30,16 +30,31 @@
             border-radius: var(--ds-radius-lg);
             background: var(--ds-surface);
             box-shadow: var(--ds-shadow-sm);
-            backdrop-filter: var(--ds-blur-surface);
-            -webkit-backdrop-filter: var(--ds-blur-surface);
+            backdrop-filter: blur(18px) saturate(135%);
+            -webkit-backdrop-filter: blur(18px) saturate(135%);
+        }
+
+        .quiz-legend {
+            color: var(--ds-text-muted);
+            font-size: 0.6875rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .quiz-factor-one {
+            color: var(--ds-factor-one);
+        }
+
+        .quiz-factor-two {
+            color: var(--ds-factor-two);
         }
 
         .safe-keypad {
             border: 1px solid var(--ds-border);
             background: var(--ds-surface);
-            box-shadow: var(--ds-keypad-shadow);
-            backdrop-filter: var(--ds-blur-keypad);
-            -webkit-backdrop-filter: var(--ds-blur-keypad);
+            box-shadow: 0 -12px 32px var(--ds-shadow-color, rgb(15 23 42 / 0.14));
+            backdrop-filter: blur(24px) saturate(165%);
+            -webkit-backdrop-filter: blur(24px) saturate(165%);
         }
 
         .floating-keypad {
@@ -51,8 +66,8 @@
             border: 1px solid var(--ds-border);
             background: var(--ds-surface);
             box-shadow: var(--ds-shadow-md);
-            backdrop-filter: var(--ds-blur-surface);
-            -webkit-backdrop-filter: var(--ds-blur-surface);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             transition: left 180ms ease, top 180ms ease, transform 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
         }
 
@@ -77,7 +92,7 @@
         .keypad-dock {
             display: none;
             position: fixed;
-            z-index: var(--ds-layer-dock);
+            z-index: 40;
             align-items: center;
             justify-content: center;
             border: 2px dashed var(--ds-drag-border);
@@ -133,8 +148,8 @@
             font-size: 1.25rem;
             line-height: 1;
             box-shadow: var(--ds-control-shadow);
-            backdrop-filter: var(--ds-blur-control);
-            -webkit-backdrop-filter: var(--ds-blur-control);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
         }
 
         .floating-keypad .keypad-close {
@@ -153,14 +168,14 @@
             justify-content: center;
             position: fixed;
             inset: 0;
-            z-index: var(--ds-layer-completion);
+            z-index: 80;
             pointer-events: none;
             overflow: hidden;
             padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0;
         }
 
         .completion-overlay.hidden {
-            display: none;
+            display: none !important;
         }
 
         .completion-card {
@@ -172,8 +187,8 @@
             border-radius: 9999px;
             background: var(--ds-surface-strong);
             box-shadow: var(--ds-shadow-md);
-            backdrop-filter: var(--ds-blur-control);
-            -webkit-backdrop-filter: var(--ds-blur-control);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             text-align: center;
             display: flex;
             align-items: center;
@@ -226,8 +241,8 @@
             line-height: 1;
             pointer-events: auto;
             box-shadow: var(--ds-shadow-sm);
-            backdrop-filter: var(--ds-blur-control);
-            -webkit-backdrop-filter: var(--ds-blur-control);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
         }
 
         .completion-close:hover {
@@ -255,8 +270,8 @@
         .quiz-question-card {
             background: var(--ds-surface);
             border-color: var(--ds-border);
-            backdrop-filter: var(--ds-blur-table);
-            -webkit-backdrop-filter: var(--ds-blur-table);
+            backdrop-filter: blur(12px) saturate(125%);
+            -webkit-backdrop-filter: blur(12px) saturate(125%);
         }
 
         .quiz-question-card.quiz-card-success {
@@ -291,16 +306,16 @@
             transform: rotate(var(--confetti-rotate));
         }
 
-        .completion-confetti span:nth-child(1) { --confetti-color: var(--ds-confetti-1); --confetti-delay: 20ms; --confetti-rotate: 12deg; --confetti-x: -35vw; --confetti-y: -25vh; }
-        .completion-confetti span:nth-child(2) { --confetti-color: var(--ds-confetti-2); --confetti-delay: 50ms; --confetti-rotate: 80deg; --confetti-x: -25vw; --confetti-y: -35vh; }
-        .completion-confetti span:nth-child(3) { --confetti-color: var(--ds-confetti-3); --confetti-delay: 80ms; --confetti-rotate: 140deg; --confetti-x: -12vw; --confetti-y: -28vh; }
-        .completion-confetti span:nth-child(4) { --confetti-color: var(--ds-confetti-4); --confetti-delay: 30ms; --confetti-rotate: 200deg; --confetti-x: 10vw; --confetti-y: -32vh; }
-        .completion-confetti span:nth-child(5) { --confetti-color: var(--ds-confetti-5); --confetti-delay: 100ms; --confetti-rotate: 260deg; --confetti-x: 25vw; --confetti-y: -24vh; }
-        .completion-confetti span:nth-child(6) { --confetti-color: var(--ds-confetti-6); --confetti-delay: 60ms; --confetti-rotate: 320deg; --confetti-x: 35vw; --confetti-y: -36vh; }
-        .completion-confetti span:nth-child(7) { --confetti-color: var(--ds-confetti-7); --confetti-delay: 120ms; --confetti-rotate: 40deg; --confetti-x: -32vw; --confetti-y: 10vh; }
-        .completion-confetti span:nth-child(8) { --confetti-color: var(--ds-confetti-8); --confetti-delay: 40ms; --confetti-rotate: 110deg; --confetti-x: -18vw; --confetti-y: 18vh; }
-        .completion-confetti span:nth-child(9) { --confetti-color: var(--ds-confetti-9); --confetti-delay: 90ms; --confetti-rotate: 180deg; --confetti-x: 18vw; --confetti-y: 16vh; }
-        .completion-confetti span:nth-child(10) { --confetti-color: var(--ds-confetti-10); --confetti-delay: 10ms; --confetti-rotate: 240deg; --confetti-x: 32vw; --confetti-y: 8vh; }
+        .completion-confetti span:nth-child(1) { --confetti-color: #f59e0b; --confetti-delay: 20ms; --confetti-rotate: 12deg; --confetti-x: -35vw; --confetti-y: -25vh; }
+        .completion-confetti span:nth-child(2) { --confetti-color: #10b981; --confetti-delay: 50ms; --confetti-rotate: 80deg; --confetti-x: -25vw; --confetti-y: -35vh; }
+        .completion-confetti span:nth-child(3) { --confetti-color: #3b82f6; --confetti-delay: 80ms; --confetti-rotate: 140deg; --confetti-x: -12vw; --confetti-y: -28vh; }
+        .completion-confetti span:nth-child(4) { --confetti-color: #ec4899; --confetti-delay: 30ms; --confetti-rotate: 200deg; --confetti-x: 10vw; --confetti-y: -32vh; }
+        .completion-confetti span:nth-child(5) { --confetti-color: #8b5cf6; --confetti-delay: 100ms; --confetti-rotate: 260deg; --confetti-x: 25vw; --confetti-y: -24vh; }
+        .completion-confetti span:nth-child(6) { --confetti-color: #f97316; --confetti-delay: 60ms; --confetti-rotate: 320deg; --confetti-x: 35vw; --confetti-y: -36vh; }
+        .completion-confetti span:nth-child(7) { --confetti-color: #14b8a6; --confetti-delay: 120ms; --confetti-rotate: 40deg; --confetti-x: -32vw; --confetti-y: 10vh; }
+        .completion-confetti span:nth-child(8) { --confetti-color: #eab308; --confetti-delay: 40ms; --confetti-rotate: 110deg; --confetti-x: -18vw; --confetti-y: 18vh; }
+        .completion-confetti span:nth-child(9) { --confetti-color: #ef4444; --confetti-delay: 90ms; --confetti-rotate: 180deg; --confetti-x: 18vw; --confetti-y: 16vh; }
+        .completion-confetti span:nth-child(10) { --confetti-color: #6366f1; --confetti-delay: 10ms; --confetti-rotate: 240deg; --confetti-x: 32vw; --confetti-y: 8vh; }
 
         @keyframes completion-pop {
             from { opacity: 0; transform: scale(.82) translateY(0.5rem); }
@@ -340,50 +355,86 @@
         }
     </style>
 </head>
-<body class="app-shell quiz-shell h-[100svh] overflow-hidden flex flex-col items-center p-4">
-    <button id="force-update" type="button" class="ds-update-pill ds-layer-update hidden fixed left-1/2 top-3 -translate-x-1/2 rounded-full border px-4 py-2 text-xs font-bold shadow-lg backdrop-blur-md transition active:scale-95" aria-label="更新網站版本">
+<body class="app-shell quiz-shell bg-slate-50 h-[100svh] overflow-hidden flex flex-col items-center p-4">
+    <button id="force-update" type="button" class="ds-update-pill hidden fixed left-1/2 top-3 z-[70] -translate-x-1/2 rounded-full border px-4 py-2 text-xs font-bold shadow-lg backdrop-blur-md transition active:scale-95" aria-label="更新網站版本">
         更新版本
     </button>
     <main class="max-w-3xl w-full h-full min-h-0 flex flex-col relative">
-        <header class="quiz-header ds-layer-header absolute left-0 right-0 top-0 text-center">
-            <button id="back-home" type="button" class="ds-icon-button absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-2xl leading-none transition" aria-label="返回選題">
+        <header class="quiz-header absolute left-0 right-0 top-0 z-20 text-center">
+            <button id="back-home" type="button" class="absolute left-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-2xl leading-none text-slate-600 shadow-sm hover:bg-slate-100 hover:text-blue-600 transition" aria-label="返回選題">
                 <span aria-hidden="true">←</span>
             </button>
-            <button id="open-settings" type="button" class="ds-icon-button absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-lg leading-none transition" aria-label="開啟設定">
+            <button id="open-settings" type="button" class="absolute right-2 top-1/2 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-lg leading-none text-slate-600 shadow-sm hover:bg-slate-100 hover:text-blue-600 transition" aria-label="開啟設定">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 17H5"/><path d="M19 7h-9"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
             </button>
-            <p class="ds-brand-text text-sm font-semibold tracking-[0.2em] mb-2">DAILY CHALLENGE</p>
-            <h1 class="ds-text-strong text-2xl md:text-3xl font-bold mb-1">乘法挑戰</h1>
-            <factor-legend></factor-legend>
+            <p class="text-sm font-semibold tracking-[0.2em] text-blue-600 mb-2">DAILY CHALLENGE</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 mb-1">乘法挑戰</h1>
+            <div class="quiz-legend flex items-center justify-center gap-1.5" aria-label="題目順序：被乘數乘以乘數">
+                <span class="quiz-factor-one">被乘數</span><span aria-hidden="true">×</span><span class="quiz-factor-two">乘數</span>
+            </div>
         </header>
 
         <section id="question-list" class="quiz-question-list grid grid-cols-1 sm:grid-cols-2 gap-2 min-h-0 flex-1" aria-label="測驗題目"></section>
         <div id="quiz-message" class="mt-6 p-4 rounded-xl text-center font-medium hidden" role="alert"></div>
     </main>
 
-    <app-completion-overlay id="completion-overlay" class="completion-overlay hidden" aria-live="polite" aria-atomic="true"></app-completion-overlay>
-
-    <div id="keypad-dock" class="keypad-dock" aria-hidden="true">放回底部</div>
-    <app-keypad id="number-pad" class="safe-keypad ds-layer-keypad fixed left-0 right-0 px-2 py-2"></app-keypad>
-
-    <div class="safe-action-bar ds-surface-strong ds-layer-keypad fixed bottom-0 left-0 right-0 flex min-h-[3.75rem] flex-nowrap items-center gap-1 border-t px-2 sm:gap-2 sm:px-4 md:px-6">
-        <div id="completion-actions" class="hidden min-w-0 shrink overflow-x-auto items-center justify-center gap-1 sm:gap-2">
-            <app-button id="return-home-after-quiz" variant="secondary" size="sm" class="whitespace-nowrap px-2 text-xs sm:px-3 sm:text-sm" aria-label="返回上一頁">← 上一頁</app-button>
-            <app-button id="another-quiz" variant="primary" size="sm" class="whitespace-nowrap px-2 text-xs sm:px-3 sm:text-sm" aria-label="依目前題庫再次出題">↻ 再次出題</app-button>
-            <app-button id="retry-quiz" variant="success" size="sm" class="whitespace-nowrap px-2 text-xs sm:px-3 sm:text-sm" aria-label="重新測驗目前題目">↺ 重新測驗</app-button>
+    <div id="completion-overlay" class="completion-overlay hidden" aria-live="polite" aria-atomic="true">
+        <div class="completion-confetti" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
         </div>
-            <app-button id="submit-answer" variant="primary" size="md" class="ml-auto whitespace-nowrap shadow-md text-sm sm:text-base">對答案</app-button>
+        <div class="completion-card">
+            <button id="close-completion" type="button" class="completion-close" aria-label="關閉完成提示">×</button>
+            <div data-completion-emoji class="completion-emoji" aria-hidden="true">🎉</div>
+            <h2 data-completion-title class="mt-2 text-xl font-black text-blue-700">你好棒！</h2>
+            <p data-completion-detail class="mt-1 text-sm font-semibold text-slate-600">全部答對，你做到了！</p>
+        </div>
     </div>
 
-        <app-modal id="leave-modal" size="sm" labelledby="leave-title">
-            <h2 id="leave-title" class="ds-text-strong text-lg font-bold">要離開這次挑戰嗎？</h2>
-            <p class="ds-text-muted mt-2 text-sm leading-6">目前的作答進度會被清除，確定要返回選題嗎？</p>
-                <div class="mt-5 flex justify-end gap-3">
-                    <app-button id="cancel-leave" data-modal-close variant="secondary" size="md">繼續作答</app-button>
-                    <app-button id="confirm-leave" variant="primary" size="md">返回選題</app-button>
-                </div>
-        </app-modal>
+    <div id="keypad-dock" class="keypad-dock" aria-hidden="true">放回底部</div>
+    <div id="number-pad" class="safe-keypad fixed left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-2 py-2 shadow-lg backdrop-blur-md">
+        <button id="close-keypad" type="button" class="keypad-close" aria-label="關閉數字鍵盤">×</button>
+        <div id="keypad-handle" class="floating-keypad-handle" aria-label="拖曳移動數字鍵盤">
+            <span aria-hidden="true">⠿</span><span class="ml-2 text-xs font-semibold">拖曳鍵盤</span>
+        </div>
+        <div class="numeric-pad mx-auto max-w-2xl">
+            <button type="button" data-pad-value="1" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">1</button>
+            <button type="button" data-pad-value="2" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">2</button>
+            <button type="button" data-pad-value="3" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">3</button>
+            <button type="button" data-pad-value="4" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">4</button>
+            <button type="button" data-pad-value="5" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">5</button>
+            <button type="button" data-pad-value="6" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">6</button>
+            <button type="button" data-pad-value="7" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">7</button>
+            <button type="button" data-pad-value="8" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">8</button>
+            <button type="button" data-pad-value="9" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">9</button>
+            <button type="button" data-pad-value="backspace" class="ds-accent rounded-lg border py-1.5 text-base font-semibold transition active:scale-95" aria-label="刪除最後一個數字">⌫</button>
+            <button type="button" data-pad-value="0" class="ds-secondary rounded-lg border py-1.5 text-base font-semibold transition active:scale-95">0</button>
+            <button type="button" data-pad-value="next" class="ds-success rounded-lg border py-1.5 text-base font-semibold transition active:scale-95" aria-label="前往下一題">↵</button>
+        </div>
+    </div>
 
-    <script src="app.js?v=20260910-153224" type="module"></script>
+    <div class="safe-action-bar ds-surface-strong fixed bottom-0 left-0 right-0 z-50 flex min-h-[3.75rem] flex-nowrap items-center gap-1 border-t px-2 sm:gap-2 sm:px-4 md:px-6">
+        <div id="completion-actions" class="hidden min-w-0 shrink overflow-x-auto items-center justify-center gap-1 sm:gap-2">
+            <button id="return-home-after-quiz" type="button" class="ds-secondary whitespace-nowrap rounded-lg border px-2 py-2 text-xs font-semibold transition sm:px-3 sm:text-sm" aria-label="返回上一頁">← 上一頁</button>
+            <button id="another-quiz" type="button" class="ds-primary whitespace-nowrap rounded-lg border px-2 py-2 text-xs font-semibold transition sm:px-3 sm:text-sm" aria-label="依目前題庫再次出題">↻ 再次出題</button>
+            <button id="retry-quiz" type="button" class="ds-success whitespace-nowrap rounded-lg border px-2 py-2 text-xs font-semibold transition sm:px-3 sm:text-sm" aria-label="重新測驗目前題目">↺ 重新測驗</button>
+        </div>
+            <button id="submit-answer" type="button" class="ds-primary ml-auto whitespace-nowrap px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-md transition cursor-pointer">
+            對答案
+        </button>
+    </div>
+
+    <div id="leave-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
+        <div class="ds-surface-strong ds-modal-surface w-full max-w-sm rounded-2xl p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="leave-title">
+            <h2 id="leave-title" class="text-lg font-bold text-slate-800">要離開這次挑戰嗎？</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">目前的作答進度會被清除，確定要返回選題嗎？</p>
+            <div class="mt-5 flex justify-end gap-3">
+                <button id="cancel-leave" type="button" class="ds-secondary px-4 py-2.5 text-sm font-medium rounded-lg border transition">繼續作答</button>
+                <button id="confirm-leave" type="button" class="ds-primary px-4 py-2.5 text-sm font-bold rounded-lg transition">返回選題</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=20260910-175108" type="module"></script>
 </body>
 </html>

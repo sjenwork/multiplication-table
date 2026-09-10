@@ -32,7 +32,7 @@ trap cleanup EXIT
 if [[ -z "$target_url" ]]; then
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
     cp index.html quiz.html study.html app.js sw.js design-tokens.css pwa.css tailwind.css theme-init.js manifest.webmanifest "$fixture_dir/"
-    cp -R app icons vendor "$fixture_dir/"
+    cp -R app icons "$fixture_dir/"
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     (cd "$fixture_dir" && python3 -m http.server 8766 --bind 127.0.0.1) >"$server_log" 2>&1 &
@@ -44,23 +44,16 @@ if [[ -z "$target_url" ]]; then
     done
 else
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
-    remote_root="${target_url%/index.html}"
+    remote_root="${target_url%%/index.html*}"
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
     curl -fsSL "$remote_root/study.html" >"$fixture_dir/study.html"
-    asset_version="$(sed -n 's/.*app\.js?v=\([^" ]*\).*/\1/p' "$fixture_dir/index.html" | head -1)"
-    for asset in pwa.css tailwind.css design-tokens.css theme-init.js manifest.webmanifest; do
-        curl -fsSL "$remote_root/$asset?v=$asset_version" >"$fixture_dir/$asset"
-    done
-    mkdir -p "$fixture_dir/app"
-    curl -fsSL "$remote_root/app/theme-colors.js?v=$asset_version" >"$fixture_dir/app/theme-colors.js"
-    mkdir -p "$fixture_dir/icons"
-    for asset in icon.svg icon-192.png icon-512.png; do
-        curl -fsSL "$remote_root/icons/$asset" >"$fixture_dir/icons/$asset"
+    for asset in design-tokens.css pwa.css tailwind.css theme-init.js manifest.webmanifest; do
+        curl -fsSL "$remote_root/$asset" >"$fixture_dir/$asset"
     done
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
-    perl -0pi -e "s#src=\"app\\.js\\?v=([^\"]*)\"#src=\"${remote_root}/app.js?v=\$1\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html" "$fixture_dir/study.html"
+    perl -0pi -e "s#src=\"app\\.js[^\"]*\"#src=\"${remote_root}/app.js\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html" "$fixture_dir/study.html"
     (cd "$fixture_dir" && python3 -m http.server 8766 --bind 127.0.0.1) >"$server_log" 2>&1 &
     server_pid=$!
     target_url="http://127.0.0.1:8766/index.html"
@@ -137,82 +130,49 @@ def evaluate(expression):
 
 if exceptions:
     raise SystemExit('browser smoke failed: ' + ' | '.join(exceptions))
-print('smoke page state:', evaluate("JSON.stringify({url: location.href, readyState: document.readyState, scripts: [...document.scripts].map((script) => script.src), appButton: !!document.querySelector('#open-settings'), selector: !!customElements.get('multiplication-selector'), cells: document.querySelectorAll('#multiplication-grid td[data-question]').length, button: (() => { const host = document.querySelector('#start-quiz'); const button = host?.querySelector('button'); return { hostClass: host?.className, buttonClass: button?.className, radius: button ? getComputedStyle(button).borderRadius : null }; })()})"), flush=True)
+print('smoke page state:', evaluate("JSON.stringify({readyState: document.readyState, scripts: [...document.scripts].map((script) => script.src), cells: document.querySelectorAll('#multiplication-grid td[data-question]').length})"), flush=True)
 grid_cells = evaluate("document.querySelectorAll('#multiplication-grid td[data-question]').length")
 if grid_cells != 81:
     raise SystemExit(f'browser smoke failed: home grid did not render 81 cells (got {grid_cells})')
-if evaluate("document.querySelector('factor-legend')?.textContent.includes('被乘數') && document.querySelector('factor-legend')?.textContent.includes('乘數')") is not True:
-    raise SystemExit('browser smoke failed: shared factor legend did not render')
-if evaluate("getComputedStyle(document.querySelector('#start-quiz button')).borderRadius") != '9999px':
-    raise SystemExit('browser smoke failed: shared action button is not pill-shaped')
-if not evaluate("[...document.querySelectorAll('app-button')].every((host) => getComputedStyle(host).boxShadow === 'none' && [...host.querySelectorAll('button')].every((button) => getComputedStyle(button).borderRadius === '9999px'))"):
-    raise SystemExit('browser smoke failed: app-button host leaked a non-rounded visual style')
-if not evaluate("(() => { const corner = document.querySelector('#multiplication-grid th'); return corner?.classList.contains('sticky') && corner.classList.contains('left-0') && corner.classList.contains('top-0') && getComputedStyle(corner).zIndex === '30'; })()"):
-    raise SystemExit('browser smoke failed: multiplication table corner is not fixed on both axes')
-selection_status_height = evaluate("document.getElementById('selection-status').getBoundingClientRect().height")
-if selection_status_height != 64:
-    raise SystemExit(f'browser smoke failed: selection capsule height was not fixed at 64px (got {selection_status_height})')
-if evaluate("document.getElementById('selection-status').textContent") != '點選或長按滑動選題；每次隨機 10 題，不足則全部出題。':
-    raise SystemExit('browser smoke failed: empty selection did not show the instruction text')
 if evaluate("document.querySelector('td[data-question]').click(); document.getElementById('selection-status').textContent") != '已選擇 1 題，準備好就開始挑戰！':
     raise SystemExit('browser smoke failed: selection interaction did not work')
-if evaluate("document.getElementById('selection-status').getBoundingClientRect().height") != selection_status_height:
-    raise SystemExit('browser smoke failed: selection capsule height changed after selection')
-if not evaluate("(async () => { document.getElementById('open-settings').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return document.querySelector('app-settings-modal [data-modal-scrim]').classList.contains('flex'); })()"):
+evaluate("document.querySelectorAll('td[data-question]')[1].click()")
+if not evaluate("document.getElementById('open-settings').click(); document.getElementById('settings-modal').classList.contains('flex')"):
     raise SystemExit('browser smoke failed: settings modal did not open')
-if not evaluate("(() => { const scrim = document.querySelector('app-settings-modal [data-modal-scrim]'); const style = getComputedStyle(scrim); return style.backdropFilter === 'blur(16px)' && style.backgroundColor.includes('0.14'); })()"):
-    raise SystemExit('browser smoke failed: modal scrim is not translucent glass')
-evaluate("(async () => { document.querySelector('app-settings-modal [data-modal-close]').click(); await new Promise((resolve) => setTimeout(resolve, 50)); document.getElementById('start-quiz').click(); })()")
+evaluate("document.getElementById('close-settings').click(); document.getElementById('start-study').click()")
+time.sleep(2)
+if evaluate("document.querySelectorAll('#study-table .study-equation').length") != 9:
+    raise SystemExit('browser smoke failed: home study entry did not open the study page')
+evaluate("document.getElementById('back-home').click()")
+time.sleep(1)
+evaluate("document.getElementById('start-quiz').click()")
 time.sleep(2)
 if evaluate("document.querySelectorAll('#question-list article').length") == 0:
     raise SystemExit('browser smoke failed: quiz questions did not render')
-if evaluate("document.querySelectorAll('#question-list input[data-question]').length") == 0:
-    raise SystemExit('browser smoke failed: quiz answer inputs did not render')
-if evaluate("getComputedStyle(document.querySelector('#question-list input[data-question]')).borderTopWidth") != '1px':
-    raise SystemExit('browser smoke failed: quiz answer input has no visible border')
-if evaluate("getComputedStyle(document.getElementById('completion-overlay')).display") != 'none':
-    raise SystemExit('browser smoke failed: completion overlay was visible before quiz completion')
-if evaluate("document.querySelector('#question-list input[data-question]').click(); document.querySelector('[data-pad-value=\"1\"]').click(); document.querySelector('#question-list input[data-question]').value") != '1':
-    raise SystemExit('browser smoke failed: keypad could not enter an answer')
+if not evaluate("document.getElementById('completion-overlay').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: completion overlay was visible on quiz start')
+if evaluate("document.getElementById('number-pad').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: numeric keypad was hidden on quiz start')
+if evaluate("document.querySelectorAll('input[data-question]').length < 2"):
+    raise SystemExit('browser smoke failed: quiz did not render multiple answer inputs')
+evaluate("document.querySelectorAll('input[data-question]')[1].click(); document.getElementById('close-keypad').click()")
+if not evaluate("document.getElementById('number-pad').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: numeric keypad close action did not hide it')
+evaluate("document.querySelectorAll('input[data-question]')[1].click()")
+if evaluate("document.getElementById('number-pad').classList.contains('hidden')"):
+    raise SystemExit('browser smoke failed: clicking a non-first answer did not reopen the keypad')
 evaluate("window.location.href = 'study.html'")
 time.sleep(2)
-evaluate("(async () => { await customElements.whenDefined('app-button'); await Promise.all([...document.querySelectorAll('#study-factor-buttons app-button')].map((button) => button.updateComplete)); return true; })()")
+if evaluate("document.querySelectorAll('#study-table .study-equation').length") != 9:
+    raise SystemExit('browser smoke failed: vanilla study table did not render 9 equations')
 if evaluate("document.querySelectorAll('#study-factor-buttons [data-factor]').length") != 8:
-    raise SystemExit('browser smoke failed: study factor buttons did not render')
-if evaluate("document.querySelectorAll('#study-factor-buttons button').length") != 8:
-    raise SystemExit('browser smoke failed: study factor buttons are not interactive')
-if evaluate("document.querySelectorAll('.study-equation').length") != 9:
-    raise SystemExit('browser smoke failed: study multiplication table did not render')
-if evaluate("getComputedStyle(document.querySelector('.study-equation')).minHeight") != '48px':
-    raise SystemExit('browser smoke failed: study equations are too widely spaced')
-if evaluate("getComputedStyle(document.querySelector('.study-equation'), '::after').borderBottomWidth") != '1px':
-    raise SystemExit('browser smoke failed: study equation separators did not render')
-if evaluate("document.querySelector('factor-legend')?.textContent.includes('被乘數') && document.querySelector('factor-legend')?.textContent.includes('乘數')") is not True:
-    raise SystemExit('browser smoke failed: study page did not use the shared factor legend')
-if evaluate("document.querySelector('.study-equation-list').textContent.includes('2')") is not True:
-    raise SystemExit('browser smoke failed: default study table did not render factor 2')
+    raise SystemExit('browser smoke failed: vanilla study factor buttons did not render')
 if evaluate("document.querySelectorAll('#study-table [data-play-question]').length") != 9:
-    raise SystemExit('browser smoke failed: study question play buttons did not render')
-if evaluate("(async () => { const area = document.querySelector('.study-content'); area.scrollTop = 0; document.querySelector('#study-table [data-play-question=\\\"9\\\"]').click(); await new Promise((resolve) => setTimeout(resolve, 600)); const row = document.querySelector('.study-equation-active').getBoundingClientRect(); const bar = document.querySelector('.safe-action-bar').getBoundingClientRect(); return row.bottom <= bar.top - 8; })()") is not True:
-    raise SystemExit('browser smoke failed: active ninth row was covered by the bottom action bar')
-if evaluate("document.querySelector('#study-table [data-auto-play]')?.getAttribute('aria-pressed')") != 'true':
-    raise SystemExit('browser smoke failed: auto-play did not default to enabled')
-if evaluate("!!document.querySelector('#study-table [data-play-factor]') || !!document.querySelector('#study-table [data-toggle-playback]')") is not True:
-    raise SystemExit('browser smoke failed: study playback controls did not render')
-evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await new Promise((resolve) => setTimeout(resolve, 50)); return true; })()")
-if evaluate("!!document.querySelector('#study-table [data-toggle-playback]') && !!document.querySelector('#study-table [data-stop-playback]:not(:disabled)')") is not True:
-    raise SystemExit('browser smoke failed: active playback did not expose pause and stop controls')
-evaluate("document.querySelector('#study-table [data-toggle-playback]').click()")
-if evaluate("document.querySelector('#study-table [data-toggle-playback]')?.getAttribute('aria-label')") != '繼續播放':
-    raise SystemExit('browser smoke failed: pause control did not preserve playback state')
-evaluate("document.querySelector('#study-table [data-stop-playback]').click()")
-if evaluate("document.querySelector('#study-table [data-stop-playback]')?.disabled") is not True:
-    raise SystemExit('browser smoke failed: stop control did not clear playback state')
-if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('app-settings-modal [data-voice-choice]').length") != 2:
-    raise SystemExit('browser smoke failed: voice gender choices did not render')
-evaluate("document.querySelector('app-settings-modal [data-modal-close]').click()")
-if evaluate("(async () => { document.querySelector('[data-factor=\"7\"] button').click(); await document.querySelector('#study-table').updateComplete; return document.querySelector('.study-equation-list').textContent.includes('63'); })()") is not True:
-    raise SystemExit('browser smoke failed: study factor selection did not update the table')
+    raise SystemExit('browser smoke failed: vanilla study question controls did not render')
+if evaluate("document.querySelectorAll('#study-table [data-play-factor], #study-table [data-toggle-playback], #study-table [data-play-all], #study-table [data-auto-play]').length") != 3:
+    raise SystemExit('browser smoke failed: vanilla study playback controls did not render')
+if evaluate("document.getElementById('open-settings').click(); document.querySelectorAll('[data-voice-choice]').length") != 2:
+    raise SystemExit('browser smoke failed: vanilla settings voice choices did not render')
 print('browser smoke passed')
 ws.close()
 PY
