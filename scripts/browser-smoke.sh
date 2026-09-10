@@ -44,11 +44,13 @@ if [[ -z "$target_url" ]]; then
     done
 else
     fixture_dir="$(mktemp -d -t multiplication-smoke-fixture.XXXXXX)"
-    remote_root="${target_url%/index.html}"
+    remote_root="${target_url%%/index.html*}"
     curl -fsSL "$target_url" >"$fixture_dir/index.html"
     curl -fsSL "$remote_root/quiz.html" >"$fixture_dir/quiz.html"
     curl -fsSL "$remote_root/study.html" >"$fixture_dir/study.html"
-    curl -fsSL "$remote_root/tailwind.css" >"$fixture_dir/tailwind.css"
+    for asset in design-tokens.css pwa.css tailwind.css theme-init.js manifest.webmanifest; do
+        curl -fsSL "$remote_root/$asset" >"$fixture_dir/$asset"
+    done
     perl -0pi -e 's#\s*<script src="https://cdn\.tailwindcss\.com"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e 's#\s*<script src="theme-init\.js[^"]*"></script>##g' "$fixture_dir/index.html" "$fixture_dir/quiz.html"
     perl -0pi -e "s#src=\"app\\.js[^\"]*\"#src=\"${remote_root}/app.js\"#g" "$fixture_dir/index.html" "$fixture_dir/quiz.html" "$fixture_dir/study.html"
