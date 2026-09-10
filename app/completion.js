@@ -1,4 +1,4 @@
-import './components/completion-overlay.js?v=20260910-132244';
+import './components/completion-overlay.js?v=20260910-134629';
 
 export function showCompletionOverlay(correctCount, total) {
     const overlay = document.getElementById('completion-overlay');

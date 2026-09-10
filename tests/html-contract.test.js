@@ -49,10 +49,9 @@ test('study page keeps the learning table contract', () => {
     assert.match(studyHtml, /\.study-equation\s*\{[\s\S]*?white-space:\s*nowrap/);
     assert.match(studyHtml, /\.study-equation-list\s*\{[\s\S]*?gap:\s*0/);
     assert.match(studyHtml, /\.study-equation-stage\s*\{[\s\S]*?overflow:\s*hidden/);
-    assert.match(studyHtml, /@keyframes study-page-pull-forward/);
-    assert.match(studyHtml, /@keyframes study-page-enter-forward/);
-    assert.match(studyHtml, /@keyframes study-page-pull-backward/);
-    assert.match(studyHtml, /@keyframes study-page-enter-backward/);
+    assert.match(studyHtml, /\.study-equation-stack\s*\{[\s\S]*?display:\s*grid/);
+    assert.match(studyHtml, /\.study-stack-card\s*\{[\s\S]*?z-index:\s*calc\(100 - var\(--stack-factor\)\)/);
+    assert.match(studyHtml, /\.study-stack-card-extracted\s*\{[\s\S]*?translate3d\(-112%/);
     assert.match(studyHtml, /\.study-equation:not\(:last-child\)::after\s*\{[\s\S]*?right:\s*16\.6667%;[\s\S]*?left:\s*16\.6667%;[\s\S]*?border-bottom:\s*1px solid var\(--ds-divider\)/);
 });
 

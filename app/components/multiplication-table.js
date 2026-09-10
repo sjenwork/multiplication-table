@@ -20,9 +20,6 @@ export class MultiplicationTable extends LitElement {
         this.playbackMode = 'idle';
         this.isPaused = false;
         this.autoPlay = true;
-        this.transitionFromFactor = null;
-        this.transitionDirection = null;
-        this.transitionToken = 0;
     }
 
     createRenderRoot() {
@@ -61,33 +58,17 @@ export class MultiplicationTable extends LitElement {
         });
     }
 
-    updated(changedProperties) {
-        if (!changedProperties.has('factor')) return;
-        const previousFactor = changedProperties.get('factor');
-        if (previousFactor === undefined || previousFactor === this.factor) return;
-        this.transitionFromFactor = previousFactor;
-        this.transitionDirection = this.factor > previousFactor ? 'forward' : 'backward';
-        const token = ++this.transitionToken;
-        this.requestUpdate();
-        window.setTimeout(() => {
-            if (token !== this.transitionToken) return;
-            this.transitionFromFactor = null;
-            this.transitionDirection = null;
-            this.requestUpdate();
-        }, 390);
-    }
-
-    renderEquationPage(factor, outgoing = false) {
+    renderEquationPage(factor, interactive) {
         return html`
-            <div class="study-equation-page study-equation-list ${outgoing ? 'study-equation-page-outgoing' : 'study-equation-page-incoming'}" role="list" aria-label="${factor} 的乘法表" ?aria-hidden=${outgoing}>
+            <div class="study-equation-page study-equation-list" role="list" aria-label="${factor} 的乘法表" ?aria-hidden=${!interactive}>
                 ${[1, 2, 3, 4, 5, 6, 7, 8, 9].map((row) => html`
-                    <div class="study-equation ${!outgoing && this.activeRow === row ? 'study-equation-active' : ''}" role="listitem">
+                    <div class="study-equation ${interactive && this.activeRow === row ? 'study-equation-active' : ''}" role="listitem">
                         <span class="ds-factor-one">${factor}</span>
                         <span aria-hidden="true">×</span>
                         <span class="ds-factor-two">${row}</span>
                         <span aria-hidden="true">=</span>
                         <strong class="study-answer">${factor * row}</strong>
-                        <button type="button" class="study-play-button study-question-play" data-play-question="${row}" aria-label="${!outgoing && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${factor}乘${row}`}" title="${!outgoing && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${factor}乘${row}`}" ?disabled=${outgoing} tabindex=${outgoing ? '-1' : '0'}>${!outgoing && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? playIcon() : pauseIcon()) : playIcon()}</button>
+                        <button type="button" class="study-play-button study-question-play" data-play-question="${row}" aria-label="${interactive && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${factor}乘${row}`}" title="${interactive && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? '繼續播放' : '暫停播放') : `播放${factor}乘${row}`}" ?disabled=${!interactive} tabindex=${interactive ? '0' : '-1'}>${interactive && this.playbackMode === 'question' && this.activeRow === row ? (this.isPaused ? playIcon() : pauseIcon()) : playIcon()}</button>
                     </div>`)}
             </div>`;
     }
@@ -105,13 +86,12 @@ export class MultiplicationTable extends LitElement {
                     </div>
                 </div>
                 <div class="study-equation-stage">
-                    ${this.transitionFromFactor === null
-                        ? this.renderEquationPage(this.factor)
-                        : html`
-                            <div class="study-page-transition study-page-transition-${this.transitionDirection}">
-                                ${this.renderEquationPage(this.transitionFromFactor, true)}
-                                ${this.renderEquationPage(this.factor)}
-                            </div>`}
+                    <div class="study-equation-stack" data-current-factor="${this.factor}">
+                        ${[2, 3, 4, 5, 6, 7, 8, 9].map((factor) => html`
+                            <div class="study-stack-card ${factor === this.factor ? 'study-stack-card-current' : ''} ${factor < this.factor ? 'study-stack-card-extracted' : ''}" data-stack-factor="${factor}" style="--stack-factor: ${factor};">
+                                ${this.renderEquationPage(factor, factor === this.factor)}
+                            </div>`)}
+                    </div>
                 </div>
             </div>`;
     }
