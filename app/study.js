@@ -1,7 +1,7 @@
-import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-144409';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-144409';
-import { saveState } from './state.js?v=20260910-144409';
-import './components/multiplication-table.js?v=20260910-144409';
+import { CLIP_GAP_MAX_MS, CLIP_GAP_MIN_MS, playAudioClip } from './audio.js?v=20260910-144915';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260910-144915';
+import { saveState } from './state.js?v=20260910-144915';
+import './components/multiplication-table.js?v=20260910-144915';
 
 function updateFactor(table, selectedFactor, isPlaying = false) {
     table.factor = selectedFactor;
@@ -109,8 +109,27 @@ export function initStudy(state) {
 
     const isCurrentPlayback = (token) => token === playbackToken && playbackMode !== 'idle';
 
+    const keepActiveRowVisible = async () => {
+        await table.updateComplete;
+        const activeRow = table.querySelector('.study-equation-active');
+        const scrollArea = document.querySelector('.study-content');
+        if (!activeRow || !scrollArea) return;
+
+        const rowRect = activeRow.getBoundingClientRect();
+        const scrollRect = scrollArea.getBoundingClientRect();
+        const header = document.querySelector('.quiz-header');
+        const headerBottom = header?.getBoundingClientRect().bottom ?? scrollRect.top;
+        const visibleTop = Math.max(scrollRect.top + 12, headerBottom + 12);
+        const visibleBottom = scrollRect.bottom - 12;
+        let offset = 0;
+        if (rowRect.top < visibleTop) offset = rowRect.top - visibleTop;
+        if (rowRect.bottom > visibleBottom) offset = rowRect.bottom - visibleBottom;
+        if (offset !== 0) scrollArea.scrollBy({ top: offset, behavior: 'smooth' });
+    };
+
     const playClip = async (factor, multiplier, token) => {
         table.activeRow = multiplier;
+        await keepActiveRowVisible();
         await playAudioClip(audio, voiceGender, factor, multiplier);
         return isCurrentPlayback(token);
     };

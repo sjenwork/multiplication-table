@@ -9,6 +9,7 @@ const buttonSource = fs.readFileSync('app/components/app-button.js', 'utf8');
 const selectorSource = fs.readFileSync('app/components/multiplication-selector.js', 'utf8');
 const keypadSource = fs.readFileSync('app/components/numeric-keypad.js', 'utf8');
 const multiplicationTableSource = fs.readFileSync('app/components/multiplication-table.js', 'utf8');
+const studySource = fs.readFileSync('app/study.js', 'utf8');
 const factorLegendSource = fs.readFileSync('app/components/factor-legend.js', 'utf8');
 
 test('multiplication selector owns the table rendering contract', () => {
@@ -61,6 +62,9 @@ test('multiplication table owns the read-only learning table', () => {
 test('audio playback exposes pause and stop controls with the study table', () => {
     assert.match(multiplicationTableSource, /暫停播放/);
     assert.match(multiplicationTableSource, /停止播放/);
+    assert.match(studySource, /keepActiveRowVisible/);
+    assert.match(studySource, /getBoundingClientRect/);
+    assert.match(studySource, /scrollArea\.scrollBy/);
 });
 
 test('factor legend owns the shared factor labels and semantic colors', () => {
