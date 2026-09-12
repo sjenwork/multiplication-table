@@ -1,5 +1,5 @@
-import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260912-170945';
-import { ensureSettingsModal, initSettings } from './settings.js?v=20260912-170945';
+import { historyText, questionKey, questionList, saveState, shuffled } from './state.js?v=20260912-171304';
+import { ensureSettingsModal, initSettings } from './settings.js?v=20260912-171304';
 
 function updateSelectionStatus(state) {
     const status = document.getElementById('selection-status');
@@ -113,6 +113,7 @@ function setupSelectionGesture(state, grid) {
     const activateGesture = () => {
         if (!gesture || gesture.moved || !gesture.startCell) return;
         gesture.active = true;
+        try { grid.setPointerCapture(gesture.pointerId); } catch (error) { /* Older Safari may not support capture here. */ }
         gesture.selecting = !gesture.selected.has(gesture.startCell.dataset.question);
         grid.classList.add('selection-dragging');
         scrollContainer.style.overflow = 'hidden';
@@ -173,7 +174,6 @@ function setupSelectionGesture(state, grid) {
             previousOverflow: scrollContainer.style.overflow,
             timer: window.setTimeout(activateGesture, LONG_PRESS_MS),
         };
-        try { grid.setPointerCapture(event.pointerId); } catch (error) { /* Older Safari may not support capture here. */ }
     });
     grid.addEventListener('pointermove', moveGesture, { passive: false });
     grid.addEventListener('pointerup', (event) => endGesture(event));

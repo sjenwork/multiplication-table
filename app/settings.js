@@ -1,4 +1,4 @@
-import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260912-170945';
+import { questionList, saveState, STORAGE_KEY } from './state.js?v=20260912-171304';
 
 const SETTINGS_MODAL_MARKUP = `
     <div id="settings-modal" class="ds-modal-backdrop fixed inset-0 z-[60] hidden items-center justify-center bg-slate-900/40 p-4" role="presentation">
