@@ -138,13 +138,21 @@ if grid_cells != 81:
     raise SystemExit(f'browser smoke failed: home grid did not render 81 cells (got {grid_cells})')
 def click_question(index):
     point = evaluate(f"(() => {{ const rect = document.querySelectorAll('td[data-question]')[{index}].getBoundingClientRect(); return {{ x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 }}; }})()")
-    send('Input.dispatchMouseEvent', {**point, 'type': 'mousePressed', 'button': 'left', 'clickCount': 1})
-    send('Input.dispatchMouseEvent', {**point, 'type': 'mouseReleased', 'button': 'left', 'clickCount': 1})
+    for event_type in ('mouseMoved', 'mousePressed', 'mouseReleased'):
+        request_id = send('Input.dispatchMouseEvent', {**point, 'type': event_type, 'button': 'left', 'clickCount': 1})
+        while True:
+            message = json.loads(ws.recv())
+            if message.get('id') == request_id:
+                if 'error' in message:
+                    raise SystemExit(f'browser smoke failed: {message["error"]}')
+                break
 
 click_question(0)
 if evaluate("document.getElementById('selection-status').textContent") != '已選擇 1 題，準備好就開始挑戰！':
     raise SystemExit('browser smoke failed: selection interaction did not work')
 click_question(1)
+if evaluate("document.getElementById('selection-status').textContent") != '已選擇 2 題，準備好就開始挑戰！':
+    raise SystemExit('browser smoke failed: second selection interaction did not work')
 if not evaluate("document.getElementById('open-settings').click(); document.getElementById('settings-modal').classList.contains('flex')"):
     raise SystemExit('browser smoke failed: settings modal did not open')
 evaluate("document.getElementById('close-settings').click(); document.getElementById('start-study').click()")
